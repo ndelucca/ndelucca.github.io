@@ -1,0 +1,17 @@
+# Node modules
+node_modules
+
+# Build output directory
+dist
+build
+
+# TypeScript generated files
+*.tsbuildinfo
+*.js.map
+*.d.ts
+
+# IDE and editor files
+.vscode
+*.swp
+*.swo
+*.log
