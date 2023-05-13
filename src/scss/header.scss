@@ -1,0 +1,48 @@
+.header {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  background-color: $secondary-color;
+  padding: 20px;
+
+  .logo {
+    background-image: url("../../public/img/logo/logo-header.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 240px;
+    height: 70px;
+    margin-right: 20px;
+  }
+
+  h1 {
+    color: $primary-color;
+    font-size: $heading-font-size;
+    margin-bottom: 10px;
+  }
+
+  p {
+    color: $primary-color;
+    font-size: $base-font-size;
+  }
+
+  // Example usage of mixin for responsive design
+  @include responsive("medium") {
+    padding: 10px;
+
+    .logo {
+      width: 180px;
+      height: 50px;
+    }
+    h1 {
+      font-size: 24px;
+    }
+    p {
+      font-size: 14px;
+    }
+  }
+}
