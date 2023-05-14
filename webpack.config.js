@@ -3,11 +3,36 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const build_dir = "build";
+const pages = ["index", "fountain", "ephemerides"];
+
+const entryPoints = {};
+
+const plugins = [
+  new CopyWebpackPlugin({
+    patterns: [{ from: "public" }],
+  }),
+];
+
+// Cada página:
+//  tiene su propio bundle a partir de un .ts específico.
+//  utiliza su propio template jinja2
+pages.map((page_name) => {
+  entryPoints[page_name] = `./src/ts/${page_name}.ts`;
+  plugins.push(
+    new HtmlWebpackPlugin({
+      template: `!!html-loader!jinja2-loader!src/templates/${page_name}.html`,
+      favicon: "public/img/favicons/favicon.ico",
+      filename: `${page_name}.html`,
+      chunks: [page_name], // Se asegura que solo cargue page_name.bundle.js
+    })
+  );
+});
+
 module.exports = {
-  entry: "./src/index.ts",
+  entry: entryPoints,
   output: {
     path: path.resolve(__dirname, build_dir),
-    filename: "bundle.js",
+    filename: "[name].bundle.js",
   },
   resolve: {
     extensions: [".ts", ".js"],
@@ -19,6 +44,24 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.html$/,
+        use: [
+          {
+            loader: "html-loader",
+            options: {
+              esModule: false,
+            },
+          },
+          {
+            loader: "jinja2-loader",
+            options: {
+              templateFolder: path.resolve(__dirname, "src/templates"),
+              context: {},
+            },
+          },
+        ],
+      },
       {
         test: /\.tsx?$/,
         use: "ts-loader",
@@ -38,15 +81,7 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: "src/index.html",
-      favicon: "public/img/favicons/favicon.ico",
-    }),
-    new CopyWebpackPlugin({
-      patterns: [{ from: "public" }],
-    }),
-  ],
+  plugins: plugins,
   devServer: {
     static: {
       directory: path.join(__dirname, build_dir),
