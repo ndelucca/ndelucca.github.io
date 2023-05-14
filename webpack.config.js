@@ -6,16 +6,14 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const build_dir = "build";
 const pages = ["index", "fountain", "ephemerides"];
 
-const entryPoints = {
-  main: "./src/scss/main.scss",
-};
+const entryPoints = {};
 
 const plugins = [
   new CopyWebpackPlugin({
     patterns: [{ from: "public" }],
   }),
   new MiniCssExtractPlugin({
-    filename: "css/[name].css",
+    filename: `main.css`,
   }),
 ];
 
@@ -23,7 +21,7 @@ const plugins = [
 //  tiene su propio bundle a partir de un .ts específico.
 //  utiliza su propio template jinja2
 pages.map((page_name) => {
-  entryPoints[page_name] = `./src/ts/${page_name}.ts`;
+  entryPoints[page_name] = [`./src/ts/${page_name}.ts`, `./src/scss/main.scss`];
   plugins.push(
     new HtmlWebpackPlugin({
       template: `!!html-loader!jinja2-loader!src/templates/${page_name}.html`,
