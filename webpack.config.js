@@ -1,15 +1,21 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const build_dir = "build";
 const pages = ["index", "fountain", "ephemerides"];
 
-const entryPoints = {};
+const entryPoints = {
+  main: "./src/scss/main.scss",
+};
 
 const plugins = [
   new CopyWebpackPlugin({
     patterns: [{ from: "public" }],
+  }),
+  new MiniCssExtractPlugin({
+    filename: "css/[name].css",
   }),
 ];
 
@@ -69,7 +75,14 @@ module.exports = {
       },
       {
         test: /\.s[ac]ss$/i,
-        use: ["style-loader", "css-loader", "postcss-loader", "sass-loader"],
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          "css-loader",
+          "postcss-loader",
+          "sass-loader",
+        ],
       },
       {
         test: /\.cow$/,
