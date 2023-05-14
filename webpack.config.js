@@ -25,7 +25,6 @@ pages.map((page_name) => {
   plugins.push(
     new HtmlWebpackPlugin({
       template: `!!html-loader!jinja2-loader!src/templates/${page_name}.html`,
-      favicon: "public/img/favicons/favicon.ico",
       filename: `${page_name}.html`,
       chunks: [page_name], // Se asegura que solo cargue page_name.bundle.js
     })
