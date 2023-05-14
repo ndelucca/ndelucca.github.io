@@ -10,3 +10,12 @@ async function lucky_cow() {
 }
 
 window.addEventListener("load", lucky_cow);
+
+window.addEventListener("load", () => {
+  const hamburger = document.querySelector(".hamburger");
+  const nav = document.querySelector(".nav");
+
+  hamburger.addEventListener("click", () => {
+    nav.classList.toggle("active");
+  });
+});

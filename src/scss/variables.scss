@@ -1,3 +1,5 @@
+$main-font: "JetBrains Mono", monospace;
+
 $primary-color: #ff851b;
 $secondary-color: #2c2c2c;
 $main-backround-color: #383838;
@@ -7,3 +9,9 @@ $secondary-font-color: #515151;
 
 $base-font-size: 16px;
 $heading-font-size: 36px;
+
+$nav-offset: 72px;
+$nav-width: 300px;
+$nav-primary-color: $primary-color;
+$nav-background-color: $secondary-color;
+$nav-font-color: $secondary-font-color;

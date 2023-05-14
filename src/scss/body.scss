@@ -1,5 +1,6 @@
 .body {
-  padding-top: 75px;
+  padding-top: $nav-offset;
   background-color: $main-backround-color;
   color: $primary-font-color;
+  font-family: $main-font;
 }
