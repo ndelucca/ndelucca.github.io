@@ -24,7 +24,7 @@ pages.map((page_name) => {
   entryPoints[page_name] = [`./src/ts/${page_name}.ts`, `./src/scss/main.scss`];
   plugins.push(
     new HtmlWebpackPlugin({
-      template: `!!html-loader!jinja2-loader!src/templates/${page_name}.html`,
+      template: `!!html-loader!jinja2-loader!src/templates/${page_name}.j2`,
       filename: `${page_name}.html`,
       chunks: [page_name], // Se asegura que solo cargue page_name.bundle.js
     })
@@ -35,7 +35,6 @@ module.exports = {
   entry: entryPoints,
   output: {
     path: path.resolve(__dirname, build_dir),
-    filename: "[name].bundle.js",
   },
   resolve: {
     extensions: [".ts", ".js"],
@@ -47,24 +46,6 @@ module.exports = {
   },
   module: {
     rules: [
-      {
-        test: /\.html$/,
-        use: [
-          {
-            loader: "html-loader",
-            options: {
-              esModule: false,
-            },
-          },
-          {
-            loader: "jinja2-loader",
-            options: {
-              templateFolder: path.resolve(__dirname, "src/templates"),
-              context: {},
-            },
-          },
-        ],
-      },
       {
         test: /\.tsx?$/,
         use: "ts-loader",
@@ -94,7 +75,7 @@ module.exports = {
   plugins: plugins,
   devServer: {
     static: {
-      directory: path.join(__dirname, build_dir),
+      directory: path.resolve(__dirname, build_dir),
     },
     compress: true,
     port: 3000,
