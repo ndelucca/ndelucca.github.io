@@ -1,7 +1,7 @@
 export { fetchFortuneCookie };
 
 async function fetchFortuneCookie(): Promise<string> {
-  const cookie_response = await fetch(
+  const cookieResponse = await fetch(
     `https://monolithdesign.com/wp-json/cookies-api/v1/cookies/?fcnonce=${Math.floor(Math.random() * 999999)}`,
     {
       headers: {
@@ -9,7 +9,7 @@ async function fetchFortuneCookie(): Promise<string> {
       },
     }
   );
-  const cookie_text = await cookie_response.json();
-  const cookie = JSON.parse(cookie_text);
+  const cookieText = await cookieResponse.json();
+  const cookie = JSON.parse(cookieText);
   return cookie.card_content;
 }

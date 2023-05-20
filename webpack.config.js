@@ -1,4 +1,6 @@
 const path = require("path");
+const fs = require("fs");
+
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -6,14 +8,19 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const build_dir = "build";
 const pages = ["index", "fountain", "ephemerides"];
 
-const entryPoints = {};
+const entryPoints = {
+  main: ["./src/scss/main.scss"],
+};
 
 const plugins = [
   new CopyWebpackPlugin({
     patterns: [{ from: "public" }],
   }),
   new MiniCssExtractPlugin({
-    filename: `main.css`,
+    filename: (pathData) => {
+      const pageName = pathData.chunk.name;
+      return pageName === "main" ? "main.css" : `${pageName}.css`;
+    },
   }),
 ];
 
@@ -21,12 +28,21 @@ const plugins = [
 //  tiene su propio bundle a partir de un .ts específico.
 //  utiliza su propio template jinja2
 pages.map((page_name) => {
-  entryPoints[page_name] = [`./src/ts/${page_name}.ts`, `./src/scss/main.scss`];
+  entryPoints[page_name] = [];
+
+  if (fs.existsSync(`./src/ts/${page_name}.ts`)) {
+    entryPoints[page_name].push(`./src/ts/${page_name}.ts`);
+  }
+
+  if (fs.existsSync(`./src/scss/${page_name}.scss`)) {
+    entryPoints[page_name].push(`./src/scss/${page_name}.scss`);
+  }
+
   plugins.push(
     new HtmlWebpackPlugin({
       template: `!!html-loader!jinja2-loader!src/templates/${page_name}.j2`,
       filename: `${page_name}.html`,
-      chunks: [page_name], // Se asegura que solo cargue page_name.bundle.js
+      chunks: ["main", page_name],
     })
   );
 });

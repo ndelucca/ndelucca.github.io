@@ -3,6 +3,12 @@
   ephemerides
 {% endblock title %}
 {% block content %}
-  <h1>Today</h1>
-  <div>Todays!</div>
-{% endblock %}
+  <h1>Today, a long time ago...</h1>
+  <div id="todays-events"></div>
+  <template id="event-template">
+    <article class="card">
+      <h3 class="title"></h3>
+      <p class="content"></p>
+    </article>
+  </template>
+{% endblock content %}
