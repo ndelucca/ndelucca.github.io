@@ -8,6 +8,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const build_dir = "build";
 
 function listFiles(directory, extension) {
+  if (!fs.existsSync(directory)) return [];
+
   const files = fs.readdirSync(directory);
   const filesWithoutExtension = files
     .filter((file) => path.extname(file) === extension)
@@ -61,9 +63,14 @@ j2pages.forEach((page_name) => {
 mdPages.forEach((page_name) => {
   entryPoints[page_name] = [];
 
+  if (!fs.existsSync(`./md/${page_name}.md`)) {
+    return;
+  }
+
   if (fs.existsSync(`./src/ts/markdown.ts`)) {
     entryPoints[page_name].push(`./src/ts/markdown.ts`);
   }
+
   if (fs.existsSync(`./src/scss/markdown.scss`)) {
     entryPoints[page_name].push(`./src/scss/markdown.scss`);
   }
