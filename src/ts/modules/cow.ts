@@ -1,6 +1,5 @@
-import * as cowsay from "cowsay";
+import { say } from "cowsay";
 export { randomCow };
-
-function randomCow(text: string) {
-  return cowsay.say({ text: text });
-}
+const randomCow = (text: string) => {
+  return say({ text: text });
+};

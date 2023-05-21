@@ -5,9 +5,10 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-const build_dir = "build";
+const dirName = __dirname;
+const buildDir = "build";
 
-function listFiles(directory, extension) {
+const listFiles = (directory, extension) => {
   if (!fs.existsSync(directory)) return [];
 
   const files = fs.readdirSync(directory);
@@ -15,7 +16,7 @@ function listFiles(directory, extension) {
     .filter((file) => path.extname(file) === extension)
     .map((file) => path.basename(file, extension));
   return filesWithoutExtension;
-}
+};
 
 j2pages = listFiles("./src/templates/pages/", ".j2");
 mdPages = listFiles("./md/", ".md");
@@ -40,48 +41,48 @@ const globals = {};
 // Cada página:
 //  tiene su propio bundle a partir de un .ts específico.
 //  utiliza su propio template jinja2
-j2pages.forEach((page_name) => {
-  entryPoints[page_name] = [];
+j2pages.forEach((pageName) => {
+  entryPoints[pageName] = [];
 
-  if (fs.existsSync(`./src/ts/${page_name}.ts`)) {
-    entryPoints[page_name].push(`./src/ts/${page_name}.ts`);
+  if (fs.existsSync(`./src/ts/${pageName}.ts`)) {
+    entryPoints[pageName].push(`./src/ts/${pageName}.ts`);
   }
 
-  if (fs.existsSync(`./src/scss/${page_name}.scss`)) {
-    entryPoints[page_name].push(`./src/scss/${page_name}.scss`);
+  if (fs.existsSync(`./src/scss/${pageName}.scss`)) {
+    entryPoints[pageName].push(`./src/scss/${pageName}.scss`);
   }
 
   plugins.push(
     new HtmlWebpackPlugin({
-      template: `!!html-loader!jinja2-loader!src/templates/pages/${page_name}.j2`,
-      filename: `${page_name}.html`,
-      chunks: ["main", page_name],
+      template: `!!html-loader!jinja2-loader!src/templates/pages/${pageName}.j2`,
+      filename: `${pageName}.html`,
+      chunks: ["main", pageName],
     })
   );
 });
 
-mdPages.forEach((page_name) => {
-  entryPoints[page_name] = [];
+mdPages.forEach((pageName) => {
+  entryPoints[pageName] = [];
 
-  if (!fs.existsSync(`./md/${page_name}.md`)) {
+  if (!fs.existsSync(`./md/${pageName}.md`)) {
     return;
   }
 
   if (fs.existsSync(`./src/ts/markdown.ts`)) {
-    entryPoints[page_name].push(`./src/ts/markdown.ts`);
+    entryPoints[pageName].push(`./src/ts/markdown.ts`);
   }
 
   if (fs.existsSync(`./src/scss/markdown.scss`)) {
-    entryPoints[page_name].push(`./src/scss/markdown.scss`);
+    entryPoints[pageName].push(`./src/scss/markdown.scss`);
   }
 
-  globals[page_name] = fs.readFileSync(`./md/${page_name}.md`, "utf-8");
+  globals[pageName] = fs.readFileSync(`./md/${pageName}.md`, "utf-8");
 
   plugins.push(
     new HtmlWebpackPlugin({
       template: `!!html-loader!jinja2-loader!src/templates/markdown.j2`,
-      filename: `${page_name}.html`,
-      chunks: ["main", page_name],
+      filename: `${pageName}.html`,
+      chunks: ["main", pageName],
     })
   );
 });
@@ -95,14 +96,14 @@ plugins.push(
 module.exports = {
   entry: entryPoints,
   output: {
-    path: path.resolve(__dirname, build_dir),
+    path: path.resolve(dirName, buildDir),
   },
   resolve: {
     extensions: [".ts", ".js"],
     modules: ["node_modules"],
     alias: {
       // El modulo tiene un bug y busca en el root en lugar del directorio de build
-      ".cows": path.resolve(__dirname, "node_modules/cowsay/cows"),
+      ".cows": path.resolve(dirName, "node_modules/cowsay/cows"),
     },
   },
   module: {
@@ -136,7 +137,7 @@ module.exports = {
   plugins: plugins,
   devServer: {
     static: {
-      directory: path.resolve(__dirname, build_dir),
+      directory: path.resolve(dirName, buildDir),
     },
     compress: true,
     port: 3000,

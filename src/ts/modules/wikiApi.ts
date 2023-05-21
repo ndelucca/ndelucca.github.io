@@ -8,11 +8,11 @@ interface Ephemeris {
   pages: object[];
 }
 
-function reverseSortByYear(a: Ephemeris, b: Ephemeris): number {
+const reverseSortByYear = (a: Ephemeris, b: Ephemeris): number => {
   return Number(a.year) - Number(b.year);
-}
+};
 
-async function fetchTodaysEphemerides(): Promise<Ephemeris[]> {
+const fetchTodaysEphemerides = async (): Promise<Ephemeris[]> => {
   const today = new Date();
 
   const wikiResponse = await fetch(`${wikiApi}/${today.getMonth()}/${today.getDay()}`, {
@@ -23,4 +23,4 @@ async function fetchTodaysEphemerides(): Promise<Ephemeris[]> {
   const wikiJson = await wikiResponse.json();
   let wikiEvents: Ephemeris[] = wikiJson.events;
   return wikiEvents.sort(reverseSortByYear);
-}
+};

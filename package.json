@@ -5,6 +5,7 @@
   "repository": {
     "url": "git+https://github.com/ndelucca/ndelucca.github.io.git"
   },
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "jest",
