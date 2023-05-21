@@ -4,6 +4,7 @@ const fs = require("fs");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const marked = require("marked");
 
 const dirName = __dirname;
 const buildDir = "build";
@@ -82,27 +83,15 @@ hbsPages.forEach((pageName) => {
 });
 
 mdPages.forEach((pageName) => {
-  const entries = [];
-
-  if (fs.existsSync(`./src/ts/markdown.ts`)) {
-    entries.push(`./src/ts/markdown.ts`);
-  }
-
-  if (fs.existsSync(`./src/scss/markdown.scss`)) {
-    entries.push(`./src/scss/markdown.scss`);
-  }
-
-  if (entries.length != 0) {
-    entryPoints[pageName] = entries;
-  }
+  entryPoints[pageName] = ["./src/scss/markdown.scss"];
 
   plugins.push(
     new HtmlWebpackPlugin({
       filename: `${pageName}.html`,
-      template: `./src/templates/${pageName}.hbs`,
+      template: `./src/templates/markdown.hbs`,
       templateParameters: {
         title: pageName,
-        mdFile: fs.readFileSync(`./md/${pageName}.md`, "utf-8"),
+        mdContent: marked.marked(fs.readFileSync(`./md/${pageName}.md`, "utf-8"), { mangle: false, headerIds: false }),
         partials,
       },
       chunks: ["main", pageName],
