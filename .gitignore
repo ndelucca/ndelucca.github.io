@@ -9,6 +9,7 @@ build
 *.tsbuildinfo
 *.js.map
 *.d.ts
+!globals.d.ts
 
 # IDE and editor files
 .vscode

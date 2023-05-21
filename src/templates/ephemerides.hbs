@@ -1,8 +1,4 @@
-{% extends "src/templates/base.j2" %}
-{% block title %}
-  ephemerides
-{% endblock title %}
-{% block content %}
+{{> partials/top_boilerplate}}
   <h1>Today, a long time ago...</h1>
   <div id="todays-events"></div>
   <template id="event-template">
@@ -11,4 +7,4 @@
       <p class="content"></p>
     </article>
   </template>
-{% endblock content %}
+{{> partials/bottom_boilerplate}}

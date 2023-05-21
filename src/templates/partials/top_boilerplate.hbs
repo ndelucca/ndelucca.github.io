@@ -5,11 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="keywords" content="ndelucca jah" />
     <meta name="description" content="ndelucca's webpage" />
-    <title>
-      {% block title %}
-        jah
-      {% endblock title %}
-    </title>
+    <title>{{title}}</title>
     <link rel="icon" type="image/png" sizes="16x16" href="/public/img/favicons/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/public/img/favicons/favicon-32x32.png" />
     <link rel="shortcut icon" type="image/x-icon" href="/public/img/favicons/favicon.ico" />
@@ -29,13 +25,5 @@
     </script>
   </head>
   <body class="body">
-    {% include "src/templates/navigation.j2" %}
+    {{> navigation}}
     <main class="main">
-      {% block content %}
-      {% endblock content %}
-    </main>
-    <footer class="footer">
-      <span>ndelucca@home</span>
-    </footer>
-  </body>
-</html>

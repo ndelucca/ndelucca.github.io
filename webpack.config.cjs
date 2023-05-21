@@ -7,6 +7,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const dirName = __dirname;
 const buildDir = "build";
+const templatesDir = "./src/templates/";
 
 const listFiles = (directory, extension) => {
   if (!fs.existsSync(directory)) return [];
@@ -18,12 +19,26 @@ const listFiles = (directory, extension) => {
   return filesWithoutExtension;
 };
 
-j2pages = listFiles("./src/templates/pages/", ".j2");
-mdPages = listFiles("./md/", ".md");
+const loadPartials = (partialFiles) => {
+  const partials = {};
+
+  for (const file of partialFiles) {
+    const filePath = path.join(templatesDir, "partials", `${file}.hbs`);
+    partials[file] = fs.readFileSync(filePath, "utf-8");
+  }
+
+  return partials;
+};
+
+const mdPages = listFiles("./md/", ".md");
+const hbsPages = listFiles("./src/templates/", ".hbs");
+const partials = loadPartials(listFiles("./src/templates/partials/", ".hbs"));
 
 const entryPoints = {
   main: ["./src/scss/main.scss"],
 };
+
+const globals = {};
 
 const plugins = [
   new CopyWebpackPlugin({
@@ -35,63 +50,65 @@ const plugins = [
       return pageName === "main" ? "main.css" : `${pageName}.css`;
     },
   }),
+  new webpack.DefinePlugin({ ...globals }),
 ];
 
-const globals = {};
-// Cada página:
-//  tiene su propio bundle a partir de un .ts específico.
-//  utiliza su propio template jinja2
-j2pages.forEach((pageName) => {
-  entryPoints[pageName] = [];
+hbsPages.forEach((pageName) => {
+  const entries = [];
 
   if (fs.existsSync(`./src/ts/${pageName}.ts`)) {
-    entryPoints[pageName].push(`./src/ts/${pageName}.ts`);
+    entries.push(`./src/ts/${pageName}.ts`);
   }
 
   if (fs.existsSync(`./src/scss/${pageName}.scss`)) {
-    entryPoints[pageName].push(`./src/scss/${pageName}.scss`);
+    entries.push(`./src/scss/${pageName}.scss`);
+  }
+
+  if (entries.length != 0) {
+    entryPoints[pageName] = entries;
   }
 
   plugins.push(
     new HtmlWebpackPlugin({
-      template: `!!html-loader!jinja2-loader!src/templates/pages/${pageName}.j2`,
       filename: `${pageName}.html`,
+      template: `./src/templates/${pageName}.hbs`,
+      templateParameters: {
+        title: pageName,
+        partials,
+      },
       chunks: ["main", pageName],
     })
   );
 });
 
 mdPages.forEach((pageName) => {
-  entryPoints[pageName] = [];
-
-  if (!fs.existsSync(`./md/${pageName}.md`)) {
-    return;
-  }
+  const entries = [];
 
   if (fs.existsSync(`./src/ts/markdown.ts`)) {
-    entryPoints[pageName].push(`./src/ts/markdown.ts`);
+    entries.push(`./src/ts/markdown.ts`);
   }
 
   if (fs.existsSync(`./src/scss/markdown.scss`)) {
-    entryPoints[pageName].push(`./src/scss/markdown.scss`);
+    entries.push(`./src/scss/markdown.scss`);
   }
 
-  globals[pageName] = fs.readFileSync(`./md/${pageName}.md`, "utf-8");
+  if (entries.length != 0) {
+    entryPoints[pageName] = entries;
+  }
 
   plugins.push(
     new HtmlWebpackPlugin({
-      template: `!!html-loader!jinja2-loader!src/templates/markdown.j2`,
       filename: `${pageName}.html`,
+      template: `./src/templates/${pageName}.hbs`,
+      templateParameters: {
+        title: pageName,
+        mdFile: fs.readFileSync(`./md/${pageName}.md`, "utf-8"),
+        partials,
+      },
       chunks: ["main", pageName],
     })
   );
 });
-
-plugins.push(
-  new webpack.DefinePlugin({
-    globals: JSON.stringify(globals),
-  })
-);
 
 module.exports = {
   entry: entryPoints,
@@ -131,6 +148,10 @@ module.exports = {
       {
         test: /\.(png|jpg|jpeg|gif)$/i,
         type: "asset/resource",
+      },
+      {
+        test: /\.hbs$/,
+        loader: "handlebars-loader",
       },
     ],
   },
