@@ -1,6 +1,8 @@
 @import "~github-markdown-css/github-markdown";
+@import "variables";
 
 .markdown-body {
   padding: 30px;
   text-align: left;
+  color: $primary-font-color;
 }

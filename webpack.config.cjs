@@ -75,6 +75,9 @@ hbsPages.forEach((pageName) => {
       template: `./src/templates/${pageName}.hbs`,
       templateParameters: {
         title: pageName,
+        mdLinks: mdPages.map((link) => {
+          return { link: link };
+        }),
         partials,
       },
       chunks: ["main", pageName],
@@ -92,6 +95,9 @@ mdPages.forEach((pageName) => {
       templateParameters: {
         title: pageName,
         mdContent: marked.marked(fs.readFileSync(`./md/${pageName}.md`, "utf-8"), { mangle: false, headerIds: false }),
+        mdLinks: mdPages.map((link) => {
+          return { link: link };
+        }),
         partials,
       },
       chunks: ["main", pageName],

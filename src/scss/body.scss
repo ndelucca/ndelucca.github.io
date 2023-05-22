@@ -1,6 +1,10 @@
 .body {
-  padding-top: $nav-offset;
   background-color: $main-backround-color;
   color: $primary-font-color;
   font-family: $main-font;
+}
+@include responsive("medium") {
+  .body {
+    padding-top: $nav-offset;
+  }
 }
