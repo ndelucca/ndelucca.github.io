@@ -11,11 +11,13 @@
     <li>
       <a href="ephemerides.html">Ephemerides</a>
     </li>
-    <li class="title">Notes</li>
-    {{#each mdLinks}}
-      <li>
-        <a href="{{link}}.html">{{link}}</a>
-      </li>
+    {{#if variable}}
+      <li class="title">Notes</li>
+      {{#each mdLinks}}
+        <li>
+          <a href="{{link}}.html">{{link}}</a>
+        </li>
     {{/each}}
+  {{/if}}
   </ul>
 </nav>

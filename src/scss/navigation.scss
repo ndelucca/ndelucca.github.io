@@ -14,8 +14,8 @@
 
 .logo {
   width: $nav-width;
-  height: 70px;
-  background-image: url("../../public/img/logo/logo-header.png");
+  height: 63px;
+  background-image: url("../../public/img/logo/logo-no-background.svg");
   background-size: contain;
   background-repeat: no-repeat;
 }
@@ -47,7 +47,7 @@
 }
 
 .nav ul li {
-  padding: 5px 15px;
+  padding: 3px 15px;
 }
 
 .nav ul li a {
@@ -55,6 +55,7 @@
   color: $nav-font-color;
   text-decoration: none;
   transition: all 0.3s ease;
+  padding: 3px;
 }
 
 .nav ul li a:hover {
@@ -66,7 +67,7 @@
   font-weight: bold;
   margin-bottom: 5px;
   padding-bottom: 5px;
-  border-bottom: 1px solid $nav-font-color;
+  border-bottom: 1px solid $nav-primary-color;
   color: $nav-primary-color;
 }
 
@@ -83,7 +84,7 @@
 @include responsive("medium") {
   .hamburger {
     display: block;
-    top: 0;
+    top: 6;
     right: 0;
     position: fixed;
     z-index: 2;
