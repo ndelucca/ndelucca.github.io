@@ -5,15 +5,11 @@
   left: 0;
   width: 100%;
   z-index: 100;
-  // background-color: $secondary-color;
-  padding: 10px;
-  color: $secondary-font-color;
+  padding: 4px;
+  color: $primary-color;
   font-size: $base-font-size;
 
   span {
     padding: 0 25px;
-  }
-  @include responsive("medium") {
-    padding: 5px;
   }
 }
