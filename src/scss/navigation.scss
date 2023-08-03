@@ -84,8 +84,8 @@
 @include responsive("medium") {
   .hamburger {
     display: block;
-    top: 6;
-    right: 0;
+    top: 5px;
+    right: -5px;
     position: fixed;
     z-index: 2;
   }
@@ -101,5 +101,9 @@
 
   .main {
     margin-left: 0;
+  }
+
+  .logo {
+    width: $nav-width - 30px;
   }
 }
