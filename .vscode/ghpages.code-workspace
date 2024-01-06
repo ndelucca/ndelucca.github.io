@@ -13,16 +13,13 @@
     "editor.tabSize": 2,
     "editor.insertSpaces": true,
     "editor.codeActionsOnSave": {
-      "source.organizeImports": true,
-      "source.fixAll.eslint": true
+      "source.organizeImports": "always",
+      "source.fixAll.eslint": "always"
     },
     "editor.formatOnSave": true,
-    "editor.rulers": [
-      80,
-      120
-    ],
+    "editor.rulers": [80, 120],
     "[html]": {
-      "editor.defaultFormatter": "monosans.djlint"
+      "editor.defaultFormatter": "vscode.html-language-features"
     },
     "[javascript]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -35,20 +32,14 @@
     },
     "prettier.printWidth": 120,
     "prettier.tabWidth": 2,
-    "eslint.workingDirectories": [
-      "./src"
-    ],
+    "eslint.workingDirectories": ["./src"],
     "djlint.formatCss": true,
     "djlint.formatJs": true,
     "djlint.configuration": "",
     "djlint.maxLineLength": 120,
-    "djlint.maxAttributeLength": 120,
+    "djlint.maxAttributeLength": 120
   },
   "extensions": {
-    "recommendations": [
-      "dbaeumer.vscode-eslint",
-      "esbenp.prettier-vscode",
-      "monosans.djlint"
-    ]
+    "recommendations": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "monosans.djlint"]
   }
 }
