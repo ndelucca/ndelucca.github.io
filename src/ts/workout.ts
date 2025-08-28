@@ -69,6 +69,9 @@ const gymData = [
 let currentWeek = 1;
 let currentDay = 1;
 
+// Exercise selection storage key
+const EXERCISE_SELECTIONS_KEY = 'workout_exercise_selections';
+
 document.addEventListener('DOMContentLoaded', () => {
   loadWorkoutData();
   setupRoutineSelector();
@@ -192,10 +195,75 @@ function loadRoutineDisplay() {
   // Use template function instead of string concatenation
   routineContent.innerHTML = renderWorkoutTemplate(workout, routine2025_08.warmup);
   
-  // Setup collapsible sections after DOM update
+  // Setup collapsible sections and exercise selectors after DOM update
   setTimeout(() => {
     setupCollapsibleSections();
+    setupExerciseSelectors();
   }, 0);
+}
+
+// Exercise Selection Functions
+function sanitizeExerciseName(name: string): string {
+  return name.toLowerCase()
+    .replace(/\s+/g, '_')
+    .replace(/[()]/g, '')
+    .replace(/[^a-z0-9_]/g, '');
+}
+
+function loadExerciseSelections(): Record<string, number> {
+  try {
+    const stored = localStorage.getItem(EXERCISE_SELECTIONS_KEY);
+    return stored ? JSON.parse(stored) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveExerciseSelection(exerciseId: string, rowIndex: number): void {
+  try {
+    const selections = loadExerciseSelections();
+    selections[exerciseId] = rowIndex;
+    localStorage.setItem(EXERCISE_SELECTIONS_KEY, JSON.stringify(selections));
+  } catch (error) {
+    console.error('Error saving exercise selection:', error);
+  }
+}
+
+function getWeightForPercentage(rowIndex: number, columnIndex: number): string | null {
+  if (rowIndex < 0 || rowIndex >= gymData.length || columnIndex < 0 || columnIndex >= gymData[rowIndex].length) {
+    return null;
+  }
+  return gymData[rowIndex][columnIndex];
+}
+
+// This function is no longer needed since weights are calculated directly in the template
+
+function setupExerciseSelectors(): void {
+  document.querySelectorAll('.exercise-selector').forEach(select => {
+    const selectElement = select as HTMLSelectElement;
+    const exerciseId = selectElement.dataset.exerciseId;
+    
+    if (!exerciseId) return;
+    
+    selectElement.addEventListener('change', (event) => {
+      const target = event.target as HTMLSelectElement;
+      const selectedValue = target.value;
+      
+      if (selectedValue === '') {
+        // Remove selection
+        const selections = loadExerciseSelections();
+        delete selections[exerciseId];
+        localStorage.setItem(EXERCISE_SELECTIONS_KEY, JSON.stringify(selections));
+      } else {
+        // Save selection
+        const rowIndex = parseInt(selectedValue);
+        saveExerciseSelection(exerciseId, rowIndex);
+      }
+      
+      // Refresh the entire routine display to show updated weights
+      loadRoutineDisplay();
+    });
+  });
 }
 
 // Template rendering functions - clean separation of HTML from logic
@@ -239,6 +307,8 @@ function renderWarmupSection(warmup: typeof routine2025_08.warmup): string {
 }
 
 function renderMainExercisesSection(mainExercises: DayWorkout['mainExercises']): string {
+  const selections = loadExerciseSelections();
+  
   return `
     <div class="routine-section">
       <h4>Ejercicios Principales</h4>
@@ -250,18 +320,84 @@ function renderMainExercisesSection(mainExercises: DayWorkout['mainExercises']):
             <th>65%</th>
             <th>75%</th>
             <th>Rango E</th>
+            <th>Rango F</th>
           </tr>
         </thead>
         <tbody>
-          ${mainExercises.map(exercise => `
-            <tr>
-              <td>${exercise.name}</td>
-              <td>${exercise.warmupSets.percentage55 || '-'}</td>
-              <td>${exercise.warmupSets.percentage65 || '-'}</td>
-              <td>${exercise.warmupSets.percentage75 || '-'}</td>
-              <td>${exercise.workingSets}</td>
-            </tr>
-          `).join('')}
+          ${mainExercises.map(exercise => {
+            const exerciseId = sanitizeExerciseName(exercise.name);
+            const selectedRow = selections[exerciseId];
+            
+            // Helper function to render weight cell
+            const renderWeightCell = (originalValue: string | undefined, columnType: string) => {
+              if (!originalValue || originalValue === '-') return '-';
+              
+              // Extract just the number/text without "reps"
+              const cleanValue = originalValue.replace(/\s*reps?\s*/i, '').trim();
+              
+              if (selectedRow !== undefined) {
+                const columnMap: Record<string, number> = {
+                  '55': 0, '65': 1, '75': 2
+                };
+                const columnIndex = columnMap[columnType];
+                if (columnIndex !== undefined) {
+                  const weight = getWeightForPercentage(selectedRow, columnIndex);
+                  return weight ? `${cleanValue} (${weight} kg)` : cleanValue;
+                }
+              }
+              
+              return `<span data-exercise-id="${exerciseId}" data-column-type="${columnType}" data-original-text="${cleanValue}">${cleanValue}</span>`;
+            };
+            
+            // Helper function to render range cell (E or F) with min/max weights
+            const renderRangeCell = (originalValue: string, rangeType: 'E' | 'F') => {
+              if (!originalValue || originalValue === '-') return '-';
+              
+              // Extract just the number/text without "reps"
+              const cleanValue = originalValue.replace(/\s*reps?\s*/i, '').trim();
+              
+              if (selectedRow !== undefined) {
+                const minColumn = rangeType === 'E' ? 3 : 5; // E min = 3, F min = 5
+                const maxColumn = rangeType === 'E' ? 4 : 6; // E max = 4, F max = 6
+                
+                const minWeight = getWeightForPercentage(selectedRow, minColumn);
+                const maxWeight = getWeightForPercentage(selectedRow, maxColumn);
+                
+                if (minWeight && maxWeight) {
+                  return `${cleanValue} (${minWeight}-${maxWeight} kg)`;
+                } else if (minWeight) {
+                  return `${cleanValue} (${minWeight} kg)`;
+                } else if (maxWeight) {
+                  return `${cleanValue} (${maxWeight} kg)`;
+                }
+              }
+              
+              return cleanValue;
+            };
+            
+            return `
+              <tr>
+                <td>
+                  <div class="exercise-container">
+                    <div class="exercise-name">${exercise.name}</div>
+                    <select class="exercise-selector" data-exercise-id="${exerciseId}">
+                      <option value="">Seleccionar peso máximo...</option>
+                      ${gymData.map((row, index) => {
+                        const maxWeight = row[7]; // MAX column
+                        const isSelected = selectedRow === index;
+                        return `<option value="${index}" ${isSelected ? 'selected' : ''}>${maxWeight} kg</option>`;
+                      }).join('')}
+                    </select>
+                  </div>
+                </td>
+                <td>${renderWeightCell(exercise.warmupSets.percentage55, '55')}</td>
+                <td>${renderWeightCell(exercise.warmupSets.percentage65, '65')}</td>
+                <td>${renderWeightCell(exercise.warmupSets.percentage75, '75')}</td>
+                <td>${renderRangeCell(exercise.workingSets, 'E')}</td>
+                <td>${exercise.rangeFSets ? renderRangeCell(exercise.rangeFSets, 'F') : '-'}</td>
+              </tr>
+            `;
+          }).join('')}
         </tbody>
       </table>
     </div>

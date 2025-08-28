@@ -13,7 +13,8 @@ export interface MainExercise {
     percentage65?: string; // e.g., "5 reps"  
     percentage75?: string; // e.g., "5 reps", "4 reps"
   };
-  workingSets: string; // e.g., "4x2", "4x3", "5x3"
+  workingSets: string; // e.g., "4x2", "4x3", "5x3" - Rango E
+  rangeFSets?: string; // Optional field for future routines with Rango F exercises
 }
 
 export interface CircuitExercise {

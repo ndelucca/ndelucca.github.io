@@ -156,6 +156,45 @@
   }
 }
 
+// Exercise Container and Selector Styles
+.exercise-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 2.5rem;
+  
+  .exercise-name {
+    font-weight: 500;
+    color: $primary-font-color;
+    font-size: 0.9rem;
+    flex: 1;
+    min-width: 0; // Allow text to wrap/ellipsis if needed
+  }
+  
+  .exercise-selector {
+    flex-shrink: 0;
+    min-width: 120px;
+    max-width: 140px;
+    padding: 0.4rem 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    color: $primary-font-color;
+    font-size: 0.8rem;
+    
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 2px rgba(255, 133, 27, 0.2);
+    }
+    
+    option {
+      background: $secondary-color;
+      color: $primary-font-color;
+    }
+  }
+}
+
 // Routine Table Styles
 .routine-table {
   width: 100%;
@@ -285,6 +324,25 @@
           min-height: 40px;
         }
       }
+    }
+  }
+  
+  .exercise-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    min-height: auto;
+    
+    .exercise-name {
+      font-size: 0.85rem;
+    }
+    
+    .exercise-selector {
+      width: 100%;
+      min-width: auto;
+      max-width: none;
+      font-size: 0.75rem;
+      padding: 0.35rem 0.4rem;
     }
   }
   
