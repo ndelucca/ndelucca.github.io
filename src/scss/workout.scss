@@ -1,0 +1,82 @@
+@use 'sass:color';
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.workout-table-container {
+  overflow-x: auto;
+  margin: 2rem 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.workout-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: $secondary-color;
+  color: $primary-font-color;
+  font-size: 0.9rem;
+
+  th, td {
+    padding: 0.75rem;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  thead {
+    background: $primary-color;
+    color: white;
+    
+    th {
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .percentage-row th {
+      background: color.adjust($primary-color, $lightness: -10%);
+      font-size: 0.85rem;
+      padding: 0.5rem;
+    }
+  }
+
+  tbody {
+    tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    tr:hover {
+      background: rgba(255, 133, 27, 0.2);
+    }
+
+    td {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+    }
+
+    .row-number {
+      background: rgba(255, 133, 27, 0.3);
+      font-weight: bold;
+      color: $primary-color;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .workout-table {
+    font-size: 0.8rem;
+    
+    th, td {
+      padding: 0.5rem 0.25rem;
+    }
+    
+    thead .percentage-row th {
+      font-size: 0.7rem;
+    }
+    
+    tbody td {
+      font-size: 0.75rem;
+    }
+  }
+}
