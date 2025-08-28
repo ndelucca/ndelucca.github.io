@@ -1,7 +1,7 @@
-@import "~@fontsource/jetbrains-mono/index.css";
+@use "variables" as *;
+@use "mixins" as *;
+@use "body";
+@use "navigation";
+@use "footer";
 
-@import "variables";
-@import "mixins";
-@import "body";
-@import "navigation";
-@import "footer";
+@import "~@fontsource/jetbrains-mono/index.css";

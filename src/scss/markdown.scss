@@ -1,5 +1,5 @@
-@import "~github-markdown-css/github-markdown";
-@import "variables";
+@use "variables" as *;
+@use "~github-markdown-css/github-markdown";
 
 .markdown-body {
   padding: 30px;
