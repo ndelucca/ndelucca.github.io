@@ -153,6 +153,30 @@ function selectDay(week: number, day: number) {
   loadRoutineDisplay();
 }
 
+function setupCollapsibleSections() {
+  document.querySelectorAll('.collapsible-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const section = (header as HTMLElement).dataset.section;
+      const content = document.querySelector(`[data-content="${section}"]`) as HTMLElement;
+      const icon = header.querySelector('.collapse-icon') as HTMLElement;
+      
+      if (!content || !icon) return;
+      
+      if (content.style.display === 'none' || content.style.display === '') {
+        content.style.display = 'block';
+        header.classList.remove('collapsed');
+        header.classList.add('expanded');
+        icon.textContent = '▲';
+      } else {
+        content.style.display = 'none';
+        header.classList.remove('expanded');
+        header.classList.add('collapsed');
+        icon.textContent = '▼';
+      }
+    });
+  });
+}
+
 // This function is no longer needed since all days are pre-rendered in HTML
 
 function loadRoutineDisplay() {
@@ -166,6 +190,11 @@ function loadRoutineDisplay() {
   }
 
   routineContent.innerHTML = generateRoutineHTML(workout);
+  
+  // Setup collapsible sections after DOM update
+  setTimeout(() => {
+    setupCollapsibleSections();
+  }, 0);
 }
 
 function generateRoutineHTML(workout: DayWorkout): string {
@@ -174,15 +203,19 @@ function generateRoutineHTML(workout: DayWorkout): string {
   // Warmup section
   html += `
     <div class="routine-section">
-        <h4>Entrada en Calor - ${routine2025_08.warmup.totalRounds} rondas</h4>
+      <h4 class="collapsible-header collapsed" data-section="warmup">
+        Entrada en Calor - ${routine2025_08.warmup.totalRounds} rondas
+        <span class="collapse-icon">▼</span>
+      </h4>
+      <div class="collapsible-content" data-content="warmup" style="display: none;">
         <table class="routine-table">
-           <thead>
-             <tr>
-               <th>Ejercicio</th>
-               <th>Series/Repeticiones</th>
-             </tr>
-           </thead>
-           <tbody>`;
+          <thead>
+            <tr>
+              <th>Ejercicio</th>
+              <th>Series/Repeticiones</th>
+            </tr>
+          </thead>
+          <tbody>`;
 
   routine2025_08.warmup.exercises.forEach(exercise => {
     html += `
@@ -193,8 +226,9 @@ function generateRoutineHTML(workout: DayWorkout): string {
   });
 
   html += `
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
     </div>`;
 
   // Main exercises section

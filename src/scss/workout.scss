@@ -24,6 +24,12 @@
       text-align: center;
       background: rgba(255, 255, 255, 0.05);
       border-right: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 2px solid transparent;
+      box-sizing: border-box;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       
       &:last-child {
         border-right: none;
@@ -39,7 +45,7 @@
       
       &.active {
         background: rgba(255, 133, 27, 0.2);
-        box-shadow: inset 0 -2px 0 $primary-color;
+        border-bottom: 2px solid $primary-color;
         
         .week-title {
           color: $primary-color;
@@ -68,9 +74,16 @@
         cursor: pointer;
         background: rgba(255, 255, 255, 0.02);
         border-right: 1px solid rgba(255, 255, 255, 0.08);
+        border-top: 2px solid transparent;
+        border-bottom: 2px solid transparent;
         transition: all 0.3s ease;
         font-size: 0.85rem;
         color: $secondary-font-color;
+        box-sizing: border-box;
+        min-height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         
         &:last-child {
           border-right: none;
@@ -85,7 +98,7 @@
           background: rgba(255, 133, 27, 0.3);
           color: $primary-color;
           font-weight: bold;
-          box-shadow: inset 0 2px 0 $primary-color;
+          border-top: 2px solid $primary-color;
         }
       }
     }
@@ -111,6 +124,34 @@
       font-size: 1.2rem;
       border-bottom: 2px solid rgba(255, 133, 27, 0.3);
       padding-bottom: 0.5rem;
+    }
+    
+    .collapsible-header {
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: color 0.3s ease;
+      user-select: none;
+      
+      &:hover {
+        color: $primary-color;
+      }
+      
+      .collapse-icon {
+        font-size: 0.8rem;
+        transition: transform 0.3s ease;
+        margin-left: 1rem;
+      }
+      
+      &.expanded .collapse-icon {
+        transform: rotate(180deg);
+      }
+    }
+    
+    .collapsible-content {
+      overflow: hidden;
+      transition: all 0.3s ease;
     }
   }
 }
@@ -228,6 +269,7 @@
     .weeks-row {
       .week-header {
         padding: 0.75rem 0.5rem;
+        min-height: 45px;
         
         .week-title {
           font-size: 0.8rem;
@@ -240,6 +282,7 @@
         .day-link {
           padding: 0.6rem 0.25rem;
           font-size: 0.75rem;
+          min-height: 40px;
         }
       }
     }
