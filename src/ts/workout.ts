@@ -189,7 +189,8 @@ function loadRoutineDisplay() {
     return;
   }
 
-  routineContent.innerHTML = generateRoutineHTML(workout);
+  // Use template function instead of string concatenation
+  routineContent.innerHTML = renderWorkoutTemplate(workout, routine2025_08.warmup);
   
   // Setup collapsible sections after DOM update
   setTimeout(() => {
@@ -197,14 +198,22 @@ function loadRoutineDisplay() {
   }, 0);
 }
 
-function generateRoutineHTML(workout: DayWorkout): string {
-  let html = `<h3>Semana ${workout.week} - Día ${workout.day}</h3>`;
+// Template rendering functions - clean separation of HTML from logic
+function renderWorkoutTemplate(workout: DayWorkout, warmup: typeof routine2025_08.warmup): string {
+  return `
+    <h3>Semana ${workout.week} - Día ${workout.day}</h3>
+    
+    ${renderWarmupSection(warmup)}
+    ${renderMainExercisesSection(workout.mainExercises)}
+    ${renderCircuitSection(workout.circuit, workout.circuitRounds)}
+  `;
+}
 
-  // Warmup section
-  html += `
+function renderWarmupSection(warmup: typeof routine2025_08.warmup): string {
+  return `
     <div class="routine-section">
       <h4 class="collapsible-header collapsed" data-section="warmup">
-        Entrada en Calor - ${routine2025_08.warmup.totalRounds} rondas
+        Entrada en Calor - ${warmup.totalRounds} rondas
         <span class="collapse-icon">▼</span>
       </h4>
       <div class="collapsible-content" data-content="warmup" style="display: none;">
@@ -215,24 +224,22 @@ function generateRoutineHTML(workout: DayWorkout): string {
               <th>Series/Repeticiones</th>
             </tr>
           </thead>
-          <tbody>`;
-
-  routine2025_08.warmup.exercises.forEach(exercise => {
-    html += `
-      <tr>
-        <td>${exercise.name}</td>
-        <td>${exercise.sets}</td>
-      </tr>`;
-  });
-
-  html += `
+          <tbody>
+            ${warmup.exercises.map(exercise => `
+              <tr>
+                <td>${exercise.name}</td>
+                <td>${exercise.sets}</td>
+              </tr>
+            `).join('')}
           </tbody>
         </table>
       </div>
-    </div>`;
+    </div>
+  `;
+}
 
-  // Main exercises section
-  html += `
+function renderMainExercisesSection(mainExercises: DayWorkout['mainExercises']): string {
+  return `
     <div class="routine-section">
       <h4>Ejercicios Principales</h4>
       <table class="routine-table">
@@ -245,28 +252,26 @@ function generateRoutineHTML(workout: DayWorkout): string {
             <th>Rango E</th>
           </tr>
         </thead>
-        <tbody>`;
-
-  workout.mainExercises.forEach(exercise => {
-    html += `
-      <tr>
-        <td>${exercise.name}</td>
-        <td>${exercise.warmupSets.percentage55 || '-'}</td>
-        <td>${exercise.warmupSets.percentage65 || '-'}</td>
-        <td>${exercise.warmupSets.percentage75 || '-'}</td>
-        <td>${exercise.workingSets}</td>
-      </tr>`;
-  });
-
-  html += `
+        <tbody>
+          ${mainExercises.map(exercise => `
+            <tr>
+              <td>${exercise.name}</td>
+              <td>${exercise.warmupSets.percentage55 || '-'}</td>
+              <td>${exercise.warmupSets.percentage65 || '-'}</td>
+              <td>${exercise.warmupSets.percentage75 || '-'}</td>
+              <td>${exercise.workingSets}</td>
+            </tr>
+          `).join('')}
         </tbody>
       </table>
-    </div>`;
+    </div>
+  `;
+}
 
-  // Circuit section
-  html += `
+function renderCircuitSection(circuit: DayWorkout['circuit'], rounds: number): string {
+  return `
     <div class="routine-section">
-      <h4>Circuito Final (${workout.circuitRounds} rondas)</h4>
+      <h4>Circuito Final (${rounds} rondas)</h4>
       <table class="routine-table">
         <thead>
           <tr>
@@ -274,20 +279,16 @@ function generateRoutineHTML(workout: DayWorkout): string {
             <th>Repeticiones</th>
           </tr>
         </thead>
-        <tbody>`;
-
-  workout.circuit.forEach(exercise => {
-    html += `
-      <tr>
-        <td>${exercise.name}</td>
-        <td>${exercise.reps}</td>
-      </tr>`;
-  });
-
-  html += `
+        <tbody>
+          ${circuit.map(exercise => `
+            <tr>
+              <td>${exercise.name}</td>
+              <td>${exercise.reps}</td>
+            </tr>
+          `).join('')}
         </tbody>
       </table>
-    </div>`;
-
-  return html;
+    </div>
+  `;
 }
+
