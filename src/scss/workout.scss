@@ -2,6 +2,162 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 
+// Routine Selector Grid Styles
+.routine-selector {
+  margin: 2rem 0;
+  
+  .selector-grid {
+    background: rgba(18, 22, 29, 0.6);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .weeks-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    
+    .week-header {
+      padding: 1rem;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.05);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      
+      &:last-child {
+        border-right: none;
+      }
+      
+      .week-title {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: $secondary-font-color;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      
+      &.active {
+        background: rgba(255, 133, 27, 0.2);
+        box-shadow: inset 0 -2px 0 $primary-color;
+        
+        .week-title {
+          color: $primary-color;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+  
+  .days-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    
+    .week-days {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      
+      &:last-child {
+        border-right: none;
+      }
+      
+      .day-link {
+        padding: 0.75rem 0.5rem;
+        text-align: center;
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0.02);
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
+        transition: all 0.3s ease;
+        font-size: 0.85rem;
+        color: $secondary-font-color;
+        
+        &:last-child {
+          border-right: none;
+        }
+        
+        &:hover {
+          background: rgba(255, 133, 27, 0.15);
+          color: $primary-font-color;
+        }
+        
+        &.active {
+          background: rgba(255, 133, 27, 0.3);
+          color: $primary-color;
+          font-weight: bold;
+          box-shadow: inset 0 2px 0 $primary-color;
+        }
+      }
+    }
+  }
+}
+
+// Current Routine Display Styles
+.current-routine {
+  margin: 2rem 0;
+  
+  h3 {
+    color: $primary-color;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+  }
+  
+  .routine-section {
+    margin-bottom: 2rem;
+    
+    h4 {
+      color: $primary-font-color;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      border-bottom: 2px solid rgba(255, 133, 27, 0.3);
+      padding-bottom: 0.5rem;
+    }
+  }
+}
+
+// Routine Table Styles
+.routine-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(18, 22, 29, 0.8);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  
+  th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  th {
+    background: rgba(255, 133, 27, 0.2);
+    color: $primary-color;
+    font-weight: bold;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  td {
+    color: $primary-font-color;
+    
+    &:first-child {
+      font-weight: 500;
+      color: $primary-font-color;
+    }
+  }
+  
+  tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+  
+  tr:last-child td {
+    border-bottom: none;
+  }
+}
+
 .workout-table-container {
   overflow-x: auto;
   margin: 2rem 0;
@@ -64,6 +220,43 @@
 }
 
 @media (max-width: 768px) {
+  .routine-selector {
+    .selector-grid {
+      border-radius: 8px;
+    }
+    
+    .weeks-row {
+      .week-header {
+        padding: 0.75rem 0.5rem;
+        
+        .week-title {
+          font-size: 0.8rem;
+        }
+      }
+    }
+    
+    .days-row {
+      .week-days {
+        .day-link {
+          padding: 0.6rem 0.25rem;
+          font-size: 0.75rem;
+        }
+      }
+    }
+  }
+  
+  .routine-table {
+    font-size: 0.8rem;
+    
+    th, td {
+      padding: 0.5rem;
+    }
+    
+    th {
+      font-size: 0.75rem;
+    }
+  }
+  
   .workout-table {
     font-size: 0.8rem;
     

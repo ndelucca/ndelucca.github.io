@@ -1,3 +1,6 @@
+import { routine2025_08, getWorkoutByWeekAndDay } from './routines/2025_08';
+import { DayWorkout } from './routines/types';
+
 // Hardcoded gym table data from gym_table.csv
 const gymData = [
   ["27.5", "32.5", "37.5", "40", "45", "45", "50", "50"],
@@ -63,30 +66,194 @@ const gymData = [
   ["110", "130", "150", "160", "175", "180", "195", "200"]
 ];
 
+let currentWeek = 1;
+let currentDay = 1;
+
 document.addEventListener('DOMContentLoaded', () => {
   loadWorkoutData();
+  setupRoutineSelector();
+  loadRoutineDisplay();
 });
 
 function loadWorkoutData() {
   const tbody = document.getElementById('workout-data');
   if (!tbody) return;
-  
+
   gymData.forEach((rowData, index) => {
     const row = document.createElement('tr');
-    
+
     // Row number (starting from 1)
     const rowNum = document.createElement('td');
     rowNum.textContent = (index + 1).toString();
     rowNum.className = 'row-number';
     row.appendChild(rowNum);
-    
+
     // Add each data cell
     rowData.forEach(value => {
       const cell = document.createElement('td');
       cell.textContent = value;
       row.appendChild(cell);
     });
-    
+
     tbody.appendChild(row);
   });
+}
+
+function setupRoutineSelector() {
+  // Handle day link clicks only
+  const dayLinks = document.querySelectorAll('.day-link');
+  dayLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      const week = parseInt(target.dataset.week || '1');
+      const day = parseInt(target.dataset.day || '1');
+      selectDay(week, day);
+    });
+  });
+}
+
+function selectWeek(week: number) {
+  currentWeek = week;
+
+  // Update active week header
+  document.querySelectorAll('.week-header').forEach(header => {
+    const element = header as HTMLElement;
+    element.classList.remove('active');
+    if (element.dataset.week === week.toString()) {
+      element.classList.add('active');
+    }
+  });
+
+  // Load first day of the week
+  selectDay(week, 1);
+}
+
+function selectDay(week: number, day: number) {
+  currentWeek = week;
+  currentDay = day;
+
+  // Update active week header
+  document.querySelectorAll('.week-header').forEach(header => {
+    const element = header as HTMLElement;
+    element.classList.remove('active');
+    if (element.dataset.week === week.toString()) {
+      element.classList.add('active');
+    }
+  });
+
+  // Update active day link
+  document.querySelectorAll('.day-link').forEach(link => {
+    const element = link as HTMLElement;
+    element.classList.remove('active');
+    if (element.dataset.week === week.toString() && element.dataset.day === day.toString()) {
+      element.classList.add('active');
+    }
+  });
+
+  loadRoutineDisplay();
+}
+
+// This function is no longer needed since all days are pre-rendered in HTML
+
+function loadRoutineDisplay() {
+  const routineContent = document.getElementById('routine-content');
+  if (!routineContent) return;
+
+  const workout = getWorkoutByWeekAndDay(currentWeek, currentDay);
+  if (!workout) {
+    routineContent.innerHTML = '<p>No se encontró entrenamiento para este día.</p>';
+    return;
+  }
+
+  routineContent.innerHTML = generateRoutineHTML(workout);
+}
+
+function generateRoutineHTML(workout: DayWorkout): string {
+  let html = `<h3>Semana ${workout.week} - Día ${workout.day}</h3>`;
+
+  // Warmup section
+  html += `
+    <div class="routine-section">
+        <h4>Entrada en Calor - ${routine2025_08.warmup.totalRounds} rondas</h4>
+        <table class="routine-table">
+           <thead>
+             <tr>
+               <th>Ejercicio</th>
+               <th>Series/Repeticiones</th>
+             </tr>
+           </thead>
+           <tbody>`;
+
+  routine2025_08.warmup.exercises.forEach(exercise => {
+    html += `
+      <tr>
+        <td>${exercise.name}</td>
+        <td>${exercise.sets}</td>
+      </tr>`;
+  });
+
+  html += `
+        </tbody>
+      </table>
+    </div>`;
+
+  // Main exercises section
+  html += `
+    <div class="routine-section">
+      <h4>Ejercicios Principales</h4>
+      <table class="routine-table">
+        <thead>
+          <tr>
+            <th>Ejercicio</th>
+            <th>55%</th>
+            <th>65%</th>
+            <th>75%</th>
+            <th>Rango E</th>
+          </tr>
+        </thead>
+        <tbody>`;
+
+  workout.mainExercises.forEach(exercise => {
+    html += `
+      <tr>
+        <td>${exercise.name}</td>
+        <td>${exercise.warmupSets.percentage55 || '-'}</td>
+        <td>${exercise.warmupSets.percentage65 || '-'}</td>
+        <td>${exercise.warmupSets.percentage75 || '-'}</td>
+        <td>${exercise.workingSets}</td>
+      </tr>`;
+  });
+
+  html += `
+        </tbody>
+      </table>
+    </div>`;
+
+  // Circuit section
+  html += `
+    <div class="routine-section">
+      <h4>Circuito Final (${workout.circuitRounds} rondas)</h4>
+      <table class="routine-table">
+        <thead>
+          <tr>
+            <th>Ejercicio</th>
+            <th>Repeticiones</th>
+          </tr>
+        </thead>
+        <tbody>`;
+
+  workout.circuit.forEach(exercise => {
+    html += `
+      <tr>
+        <td>${exercise.name}</td>
+        <td>${exercise.reps}</td>
+      </tr>`;
+  });
+
+  html += `
+        </tbody>
+      </table>
+    </div>`;
+
+  return html;
 }
