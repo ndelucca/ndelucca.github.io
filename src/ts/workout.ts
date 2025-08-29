@@ -69,13 +69,21 @@ const gymData = [
 let currentWeek = 1;
 let currentDay = 1;
 
-// Exercise selection storage key
+// Storage keys
 const EXERCISE_SELECTIONS_KEY = 'workout_exercise_selections';
+const LAST_SELECTED_DAY_KEY = 'workout_last_selected_day';
 
 document.addEventListener('DOMContentLoaded', () => {
   loadWorkoutData();
   setupRoutineSelector();
-  loadRoutineDisplay();
+  
+  // Load saved day if available, otherwise use defaults
+  const savedDay = loadLastSelectedDay();
+  if (savedDay) {
+    selectDay(savedDay.week, savedDay.day);
+  } else {
+    selectDay(currentWeek, currentDay);
+  }
 });
 
 function loadWorkoutData() {
@@ -154,6 +162,7 @@ function selectDay(week: number, day: number) {
   });
 
   loadRoutineDisplay();
+  saveLastSelectedDay(week, day);
 }
 
 function setupCollapsibleSections() {
@@ -234,6 +243,31 @@ function getWeightForPercentage(rowIndex: number, columnIndex: number): string |
     return null;
   }
   return gymData[rowIndex][columnIndex];
+}
+
+function saveLastSelectedDay(week: number, day: number): void {
+  try {
+    const dayData = { week, day };
+    localStorage.setItem(LAST_SELECTED_DAY_KEY, JSON.stringify(dayData));
+  } catch (error) {
+    console.error('Error saving last selected day:', error);
+  }
+}
+
+function loadLastSelectedDay(): { week: number; day: number } | null {
+  try {
+    const stored = localStorage.getItem(LAST_SELECTED_DAY_KEY);
+    if (stored) {
+      const data = JSON.parse(stored);
+      // Validate the data structure
+      if (data && typeof data.week === 'number' && typeof data.day === 'number') {
+        return data;
+      }
+    }
+    return null;
+  } catch {
+    return null;
+  }
 }
 
 // This function is no longer needed since weights are calculated directly in the template
