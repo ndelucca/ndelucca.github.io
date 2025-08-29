@@ -2,6 +2,119 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 
+// Login Screen Styles
+.login-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: $main-backround-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.login-container {
+  background: rgba(30, 37, 48, 0.95);
+  padding: 3rem 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 133, 27, 0.2);
+  min-width: 400px;
+  max-width: 500px;
+  text-align: center;
+
+  h1 {
+    color: $primary-color;
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    font-weight: 600;
+  }
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: left;
+
+    label {
+      color: $primary-font-color;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    input[type="password"] {
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      color: $primary-font-color;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba(255, 133, 27, 0.1);
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+    }
+  }
+
+  .login-button {
+    padding: 1rem 2rem;
+    background: $primary-color;
+    border: none;
+    border-radius: 6px;
+    color: $main-backround-color;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: color.adjust($primary-color, $lightness: 10%);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  .login-error {
+    color: #ff6b6b;
+    font-size: 0.9rem;
+    padding: 0.75rem;
+    background: rgba(255, 107, 107, 0.1);
+    border: 1px solid rgba(255, 107, 107, 0.3);
+    border-radius: 6px;
+    margin-top: 0.5rem;
+  }
+}
+
+// Responsive login
+@media (max-width: 768px) {
+  .login-container {
+    margin: 1rem;
+    padding: 2rem 1.5rem;
+    min-width: auto;
+    width: calc(100% - 2rem);
+  }
+}
+
 // Routine Selector Grid Styles
 .routine-selector {
   margin: 2rem 0;

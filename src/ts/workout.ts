@@ -72,11 +72,96 @@ let currentDay = 1;
 // Storage keys
 const EXERCISE_SELECTIONS_KEY = 'workout_exercise_selections';
 const LAST_SELECTED_DAY_KEY = 'workout_last_selected_day';
+const LOGIN_AUTH_KEY = 'workout_authenticated';
+
+const CORRECT_PASSWORD_HASH = '80895744385d20a00a4f66ec0d590e06fa2969fd4a4381157aaea1038002a347';
 
 document.addEventListener('DOMContentLoaded', () => {
+  checkAuthenticationAndInitialize();
+});
+
+async function hashPassword(password: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+  return hashHex;
+}
+
+// Authentication Check and Initialize
+function checkAuthenticationAndInitialize(): void {
+  if (isAuthenticated()) {
+    // User is already authenticated - skip login and go straight to app
+    hideLoginScreen();
+    initializeWorkoutApp();
+  } else {
+    // User is not authenticated - show login form
+    setupLoginForm();
+  }
+}
+
+// Login Functions
+function setupLoginForm(): void {
+  const loginForm = document.getElementById('login-form') as HTMLFormElement;
+  const loginError = document.getElementById('login-error') as HTMLElement;
+  const passwordInput = document.getElementById('workout-password') as HTMLInputElement;
+
+  if (!loginForm || !loginError || !passwordInput) return;
+
+  loginForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const enteredPassword = passwordInput.value;
+
+    try {
+      const hashedEnteredPassword = await hashPassword(enteredPassword);
+
+      if (hashedEnteredPassword === CORRECT_PASSWORD_HASH) {
+        // Correct password - save authentication and proceed
+        saveAuthentication();
+        hideLoginScreen();
+        initializeWorkoutApp();
+      } else {
+        // Wrong password - show error
+        showLoginError();
+        passwordInput.value = ''; // Clear the password field
+        passwordInput.focus();
+      }
+    } catch (error) {
+      console.error('Error hashing password:', error);
+      showLoginError();
+      passwordInput.value = '';
+      passwordInput.focus();
+    }
+  });
+
+  // Focus on password input when page loads
+  passwordInput.focus();
+}
+
+function showLoginError(): void {
+  const loginError = document.getElementById('login-error') as HTMLElement;
+  if (loginError) {
+    loginError.style.display = 'block';
+  }
+}
+
+function hideLoginScreen(): void {
+  const loginScreen = document.getElementById('login-screen') as HTMLElement;
+  const workoutContent = document.getElementById('workout-content') as HTMLElement;
+
+  if (loginScreen && workoutContent) {
+    loginScreen.style.display = 'none';
+    workoutContent.style.display = 'block';
+  }
+}
+
+function initializeWorkoutApp(): void {
+  // Initialize the workout app after successful login
   loadWorkoutData();
   setupRoutineSelector();
-  
+
   // Load saved day if available, otherwise use defaults
   const savedDay = loadLastSelectedDay();
   if (savedDay) {
@@ -84,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
   } else {
     selectDay(currentWeek, currentDay);
   }
-});
+}
 
 function loadWorkoutData() {
   const tbody = document.getElementById('workout-data');
@@ -171,9 +256,9 @@ function setupCollapsibleSections() {
       const section = (header as HTMLElement).dataset.section;
       const content = document.querySelector(`[data-content="${section}"]`) as HTMLElement;
       const icon = header.querySelector('.collapse-icon') as HTMLElement;
-      
+
       if (!content || !icon) return;
-      
+
       if (content.style.display === 'none' || content.style.display === '') {
         content.style.display = 'block';
         header.classList.remove('collapsed');
@@ -203,7 +288,7 @@ function loadRoutineDisplay() {
 
   // Use template function instead of string concatenation
   routineContent.innerHTML = renderWorkoutTemplate(workout, routine2025_08.warmup);
-  
+
   // Setup collapsible sections and exercise selectors after DOM update
   setTimeout(() => {
     setupCollapsibleSections();
@@ -270,19 +355,36 @@ function loadLastSelectedDay(): { week: number; day: number } | null {
   }
 }
 
+function saveAuthentication(): void {
+  try {
+    localStorage.setItem(LOGIN_AUTH_KEY, 'true');
+  } catch (error) {
+    console.error('Error saving authentication status:', error);
+  }
+}
+
+function isAuthenticated(): boolean {
+  try {
+    const stored = localStorage.getItem(LOGIN_AUTH_KEY);
+    return stored === 'true';
+  } catch {
+    return false;
+  }
+}
+
 // This function is no longer needed since weights are calculated directly in the template
 
 function setupExerciseSelectors(): void {
   document.querySelectorAll('.exercise-selector').forEach(select => {
     const selectElement = select as HTMLSelectElement;
     const exerciseId = selectElement.dataset.exerciseId;
-    
+
     if (!exerciseId) return;
-    
+
     selectElement.addEventListener('change', (event) => {
       const target = event.target as HTMLSelectElement;
       const selectedValue = target.value;
-      
+
       if (selectedValue === '') {
         // Remove selection
         const selections = loadExerciseSelections();
@@ -293,7 +395,7 @@ function setupExerciseSelectors(): void {
         const rowIndex = parseInt(selectedValue);
         saveExerciseSelection(exerciseId, rowIndex);
       }
-      
+
       // Refresh the entire routine display to show updated weights
       loadRoutineDisplay();
     });
@@ -304,7 +406,7 @@ function setupExerciseSelectors(): void {
 function renderWorkoutTemplate(workout: DayWorkout, warmup: typeof routine2025_08.warmup): string {
   return `
     <h3>Semana ${workout.week} - Día ${workout.day}</h3>
-    
+
     ${renderWarmupSection(warmup)}
     ${renderMainExercisesSection(workout.mainExercises)}
     ${renderCircuitSection(workout.circuit, workout.circuitRounds)}
@@ -342,7 +444,7 @@ function renderWarmupSection(warmup: typeof routine2025_08.warmup): string {
 
 function renderMainExercisesSection(mainExercises: DayWorkout['mainExercises']): string {
   const selections = loadExerciseSelections();
-  
+
   return `
     <div class="routine-section">
       <h4>Ejercicios Principales</h4>
@@ -361,14 +463,14 @@ function renderMainExercisesSection(mainExercises: DayWorkout['mainExercises']):
           ${mainExercises.map(exercise => {
             const exerciseId = sanitizeExerciseName(exercise.name);
             const selectedRow = selections[exerciseId];
-            
+
             // Helper function to render weight cell
             const renderWeightCell = (originalValue: string | undefined, columnType: string) => {
               if (!originalValue || originalValue === '-') return '-';
-              
+
               // Extract just the number/text without "reps"
               const cleanValue = originalValue.replace(/\s*reps?\s*/i, '').trim();
-              
+
               if (selectedRow !== undefined) {
                 const columnMap: Record<string, number> = {
                   '55': 0, '65': 1, '75': 2
@@ -379,24 +481,24 @@ function renderMainExercisesSection(mainExercises: DayWorkout['mainExercises']):
                   return weight ? `${cleanValue} (${weight} kg)` : cleanValue;
                 }
               }
-              
+
               return `<span data-exercise-id="${exerciseId}" data-column-type="${columnType}" data-original-text="${cleanValue}">${cleanValue}</span>`;
             };
-            
+
             // Helper function to render range cell (E or F) with min/max weights
             const renderRangeCell = (originalValue: string, rangeType: 'E' | 'F') => {
               if (!originalValue || originalValue === '-') return '-';
-              
+
               // Extract just the number/text without "reps"
               const cleanValue = originalValue.replace(/\s*reps?\s*/i, '').trim();
-              
+
               if (selectedRow !== undefined) {
                 const minColumn = rangeType === 'E' ? 3 : 5; // E min = 3, F min = 5
                 const maxColumn = rangeType === 'E' ? 4 : 6; // E max = 4, F max = 6
-                
+
                 const minWeight = getWeightForPercentage(selectedRow, minColumn);
                 const maxWeight = getWeightForPercentage(selectedRow, maxColumn);
-                
+
                 if (minWeight && maxWeight) {
                   return `${cleanValue} (${minWeight}-${maxWeight} kg)`;
                 } else if (minWeight) {
@@ -405,10 +507,10 @@ function renderMainExercisesSection(mainExercises: DayWorkout['mainExercises']):
                   return `${cleanValue} (${maxWeight} kg)`;
                 }
               }
-              
+
               return cleanValue;
             };
-            
+
             return `
               <tr>
                 <td>
