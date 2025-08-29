@@ -381,7 +381,7 @@ function renderMainExercisesSection(mainExercises: DayWorkout['mainExercises']):
                   <div class="exercise-container">
                     <div class="exercise-name">${exercise.name}</div>
                     <select class="exercise-selector" data-exercise-id="${exerciseId}">
-                      <option value="">Seleccionar peso máximo...</option>
+                      <option value="">Máximo...</option>
                       ${gymData.map((row, index) => {
                         const maxWeight = row[7]; // MAX column
                         const isSelected = selectedRow === index;
