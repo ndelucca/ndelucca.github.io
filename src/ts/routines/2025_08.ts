@@ -14,7 +14,7 @@ export const routine2025_08: MonthRoutine = {
   },
   ranges: {
     rangeE: "80% - 87.5% del 1RM",
-    rangeF: "87.5% - 95% del 1RM (patrón siguiente)"
+    rangeF: "87.5% - 95% del 1RM",
   },
   workoutDays: [
     // SEMANA 1
@@ -52,7 +52,7 @@ export const routine2025_08: MonthRoutine = {
       week: 1,
       mainExercises: [
         {
-          name: "RDL (Peso muerto rumano)",
+          name: "RDL",
           warmupSets: { percentage55: "5 reps", percentage65: "5 reps", percentage75: "5 reps" },
           workingSets: "4x2"
         },

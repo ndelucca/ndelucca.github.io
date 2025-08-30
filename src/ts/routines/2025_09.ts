@@ -5,16 +5,16 @@ export const routine2025_09: MonthRoutine = {
   month: "2025_09",
   warmup: {
     exercises: [
-      { name: "Rev la olla", sets: "6+6" },
-      { name: "Emp el cielo", sets: "15\"" },
-      { name: "Mov c/barra", sets: "15\"" },
-      { name: "Vit cruzada", sets: "6" }
+      { name: "Revolver la olla", sets: "6+6" },
+      { name: "Empujar el cielo c/mancuerna", sets: "15\"" },
+      { name: "Movilizaciones c/barra", sets: "15\"" },
+      { name: "Vitalización cruzada", sets: "6" }
     ],
     totalRounds: 3
   },
   ranges: {
     rangeE: "80% - 87.5% del 1RM",
-    rangeF: "87.5% - 95% del 1RM (patrón siguiente)"
+    rangeF: "87.5% - 95% del 1RM"
   },
   workoutDays: [
     // SEMANA 1
@@ -52,7 +52,7 @@ export const routine2025_09: MonthRoutine = {
       week: 1,
       mainExercises: [
         {
-          name: "RDL (Peso muerto rumano)",
+          name: "RDL",
           warmupSets: { percentage55: "5 reps", percentage65: "5 reps", percentage75: "4 reps" },
           workingSets: "3x3"
         },
