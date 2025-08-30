@@ -1,5 +1,5 @@
-import { routine2025_08, getWorkoutByWeekAndDay } from './routines/2025_08';
-import { DayWorkout } from './routines/types';
+import { getAvailableMonths, getRoutineByMonth } from './routines/index';
+import { DayWorkout, MonthRoutine } from './routines/types';
 
 // Hardcoded gym table data from gym_table.csv
 const gymData = [
@@ -66,12 +66,15 @@ const gymData = [
   ["110", "130", "150", "160", "175", "180", "195", "200"]
 ];
 
+let currentMonth = '';
 let currentWeek = 1;
 let currentDay = 1;
+let currentRoutine: MonthRoutine | null = null;
 
 // Storage keys
 const EXERCISE_SELECTIONS_KEY = 'workout_exercise_selections';
 const LAST_SELECTED_DAY_KEY = 'workout_last_selected_day';
+const LAST_SELECTED_MONTH_KEY = 'workout_last_selected_month';
 const LOGIN_AUTH_KEY = 'workout_authenticated';
 
 const CORRECT_PASSWORD_HASH = '80895744385d20a00a4f66ec0d590e06fa2969fd4a4381157aaea1038002a347';
@@ -160,7 +163,17 @@ function hideLoginScreen(): void {
 function initializeWorkoutApp(): void {
   // Initialize the workout app after successful login
   loadWorkoutData();
+  setupMonthSelector();
   setupRoutineSelector();
+
+  // Load saved month if available, otherwise use most recent
+  const savedMonth = loadLastSelectedMonth();
+  const availableMonths = getAvailableMonths();
+  const monthToUse = savedMonth && availableMonths.includes(savedMonth) 
+    ? savedMonth 
+    : availableMonths[availableMonths.length - 1]; // Most recent month
+
+  selectMonth(monthToUse);
 
   // Load saved day if available, otherwise use defaults
   const savedDay = loadLastSelectedDay();
@@ -192,6 +205,29 @@ function loadWorkoutData() {
     });
 
     tbody.appendChild(row);
+  });
+}
+
+function setupMonthSelector() {
+  const monthSelect = document.getElementById('month-select') as HTMLSelectElement;
+  if (!monthSelect) return;
+
+  // Populate month options
+  const availableMonths = getAvailableMonths();
+  monthSelect.innerHTML = '';
+  
+  availableMonths.forEach(monthId => {
+    const option = document.createElement('option');
+    option.value = monthId;
+    // Format display name (e.g., "2025_09" -> "Septiembre 2025")
+    option.textContent = formatMonthDisplay(monthId);
+    monthSelect.appendChild(option);
+  });
+
+  // Handle month selection change
+  monthSelect.addEventListener('change', (e) => {
+    const target = e.target as HTMLSelectElement;
+    selectMonth(target.value);
   });
 }
 
@@ -250,6 +286,41 @@ function selectDay(week: number, day: number) {
   saveLastSelectedDay(week, day);
 }
 
+function selectMonth(monthId: string) {
+  currentMonth = monthId;
+  currentRoutine = getRoutineByMonth(monthId);
+  
+  if (!currentRoutine) {
+    console.error(`No routine found for month: ${monthId}`);
+    return;
+  }
+
+  // Update the select element
+  const monthSelect = document.getElementById('month-select') as HTMLSelectElement;
+  if (monthSelect) {
+    monthSelect.value = monthId;
+  }
+
+  // Save the selected month
+  saveLastSelectedMonth(monthId);
+  
+  // Reload the current routine display
+  loadRoutineDisplay();
+}
+
+function formatMonthDisplay(monthId: string): string {
+  const [year, monthNum] = monthId.split('_');
+  const monthNames = [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+  ];
+  
+  const monthIndex = parseInt(monthNum) - 1;
+  const monthName = monthNames[monthIndex] || `Mes ${monthNum}`;
+  
+  return `${monthName} ${year}`;
+}
+
 function setupCollapsibleSections() {
   document.querySelectorAll('.collapsible-header').forEach(header => {
     header.addEventListener('click', () => {
@@ -280,20 +351,30 @@ function loadRoutineDisplay() {
   const routineContent = document.getElementById('routine-content');
   if (!routineContent) return;
 
+  if (!currentRoutine) {
+    routineContent.innerHTML = '<p>No se ha seleccionado ninguna rutina.</p>';
+    return;
+  }
+
   const workout = getWorkoutByWeekAndDay(currentWeek, currentDay);
   if (!workout) {
     routineContent.innerHTML = '<p>No se encontró entrenamiento para este día.</p>';
     return;
   }
 
-  // Use template function instead of string concatenation
-  routineContent.innerHTML = renderWorkoutTemplate(workout, routine2025_08.warmup);
+  // Use template function with current routine
+  routineContent.innerHTML = renderWorkoutTemplate(workout, currentRoutine.warmup);
 
   // Setup collapsible sections and exercise selectors after DOM update
   setTimeout(() => {
     setupCollapsibleSections();
     setupExerciseSelectors();
   }, 0);
+}
+
+function getWorkoutByWeekAndDay(week: number, day: number): DayWorkout | undefined {
+  if (!currentRoutine) return undefined;
+  return currentRoutine.workoutDays.find(w => w.week === week && w.day === day);
 }
 
 // Exercise Selection Functions
@@ -307,7 +388,35 @@ function sanitizeExerciseName(name: string): string {
 function loadExerciseSelections(): Record<string, number> {
   try {
     const stored = localStorage.getItem(EXERCISE_SELECTIONS_KEY);
-    return stored ? JSON.parse(stored) : {};
+    if (!stored) return {};
+    
+    const data = JSON.parse(stored);
+    
+    // Check if it's the new format (grouped by month)
+    if (data && typeof data === 'object' && currentMonth && data[currentMonth]) {
+      return data[currentMonth];
+    }
+    
+    // Check if it's the old format (flat structure) - migrate it
+    if (data && typeof data === 'object' && !currentMonth) {
+      // If no current month set, return empty to avoid errors
+      return {};
+    }
+    
+    // Handle old format migration
+    if (data && typeof data === 'object' && currentMonth) {
+      // Check if any key doesn't look like a month ID (YYYY_MM)
+      const hasOldFormat = Object.keys(data).some(key => !/^\d{4}_\d{2}$/.test(key));
+      if (hasOldFormat) {
+        // This is old format, migrate to new format
+        migrateExerciseSelections(data);
+        // Return the current month's data after migration
+        const newData = JSON.parse(localStorage.getItem(EXERCISE_SELECTIONS_KEY) || '{}');
+        return newData[currentMonth] || {};
+      }
+    }
+    
+    return {};
   } catch {
     return {};
   }
@@ -315,11 +424,74 @@ function loadExerciseSelections(): Record<string, number> {
 
 function saveExerciseSelection(exerciseId: string, rowIndex: number): void {
   try {
-    const selections = loadExerciseSelections();
-    selections[exerciseId] = rowIndex;
-    localStorage.setItem(EXERCISE_SELECTIONS_KEY, JSON.stringify(selections));
+    if (!currentMonth) {
+      console.error('Cannot save exercise selection: no current month set');
+      return;
+    }
+    
+    const allSelections = loadAllExerciseSelections();
+    
+    // Initialize month if it doesn't exist
+    if (!allSelections[currentMonth]) {
+      allSelections[currentMonth] = {};
+    }
+    
+    // Save the selection for the current month
+    allSelections[currentMonth][exerciseId] = rowIndex;
+    
+    localStorage.setItem(EXERCISE_SELECTIONS_KEY, JSON.stringify(allSelections));
   } catch (error) {
     console.error('Error saving exercise selection:', error);
+  }
+}
+
+function removeExerciseSelection(exerciseId: string): void {
+  try {
+    if (!currentMonth) {
+      console.error('Cannot remove exercise selection: no current month set');
+      return;
+    }
+    
+    const allSelections = loadAllExerciseSelections();
+    
+    // Remove the selection for the current month
+    if (allSelections[currentMonth]) {
+      delete allSelections[currentMonth][exerciseId];
+    }
+    
+    localStorage.setItem(EXERCISE_SELECTIONS_KEY, JSON.stringify(allSelections));
+  } catch (error) {
+    console.error('Error removing exercise selection:', error);
+  }
+}
+
+function loadAllExerciseSelections(): Record<string, Record<string, number>> {
+  try {
+    const stored = localStorage.getItem(EXERCISE_SELECTIONS_KEY);
+    return stored ? JSON.parse(stored) : {};
+  } catch {
+    return {};
+  }
+}
+
+function migrateExerciseSelections(oldData: Record<string, number>): void {
+  try {
+    // Create new format structure
+    const newData: Record<string, Record<string, number>> = {};
+    
+    // Get all available months
+    const availableMonths = getAvailableMonths();
+    
+    // For migration, we'll assign the old selections to all available months
+    // This ensures users don't lose their existing selections
+    availableMonths.forEach(monthId => {
+      newData[monthId] = { ...oldData };
+    });
+    
+    // Save the migrated data
+    localStorage.setItem(EXERCISE_SELECTIONS_KEY, JSON.stringify(newData));
+  } catch (error) {
+    console.error('Error migrating exercise selections:', error);
   }
 }
 
@@ -350,6 +522,22 @@ function loadLastSelectedDay(): { week: number; day: number } | null {
       }
     }
     return null;
+  } catch {
+    return null;
+  }
+}
+
+function saveLastSelectedMonth(monthId: string): void {
+  try {
+    localStorage.setItem(LAST_SELECTED_MONTH_KEY, monthId);
+  } catch (error) {
+    console.error('Error saving last selected month:', error);
+  }
+}
+
+function loadLastSelectedMonth(): string | null {
+  try {
+    return localStorage.getItem(LAST_SELECTED_MONTH_KEY);
   } catch {
     return null;
   }
@@ -387,9 +575,7 @@ function setupExerciseSelectors(): void {
 
       if (selectedValue === '') {
         // Remove selection
-        const selections = loadExerciseSelections();
-        delete selections[exerciseId];
-        localStorage.setItem(EXERCISE_SELECTIONS_KEY, JSON.stringify(selections));
+        removeExerciseSelection(exerciseId);
       } else {
         // Save selection
         const rowIndex = parseInt(selectedValue);
@@ -403,7 +589,7 @@ function setupExerciseSelectors(): void {
 }
 
 // Template rendering functions - clean separation of HTML from logic
-function renderWorkoutTemplate(workout: DayWorkout, warmup: typeof routine2025_08.warmup): string {
+function renderWorkoutTemplate(workout: DayWorkout, warmup: MonthRoutine['warmup']): string {
   return `
     <h3>Semana ${workout.week} - Día ${workout.day}</h3>
 
@@ -413,7 +599,7 @@ function renderWorkoutTemplate(workout: DayWorkout, warmup: typeof routine2025_0
   `;
 }
 
-function renderWarmupSection(warmup: typeof routine2025_08.warmup): string {
+function renderWarmupSection(warmup: MonthRoutine['warmup']): string {
   return `
     <div class="routine-section">
       <h4 class="collapsible-header collapsed" data-section="warmup">
