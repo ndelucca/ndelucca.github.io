@@ -55,10 +55,10 @@ The build system automatically:
 
 **Purpose**: Process a monthly workout routine markdown file and generate corresponding TypeScript data structure.
 
-**Usage**: When the user says "upload_month" and has uploaded a markdown file in the `rutines/` directory (e.g., `rutines/2025_09.md`).
+**Usage**: When the user says "upload_month" and has uploaded a markdown file in the `routines/` directory (e.g., `routines/2025_09.md`).
 
 **Process**:
-1. Identify the newest markdown file in the `rutines/` directory
+1. Identify the newest markdown file in the `routines/` directory
 2. Parse the content following the established structure:
    - Entrada en Calor (common warmup exercises)
    - 4 weeks with 3 days each (12 workout days total)
@@ -78,7 +78,7 @@ The build system automatically:
 - Common types: `src/ts/routines/types.ts`
 - Monthly data: `src/ts/routines/YYYY_MM.ts` (e.g., `2025_08.ts`, `2025_09.ts`)
 - Registry: `src/ts/routines/index.ts`
-- Source markdown: `rutines/YYYY_MM.md`
+- Source markdown: `routines/YYYY_MM.md`
 
 **Example**:
-User uploads `rutines/2025_09.md` and says "upload_month" → Generate `src/ts/routines/2025_09.ts` and update index.
+User uploads `routines/2025_09.md` and says "upload_month" → Generate `src/ts/routines/2025_09.ts` and update index.

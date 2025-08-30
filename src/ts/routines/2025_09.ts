@@ -1,4 +1,4 @@
-// September 2025 routine data - extracted from rutines/2025_09.md
+// September 2025 routine data - extracted from routines/2025_09.md
 import { MonthRoutine, DayWorkout } from './types';
 
 export const routine2025_09: MonthRoutine = {
