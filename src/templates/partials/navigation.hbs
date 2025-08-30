@@ -14,13 +14,13 @@
     <li>
       <a href="workout.html">Workout</a>
     </li>
-    {{#if variable}}
+    {{#if mdLinks}}
       <li class="title">Notes</li>
       {{#each mdLinks}}
         <li>
           <a href="{{link}}.html">{{link}}</a>
         </li>
-    {{/each}}
-  {{/if}}
+      {{/each}}
+    {{/if}}
   </ul>
 </nav>
