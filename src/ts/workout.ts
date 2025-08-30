@@ -1,4 +1,5 @@
 import { getAvailableMonths, getRoutineByMonth } from './routines/index';
+import { getDefaultsForMonth } from './routines/defaults/index';
 import { DayWorkout, MonthRoutine } from './routines/types';
 
 // Hardcoded gym table data from gym_table.csv
@@ -648,7 +649,20 @@ function renderMainExercisesSection(mainExercises: DayWorkout['mainExercises']):
         <tbody>
           ${mainExercises.map(exercise => {
             const exerciseId = sanitizeExerciseName(exercise.name);
-            const selectedRow = selections[exerciseId];
+            let selectedRow = selections[exerciseId];
+            
+            // Use routine default if no selection exists
+            if (selectedRow === undefined && currentMonth) {
+              const defaults = getDefaultsForMonth(currentMonth);
+              if (defaults) {
+                const defaultWeight = defaults[exercise.name];
+                if (defaultWeight !== undefined) {
+                  // Find the row index that matches the default weight
+                  selectedRow = gymData.findIndex(row => parseInt(row[7]) === defaultWeight);
+                  if (selectedRow === -1) selectedRow = undefined;
+                }
+              }
+            }
 
             // Helper function to render weight cell
             const renderWeightCell = (originalValue: string | undefined, columnType: string) => {
@@ -703,7 +717,10 @@ function renderMainExercisesSection(mainExercises: DayWorkout['mainExercises']):
                   <div class="exercise-container">
                     <div class="exercise-name">${exercise.name}</div>
                     <select class="exercise-selector" data-exercise-id="${exerciseId}">
-                      <option value="">Máximo...</option>
+                      <option value="">${selectedRow !== undefined ? 'Máximo...' : (() => {
+                        const defaults = getDefaultsForMonth(currentMonth);
+                        return defaults && defaults[exercise.name] ? `${defaults[exercise.name]} kg` : 'Máximo...';
+                      })()}</option>
                       ${gymData.map((row, index) => {
                         const maxWeight = row[7]; // MAX column
                         const isSelected = selectedRow === index;
