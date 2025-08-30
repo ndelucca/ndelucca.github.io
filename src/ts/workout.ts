@@ -174,7 +174,7 @@ function initializeWorkoutApp(): void {
     ? savedMonth 
     : availableMonths[availableMonths.length - 1]; // Most recent month
 
-  selectMonth(monthToUse);
+  selectMonth(monthToUse, true);
 
   // Load saved day if available, otherwise use defaults
   const savedDay = loadLastSelectedDay();
@@ -287,7 +287,7 @@ function selectDay(week: number, day: number) {
   saveLastSelectedDay(week, day);
 }
 
-function selectMonth(monthId: string) {
+function selectMonth(monthId: string, skipDisplayReload: boolean = false) {
   currentMonth = monthId;
   currentRoutine = getRoutineByMonth(monthId);
   
@@ -305,8 +305,10 @@ function selectMonth(monthId: string) {
   // Save the selected month
   saveLastSelectedMonth(monthId);
   
-  // Reload the current routine display
-  loadRoutineDisplay();
+  // Reload the current routine display (unless skipped during initialization)
+  if (!skipDisplayReload) {
+    loadRoutineDisplay();
+  }
 }
 
 function formatMonthDisplay(monthId: string): string {
@@ -326,18 +328,35 @@ function setupCollapsibleSections() {
   document.querySelectorAll('.collapsible-header').forEach(header => {
     header.addEventListener('click', () => {
       const section = (header as HTMLElement).dataset.section;
-      const content = document.querySelector(`[data-content="${section}"]`) as HTMLElement;
+      const contentElements = document.querySelectorAll(`[data-content="${section}"]`);
       const icon = header.querySelector('.collapse-icon') as HTMLElement;
 
-      if (!content || !icon) return;
+      if (contentElements.length === 0 || !icon) return;
 
-      if (content.style.display === 'none' || content.style.display === '') {
-        content.style.display = 'block';
+      const firstContent = contentElements[0] as HTMLElement;
+      const isCollapsed = firstContent.style.display === 'none';
+
+      if (isCollapsed) {
+        // Expand all content elements
+        contentElements.forEach(element => {
+          const el = element as HTMLElement;
+          // Set appropriate display value based on element type
+          if (el.tagName.toLowerCase() === 'tbody') {
+            el.style.display = 'table-row-group';
+          } else if (el.tagName.toLowerCase() === 'tr') {
+            el.style.display = 'table-row';
+          } else {
+            el.style.display = 'block';
+          }
+        });
         header.classList.remove('collapsed');
         header.classList.add('expanded');
         icon.textContent = '▲';
       } else {
-        content.style.display = 'none';
+        // Collapse all content elements
+        contentElements.forEach(element => {
+          (element as HTMLElement).style.display = 'none';
+        });
         header.classList.remove('expanded');
         header.classList.add('collapsed');
         icon.textContent = '▼';
@@ -603,28 +622,28 @@ function renderWorkoutTemplate(workout: DayWorkout, warmup: MonthRoutine['warmup
 function renderWarmupSection(warmup: MonthRoutine['warmup']): string {
   return `
     <div class="routine-section">
-      <h4 class="collapsible-header collapsed" data-section="warmup">
-        Entrada en Calor - ${warmup.totalRounds} rondas
-        <span class="collapse-icon">▼</span>
-      </h4>
-      <div class="collapsible-content" data-content="warmup" style="display: none;">
-        <table class="routine-table">
-          <thead>
+      <table class="routine-table">
+        <thead>
+          <tr class="section-header collapsible-header collapsed" data-section="warmup">
+            <th colspan="2">
+              <span class="section-title">Entrada en Calor - ${warmup.totalRounds} rondas</span>
+              <span class="collapse-icon">▼</span>
+            </th>
+          </tr>
+          <tr class="collapsible-content column-headers" data-content="warmup" style="display: none;">
+            <th>Ejercicio</th>
+            <th>Series/Repeticiones</th>
+          </tr>
+        </thead>
+        <tbody class="collapsible-content" data-content="warmup" style="display: none;">
+          ${warmup.exercises.map(exercise => `
             <tr>
-              <th>Ejercicio</th>
-              <th>Series/Repeticiones</th>
+              <td>${exercise.name}</td>
+              <td>${exercise.sets}</td>
             </tr>
-          </thead>
-          <tbody>
-            ${warmup.exercises.map(exercise => `
-              <tr>
-                <td>${exercise.name}</td>
-                <td>${exercise.sets}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
+          `).join('')}
+        </tbody>
+      </table>
     </div>
   `;
 }
@@ -634,10 +653,14 @@ function renderMainExercisesSection(mainExercises: DayWorkout['mainExercises']):
 
   return `
     <div class="routine-section">
-      <h4>Ejercicios Principales</h4>
       <table class="routine-table">
         <thead>
-          <tr>
+          <tr class="section-header">
+            <th colspan="6">
+              <span class="section-title">Ejercicios Principales</span>
+            </th>
+          </tr>
+          <tr class="column-headers">
             <th>Ejercicio</th>
             <th>55%</th>
             <th>65%</th>
@@ -746,10 +769,14 @@ function renderMainExercisesSection(mainExercises: DayWorkout['mainExercises']):
 function renderCircuitSection(circuit: DayWorkout['circuit'], rounds: number): string {
   return `
     <div class="routine-section">
-      <h4>Circuito Final (${rounds} rondas)</h4>
       <table class="routine-table">
         <thead>
-          <tr>
+          <tr class="section-header">
+            <th colspan="2">
+              <span class="section-title">Circuito Final (${rounds} rondas)</span>
+            </th>
+          </tr>
+          <tr class="column-headers">
             <th>Ejercicio</th>
             <th>Repeticiones</th>
           </tr>
