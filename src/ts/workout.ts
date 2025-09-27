@@ -170,19 +170,15 @@ function initializeWorkoutApp(): void {
   // Load saved month if available, otherwise use most recent
   const savedMonth = loadLastSelectedMonth();
   const availableMonths = getAvailableMonths();
-  const monthToUse = savedMonth && availableMonths.includes(savedMonth) 
-    ? savedMonth 
+  const monthToUse = savedMonth && availableMonths.includes(savedMonth)
+    ? savedMonth
     : availableMonths[availableMonths.length - 1]; // Most recent month
-
-  selectMonth(monthToUse, true);
 
   // Load saved day if available, otherwise use defaults
   const savedDay = loadLastSelectedDay();
-  if (savedDay) {
-    selectDay(savedDay.week, savedDay.day);
-  } else {
-    selectDay(currentWeek, currentDay);
-  }
+
+  // Select month and handle saved day within the same call
+  selectMonthAndDay(monthToUse, savedDay);
 }
 
 function loadWorkoutData() {
@@ -233,7 +229,12 @@ function setupMonthSelector() {
 }
 
 function setupRoutineSelector() {
-  // Handle day link clicks only
+  // This will be called after generating the week interface
+  setupWeekAndDayEventListeners();
+}
+
+function setupWeekAndDayEventListeners() {
+  // Handle day link clicks
   const dayLinks = document.querySelectorAll('.day-link');
   dayLinks.forEach(link => {
     link.addEventListener('click', (e) => {
@@ -243,6 +244,66 @@ function setupRoutineSelector() {
       selectDay(week, day);
     });
   });
+}
+
+function generateWeekInterface() {
+  if (!currentRoutine) return;
+
+  // Get the available weeks from the current routine
+  const weeks = [...new Set(currentRoutine.workoutDays.map(d => d.week))].sort((a, b) => a - b);
+
+  // Get containers and templates
+  const weeksRow = document.getElementById('weeks-row');
+  const daysRow = document.getElementById('days-row');
+  const weekHeaderTemplate = document.getElementById('week-header-template') as HTMLTemplateElement;
+  const weekDaysTemplate = document.getElementById('week-days-template') as HTMLTemplateElement;
+
+  if (!weeksRow || !daysRow || !weekHeaderTemplate || !weekDaysTemplate) return;
+
+  // Clear existing content (except templates)
+  const existingHeaders = weeksRow.querySelectorAll('.week-header');
+  const existingDays = daysRow.querySelectorAll('.week-days');
+  existingHeaders.forEach(header => header.remove());
+  existingDays.forEach(days => days.remove());
+
+  // Generate week headers using template
+  weeks.forEach(weekNum => {
+    const headerClone = weekHeaderTemplate.content.cloneNode(true) as DocumentFragment;
+    const headerElement = headerClone.querySelector('.week-header') as HTMLElement;
+    const titleElement = headerClone.querySelector('.week-title') as HTMLElement;
+
+    headerElement.dataset.week = weekNum.toString();
+    titleElement.textContent = `SEMANA ${weekNum}`;
+    if (weekNum === currentWeek) {
+      headerElement.classList.add('active');
+    }
+
+    weeksRow.appendChild(headerClone);
+  });
+
+  // Generate day buttons using template
+  weeks.forEach((weekNum, index) => {
+    const daysClone = weekDaysTemplate.content.cloneNode(true) as DocumentFragment;
+    const weekDaysElement = daysClone.querySelector('.week-days') as HTMLElement;
+    const dayLinks = daysClone.querySelectorAll('.day-link');
+
+    weekDaysElement.dataset.week = weekNum.toString();
+    if (weekNum === currentWeek) weekDaysElement.classList.add('active');
+
+    dayLinks.forEach(dayLink => {
+      const element = dayLink as HTMLElement;
+      element.dataset.week = weekNum.toString();
+      // data-day is already set in the template (1, 2, 3)
+      if (weekNum === currentWeek && element.dataset.day === currentDay.toString()) {
+        element.classList.add('active');
+      }
+    });
+
+    daysRow.appendChild(daysClone);
+  });
+
+  // Re-setup event listeners after generating new elements
+  setupWeekAndDayEventListeners();
 }
 
 function selectWeek(week: number) {
@@ -290,7 +351,7 @@ function selectDay(week: number, day: number) {
 function selectMonth(monthId: string, skipDisplayReload: boolean = false) {
   currentMonth = monthId;
   currentRoutine = getRoutineByMonth(monthId);
-  
+
   if (!currentRoutine) {
     console.error(`No routine found for month: ${monthId}`);
     return;
@@ -302,13 +363,68 @@ function selectMonth(monthId: string, skipDisplayReload: boolean = false) {
     monthSelect.value = monthId;
   }
 
+  // Generate the week interface for this routine
+  generateWeekInterface();
+
+  // Reset to first available week/day for this routine
+  const availableWeeks = [...new Set(currentRoutine.workoutDays.map(d => d.week))].sort((a, b) => a - b);
+  if (availableWeeks.length > 0) {
+    currentWeek = availableWeeks[0];
+    currentDay = 1;
+  }
+
   // Save the selected month
   saveLastSelectedMonth(monthId);
-  
+
   // Reload the current routine display (unless skipped during initialization)
   if (!skipDisplayReload) {
     loadRoutineDisplay();
   }
+}
+
+function selectMonthAndDay(monthId: string, savedDay: { week: number; day: number } | null) {
+  currentMonth = monthId;
+  currentRoutine = getRoutineByMonth(monthId);
+
+  if (!currentRoutine) {
+    console.error(`No routine found for month: ${monthId}`);
+    return;
+  }
+
+  // Update the select element
+  const monthSelect = document.getElementById('month-select') as HTMLSelectElement;
+  if (monthSelect) {
+    monthSelect.value = monthId;
+  }
+
+  // Set week/day before generating interface (so active states are correct)
+  if (savedDay) {
+    // Validate that the saved day exists in this routine
+    const workoutExists = currentRoutine.workoutDays.some(w => w.week === savedDay.week && w.day === savedDay.day);
+    if (workoutExists) {
+      currentWeek = savedDay.week;
+      currentDay = savedDay.day;
+    } else {
+      // Saved day doesn't exist in this routine, use defaults
+      const availableWeeks = [...new Set(currentRoutine.workoutDays.map(d => d.week))].sort((a, b) => a - b);
+      currentWeek = availableWeeks[0] || 1;
+      currentDay = 1;
+    }
+  } else {
+    // No saved day, use defaults
+    const availableWeeks = [...new Set(currentRoutine.workoutDays.map(d => d.week))].sort((a, b) => a - b);
+    currentWeek = availableWeeks[0] || 1;
+    currentDay = 1;
+  }
+
+  // Generate the week interface for this routine (with correct active states)
+  generateWeekInterface();
+
+  // Save the selected month
+  saveLastSelectedMonth(monthId);
+
+  // Load the routine display
+  loadRoutineDisplay();
 }
 
 function formatMonthDisplay(monthId: string): string {

@@ -31,3 +31,25 @@ export const getRoutineByMonth = (monthId: string) => {
 export const getAvailableMonths = (): string[] => {
   return Object.keys(availableRoutines);
 };
+
+// Get routine statistics
+export const getRoutineStats = (monthId: string) => {
+  const routine = getRoutineByMonth(monthId);
+  if (!routine) return null;
+
+  const weeks = [...new Set(routine.workoutDays.map(d => d.week))];
+  return {
+    totalWeeks: Math.max(...weeks),
+    totalWorkoutDays: routine.workoutDays.length,
+    weekRange: { min: Math.min(...weeks), max: Math.max(...weeks) },
+    daysPerWeek: routine.workoutDays.filter(d => d.week === 1).length
+  };
+};
+
+// Get all routine statistics
+export const getAllRoutineStats = () => {
+  return Object.keys(availableRoutines).map(monthId => ({
+    month: monthId,
+    ...getRoutineStats(monthId)
+  }));
+};

@@ -502,3 +502,16 @@ export const getCurrentWeekWorkouts = (week: number): DayWorkout[] => {
 export const getAllWeeks = (): number[] => {
   return [...new Set(routine2025_10.workoutDays.map(w => w.week))].sort();
 };
+
+export const getTotalWeeks = (): number => {
+  return Math.max(...routine2025_10.workoutDays.map(w => w.week));
+};
+
+export const getTotalWorkoutDays = (): number => {
+  return routine2025_10.workoutDays.length;
+};
+
+export const getWeekRange = (): { min: number; max: number } => {
+  const weeks = getAllWeeks();
+  return { min: Math.min(...weeks), max: Math.max(...weeks) };
+};

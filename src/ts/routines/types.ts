@@ -23,8 +23,8 @@ export interface CircuitExercise {
 }
 
 export interface DayWorkout {
-  day: number; // 1, 2, 3
-  week: number; // 1, 2, 3, 4
+  day: number; // 1, 2, 3 (days per week)
+  week: number; // Week number (varies by routine: 1-4 for most, 1-5 for some)
   mainExercises: MainExercise[];
   circuit: CircuitExercise[];
   circuitRounds: number; // Usually 3
@@ -47,3 +47,13 @@ export interface MonthRoutine {
 export type WeekWorkoutGetter = (week: number, day: number) => DayWorkout | undefined;
 export type WeekWorkoutsGetter = (week: number) => DayWorkout[];
 export type AllWeeksGetter = () => number[];
+
+// Helper functions for working with routines
+export interface RoutineHelpers {
+  getWorkoutByWeekAndDay: WeekWorkoutGetter;
+  getCurrentWeekWorkouts: WeekWorkoutsGetter;
+  getAllWeeks: AllWeeksGetter;
+  getTotalWeeks: () => number;
+  getTotalWorkoutDays: () => number;
+  getWeekRange: () => { min: number; max: number };
+}

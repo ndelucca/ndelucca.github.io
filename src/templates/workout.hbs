@@ -37,43 +37,25 @@
   <div class="routine-selector">
     <div class="selector-grid">
       <!-- Week Headers Row -->
-      <div class="weeks-row">
-        <div class="week-header" data-week="1">
-          <span class="week-title">SEMANA 1</span>
-        </div>
-        <div class="week-header" data-week="2">
-          <span class="week-title">SEMANA 2</span>
-        </div>
-        <div class="week-header" data-week="3">
-          <span class="week-title">SEMANA 3</span>
-        </div>
-        <div class="week-header" data-week="4">
-          <span class="week-title">SEMANA 4</span>
-        </div>
+      <div class="weeks-row" id="weeks-row">
+        <!-- Template for week headers - will be cloned by JavaScript -->
+        <template id="week-header-template">
+          <div class="week-header" data-week="">
+            <span class="week-title"></span>
+          </div>
+        </template>
       </div>
-      
+
       <!-- Days Row -->
-      <div class="days-row">
-        <div class="week-days active" data-week="1">
-          <div class="day-link active" data-week="1" data-day="1">DÍA 1</div>
-          <div class="day-link" data-week="1" data-day="2">DÍA 2</div>
-          <div class="day-link" data-week="1" data-day="3">DÍA 3</div>
-        </div>
-        <div class="week-days" data-week="2">
-          <div class="day-link" data-week="2" data-day="1">DÍA 1</div>
-          <div class="day-link" data-week="2" data-day="2">DÍA 2</div>
-          <div class="day-link" data-week="2" data-day="3">DÍA 3</div>
-        </div>
-        <div class="week-days" data-week="3">
-          <div class="day-link" data-week="3" data-day="1">DÍA 1</div>
-          <div class="day-link" data-week="3" data-day="2">DÍA 2</div>
-          <div class="day-link" data-week="3" data-day="3">DÍA 3</div>
-        </div>
-        <div class="week-days" data-week="4">
-          <div class="day-link" data-week="4" data-day="1">DÍA 1</div>
-          <div class="day-link" data-week="4" data-day="2">DÍA 2</div>
-          <div class="day-link" data-week="4" data-day="3">DÍA 3</div>
-        </div>
+      <div class="days-row" id="days-row">
+        <!-- Template for week days - will be cloned by JavaScript -->
+        <template id="week-days-template">
+          <div class="week-days" data-week="">
+            <div class="day-link" data-week="" data-day="1">DÍA 1</div>
+            <div class="day-link" data-week="" data-day="2">DÍA 2</div>
+            <div class="day-link" data-week="" data-day="3">DÍA 3</div>
+          </div>
+        </template>
       </div>
     </div>
   </div>
