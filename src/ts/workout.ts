@@ -282,7 +282,7 @@ function generateWeekInterface() {
   });
 
   // Generate day buttons using template
-  weeks.forEach((weekNum, index) => {
+  weeks.forEach((weekNum) => {
     const daysClone = weekDaysTemplate.content.cloneNode(true) as DocumentFragment;
     const weekDaysElement = daysClone.querySelector('.week-days') as HTMLElement;
     const dayLinks = daysClone.querySelectorAll('.day-link');
@@ -306,21 +306,8 @@ function generateWeekInterface() {
   setupWeekAndDayEventListeners();
 }
 
-function selectWeek(week: number) {
-  currentWeek = week;
-
-  // Update active week header
-  document.querySelectorAll('.week-header').forEach(header => {
-    const element = header as HTMLElement;
-    element.classList.remove('active');
-    if (element.dataset.week === week.toString()) {
-      element.classList.add('active');
-    }
-  });
-
-  // Load first day of the week
-  selectDay(week, 1);
-}
+// Note: selectWeek function removed as it was unused
+// Week selection happens through day selection (selectDay function)
 
 function selectDay(week: number, day: number) {
   currentWeek = week;
@@ -788,8 +775,8 @@ function renderMainExercisesSection(mainExercises: DayWorkout['mainExercises']):
         <tbody>
           ${mainExercises.map(exercise => {
             const exerciseId = sanitizeExerciseName(exercise.name);
-            let selectedRow = selections[exerciseId];
-            
+            let selectedRow: number | undefined = selections[exerciseId];
+
             // Use routine default if no selection exists
             if (selectedRow === undefined && currentMonth) {
               const defaults = getDefaultsForMonth(currentMonth);
