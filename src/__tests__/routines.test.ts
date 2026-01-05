@@ -71,10 +71,11 @@ describe('Routine Variable Week Support', () => {
 
     // Test all routine stats
     const allStats = getAllRoutineStats();
-    expect(allStats).toHaveLength(5);
+    expect(allStats).toHaveLength(6);
     expect(allStats.find(s => s.month === '2025_08')?.totalWeeks).toBe(4);
     expect(allStats.find(s => s.month === '2025_10')?.totalWeeks).toBe(5);
     expect(allStats.find(s => s.month === '2025_11')?.totalWeeks).toBe(4);
     expect(allStats.find(s => s.month === '2025_12')?.totalWeeks).toBe(3);
+    expect(allStats.find(s => s.month === '2026_01')?.totalWeeks).toBe(4);
   });
 });
