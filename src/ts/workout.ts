@@ -166,6 +166,7 @@ function initializeWorkoutApp(): void {
   loadWorkoutData();
   setupMonthSelector();
   setupRoutineSelector();
+  setupCollapsibleSections();
 
   // Load saved month if available, otherwise use most recent
   const savedMonth = loadLastSelectedMonth();
@@ -429,6 +430,9 @@ function formatMonthDisplay(monthId: string): string {
 
 function setupCollapsibleSections() {
   document.querySelectorAll('.collapsible-header').forEach(header => {
+    const headerEl = header as HTMLElement;
+    if (headerEl.dataset.collapsibleBound === 'true') return;
+    headerEl.dataset.collapsibleBound = 'true';
     header.addEventListener('click', () => {
       const section = (header as HTMLElement).dataset.section;
       const contentElements = document.querySelectorAll(`[data-content="${section}"]`);
@@ -758,12 +762,13 @@ function renderMainExercisesSection(mainExercises: DayWorkout['mainExercises']):
     <div class="routine-section">
       <table class="routine-table">
         <thead>
-          <tr class="section-header">
+          <tr class="section-header collapsible-header expanded" data-section="main">
             <th colspan="7">
               <span class="section-title">Ejercicios Principales</span>
+              <span class="collapse-icon">▲</span>
             </th>
           </tr>
-          <tr class="column-headers">
+          <tr class="collapsible-content column-headers" data-content="main">
             <th>Ejercicio</th>
             <th>55%</th>
             <th>65%</th>
@@ -773,7 +778,7 @@ function renderMainExercisesSection(mainExercises: DayWorkout['mainExercises']):
             <th>MAX</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="collapsible-content" data-content="main">
           ${mainExercises.map(exercise => {
             const exerciseId = sanitizeExerciseName(exercise.name);
             let selectedRow: number | undefined = selections[exerciseId];
@@ -891,17 +896,18 @@ function renderCircuitSection(circuit: DayWorkout['circuit'], rounds: number): s
     <div class="routine-section">
       <table class="routine-table">
         <thead>
-          <tr class="section-header">
+          <tr class="section-header collapsible-header expanded" data-section="circuit">
             <th colspan="2">
               <span class="section-title">Circuito Final (${rounds} rondas)</span>
+              <span class="collapse-icon">▲</span>
             </th>
           </tr>
-          <tr class="column-headers">
+          <tr class="collapsible-content column-headers" data-content="circuit">
             <th>Ejercicio</th>
             <th>Repeticiones</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="collapsible-content" data-content="circuit">
           ${circuit.map(exercise => `
             <tr>
               <td>${exercise.name}</td>

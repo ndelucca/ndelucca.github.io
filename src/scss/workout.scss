@@ -444,6 +444,30 @@
   margin: 1.5rem 0 0.75rem 0;
   padding-bottom: 0.25rem;
   border-bottom: 1px solid rgba(255, 133, 27, 0.3);
+
+  &.collapsible-header {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: color.adjust($primary-color, $lightness: 10%);
+    }
+
+    .collapse-icon {
+      font-size: 0.75rem;
+      transition: transform 0.3s ease;
+      margin-left: 0.75rem;
+      color: $primary-color;
+    }
+
+    &.expanded .collapse-icon {
+      transform: rotate(180deg);
+    }
+  }
 }
 
 .workout-table-container {
