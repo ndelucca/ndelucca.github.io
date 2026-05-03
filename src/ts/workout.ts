@@ -759,7 +759,7 @@ function renderMainExercisesSection(mainExercises: DayWorkout['mainExercises']):
       <table class="routine-table">
         <thead>
           <tr class="section-header">
-            <th colspan="6">
+            <th colspan="7">
               <span class="section-title">Ejercicios Principales</span>
             </th>
           </tr>
@@ -770,6 +770,7 @@ function renderMainExercisesSection(mainExercises: DayWorkout['mainExercises']):
             <th>75%</th>
             <th>Rango E</th>
             <th>Rango F</th>
+            <th>MAX</th>
           </tr>
         </thead>
         <tbody>
@@ -837,6 +838,21 @@ function renderMainExercisesSection(mainExercises: DayWorkout['mainExercises']):
               return cleanValue;
             };
 
+            const renderMaxCell = (originalValue: string | undefined) => {
+              if (!originalValue || originalValue === '-') return '-';
+
+              const cleanValue = originalValue.replace(/\s*reps?\s*/i, '').trim();
+
+              if (selectedRow !== undefined) {
+                const maxWeight = getWeightForPercentage(selectedRow, 7);
+                if (maxWeight) {
+                  return `${cleanValue} (${maxWeight} kg)`;
+                }
+              }
+
+              return cleanValue;
+            };
+
             return `
               <tr>
                 <td>
@@ -860,6 +876,7 @@ function renderMainExercisesSection(mainExercises: DayWorkout['mainExercises']):
                 <td>${renderWeightCell(exercise.warmupSets.percentage75, '75')}</td>
                 <td>${renderRangeCell(exercise.workingSets, 'E')}</td>
                 <td>${exercise.rangeFSets ? renderRangeCell(exercise.rangeFSets, 'F') : '-'}</td>
+                <td>${renderMaxCell(exercise.maxSets)}</td>
               </tr>
             `;
           }).join('')}

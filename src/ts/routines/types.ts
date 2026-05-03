@@ -15,6 +15,7 @@ export interface MainExercise {
   };
   workingSets: string; // e.g., "4x2", "4x3", "5x3" - Rango E
   rangeFSets?: string; // Optional field for future routines with Rango F exercises
+  maxSets?: string; // Optional field for max-effort attempts at 1RM (column MAX)
 }
 
 export interface CircuitExercise {
