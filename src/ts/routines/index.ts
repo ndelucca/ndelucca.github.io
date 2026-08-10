@@ -13,6 +13,7 @@ import { routine2026_04 } from './2026_04';
 import { routine2026_05 } from './2026_05';
 import { routine2026_06 } from './2026_06';
 import { routine2026_07 } from './2026_07';
+import { routine2026_08 } from './2026_08';
 // Import future months here as they are added
 
 export { routine2025_08 };
@@ -27,6 +28,7 @@ export { routine2026_04 };
 export { routine2026_05 };
 export { routine2026_06 };
 export { routine2026_07 };
+export { routine2026_08 };
 // Export future months here
 
 // Export common types
@@ -46,6 +48,7 @@ export const availableRoutines = {
   '2026_05': routine2026_05,
   '2026_06': routine2026_06,
   '2026_07': routine2026_07,
+  '2026_08': routine2026_08,
   // Add future months here
 };
 
