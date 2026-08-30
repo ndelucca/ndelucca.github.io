@@ -12,9 +12,10 @@ import { defaults2026_05 } from './2026_05';
 import { defaults2026_06 } from './2026_06';
 import { defaults2026_07 } from './2026_07';
 import { defaults2026_08 } from './2026_08';
+import { defaults2026_09 } from './2026_09';
 
 // Export individual defaults
-export { defaults2025_08, defaults2025_09, defaults2025_10, defaults2025_11, defaults2025_12, defaults2026_01, defaults2026_02, defaults2026_03, defaults2026_04, defaults2026_05, defaults2026_06, defaults2026_07, defaults2026_08 };
+export { defaults2025_08, defaults2025_09, defaults2025_10, defaults2025_11, defaults2025_12, defaults2026_01, defaults2026_02, defaults2026_03, defaults2026_04, defaults2026_05, defaults2026_06, defaults2026_07, defaults2026_08, defaults2026_09 };
 
 // Registry of available defaults by month
 export const availableDefaults: Record<string, Record<string, number>> = {
@@ -31,6 +32,7 @@ export const availableDefaults: Record<string, Record<string, number>> = {
   '2026_06': defaults2026_06,
   '2026_07': defaults2026_07,
   '2026_08': defaults2026_08,
+  '2026_09': defaults2026_09,
 };
 
 // Helper function to get defaults for a specific month
