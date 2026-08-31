@@ -389,8 +389,17 @@ The project uses strict TypeScript settings (see `tsconfig.json`):
 - **TypeScript** - Strict type checking enabled
 - **Jest** - Unit testing framework, `jsdom` environment so DOM and localStorage code is testable
 
-TypeScript stays on 5.x: `ts-jest` (`typescript <7`) and `typescript-eslint`
-(`typescript <6.1`) do not support TypeScript 7 yet.
+**TypeScript stays on 5.x.** TypeScript 7 is released, and Dependabot will keep
+proposing it, but the toolchain cannot take it yet. Verified by installing 7.0.2
+and running the suite:
+
+- `typescript-eslint` refuses at runtime: `typescript-eslint does not support TS 7.0`
+- `ts-jest` cannot load it: TS 7 does not expose the JavaScript compiler API it needs
+- `tsc --noEmit` fails on `moduleResolution: node`, removed in 7 (this one is a
+  config migration, the other two are not ours to fix)
+
+Close the Dependabot PR until `ts-jest` and `typescript-eslint` ship support, then
+retry the same three commands.
 
 ### When Writing New Code
 
