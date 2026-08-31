@@ -5,6 +5,13 @@ updates:
     schedule:
       interval: monthly
     open-pull-requests-limit: 5
+    ignore:
+      # TypeScript 7 is out, but ts-jest cannot load it (it does not expose the
+      # JS compiler API) and typescript-eslint refuses it outright. Both were
+      # verified by installing 7.0.2 - see .claude/CLAUDE.md. Drop this entry to
+      # get the upgrade PR back once those two ship support.
+      - dependency-name: typescript
+        update-types: [version-update:semver-major]
     groups:
       # One PR per ecosystem instead of one per package, so a routine bump is a
       # single review rather than fifteen.
