@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ndelucca.github.io/sitemap.xml

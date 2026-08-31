@@ -3,48 +3,61 @@
   "version": "1.0.0",
   "description": "my personal web page",
   "repository": {
+    "type": "git",
     "url": "git+https://github.com/ndelucca/ndelucca.github.io.git"
   },
+  "homepage": "https://ndelucca.github.io",
   "type": "module",
-  "main": "index.js",
+  "license": "ISC",
+  "author": "ndelucca",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "browserslist": [
+    "defaults",
+    "not IE 11"
+  ],
   "scripts": {
-    "test": "jest",
     "start": "webpack serve --mode development",
     "build": "webpack --mode production",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "test": "jest",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm test"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.25.0",
-    "@babel/preset-env": "^7.25.0",
-    "@types/jest": "^29.5.0",
-    "copy-webpack-plugin": "^12.0.0",
-    "css-loader": "^7.1.0",
-    "gh-pages": "^6.1.0",
+    "@eslint/js": "^10.0.0",
+    "@types/jest": "^30.0.0",
+    "autoprefixer": "^10.5.4",
+    "copy-webpack-plugin": "^14.0.0",
+    "css-loader": "^7.1.5",
+    "eslint": "^10.9.1",
+    "globals": "^16.0.0",
     "handlebars-loader": "^1.7.3",
-    "html-loader": "^5.1.0",
-    "html-webpack-plugin": "^5.6.0",
-    "jest": "^29.7.0",
-    "marked": "^14.1.0",
-    "mini-css-extract-plugin": "^2.9.0",
-    "sass": "^1.77.0",
-    "postcss-loader": "^8.1.0",
-    "raw-loader": "^4.0.2",
-    "sass-loader": "^16.0.0",
-    "style-loader": "^4.0.0",
-    "ts-jest": "^29.2.0",
-    "ts-loader": "^9.5.0",
-    "typescript": "^5.5.0",
-    "webpack": "^5.94.0",
-    "webpack-cli": "^5.1.0",
-    "webpack-dev-server": "^5.1.0"
+    "html-webpack-plugin": "^5.6.8",
+    "jest": "^30.5.0",
+    "jest-environment-jsdom": "^30.5.0",
+    "marked": "^18.0.11",
+    "mini-css-extract-plugin": "^2.10.2",
+    "postcss": "^8.5.0",
+    "postcss-loader": "^8.2.1",
+    "prettier": "^3.9.6",
+    "sass": "^1.103.1",
+    "sass-loader": "^17.0.1",
+    "ts-jest": "^29.4.12",
+    "ts-loader": "^9.6.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.68.0",
+    "webpack": "^5.110.2",
+    "webpack-cli": "^7.2.3",
+    "webpack-dev-server": "^6.0.0"
   },
   "dependencies": {
-    "@fontsource/jetbrains-mono": "^5.1.0",
-    "cowsay": "^1.6.0",
-    "github-markdown-css": "^5.6.0"
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "github-markdown-css": "^5.9.0"
   }
 }

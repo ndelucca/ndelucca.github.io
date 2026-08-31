@@ -1,18 +1,19 @@
-# Node modules
+# Dependencies
 node_modules
 
-# Build output directory
-dist
+# Build output
 build
+dist
 
-# TypeScript generated files
+# TypeScript artifacts
 *.tsbuildinfo
-*.js.map
-*.d.ts
-!globals.d.ts
 
-# IDE and editor files
+# Editors
 .vscode
+.idea
 *.swp
 *.swo
+
+# Logs
 *.log
+npm-debug.log*

@@ -1,0 +1,10 @@
+build
+node_modules
+package-lock.json
+
+# Generated routine data: machine written, and reformatting it would blow up
+# the diff of every month
+src/data
+
+# Prettier's glimmer parser rejects Handlebars partials and template fragments
+*.hbs
