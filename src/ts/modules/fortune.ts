@@ -7,13 +7,13 @@ const fallbackFortunes = [
   'A journey of a thousand miles begins with a single step.',
   'The best time to plant a tree was 20 years ago. The second best time is now.',
   'Fortune favors the bold.',
-  'What doesn\'t kill you makes you stronger.',
+  "What doesn't kill you makes you stronger.",
   'The only constant in life is change.',
   'Success is not final, failure is not fatal: it is the courage to continue that counts.',
   'In the middle of difficulty lies opportunity.',
   'Be yourself; everyone else is already taken.',
-  'Life is what happens to you while you\'re busy making other plans.',
-  'The future belongs to those who believe in the beauty of their dreams.'
+  "Life is what happens to you while you're busy making other plans.",
+  'The future belongs to those who believe in the beauty of their dreams.',
 ];
 
 /**

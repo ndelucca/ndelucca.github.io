@@ -1,880 +1,373 @@
-import { getAvailableMonths, getRoutineByMonth } from './routines/index';
-import { getDefaultsForMonth } from './routines/defaults/index';
-import { DayWorkout, MonthRoutine } from './routines/types';
+/**
+ * Workout page - picks a month, a week and a day, and shows that day's routine
+ * with every load resolved against the user's 1RM.
+ * @module workout
+ */
+
+import {
+  getAvailableMonths,
+  getWorkoutByWeekAndDay,
+  getWeeks,
+  loadRoutine,
+} from './routines/index';
+import { MonthRoutine } from './routines/types';
 import { setupCollapsibleSections } from './modules/collapsible';
+import { formatMonthDisplay } from './workout/format';
+import { renderGymTableRows, renderWorkoutDay } from './workout/render';
+import {
+  isAuthenticated,
+  loadExerciseSelections,
+  loadLastSelectedDay,
+  loadLastSelectedMonth,
+  removeExerciseSelection,
+  saveAuthentication,
+  saveExerciseSelection,
+  saveLastSelectedDay,
+  saveLastSelectedMonth,
+  SelectedDay,
+} from './workout/storage';
 
-// Hardcoded gym table data from gym_table.csv
-const gymData = [
-  ["27.5", "32.5", "37.5", "40", "45", "45", "50", "50"],
-  ["30", "35", "40", "42.5", "47.5", "47.5", "52.5", "52.5"],
-  ["32.5", "37.5", "42.5", "45", "50", "50", "55", "55"],
-  ["32.5", "37.5", "45", "47.5", "52.5", "52.5", "57.5", "57.5"],
-  ["35", "40", "45", "50", "52.5", "55", "60", "60"],
-  ["37", "42.5", "47.5", "50", "55", "57.5", "62.5", "62.5"],
-  ["37.5", "42.5", "50", "52.5", "57.5", "60", "65", "65"],
-  ["37.5", "45", "52.5", "55", "60", "62.5", "67.5", "67.5"],
-  ["40", "47.5", "52.5", "57.5", "62.5", "65", "70", "70"],
-  ["40", "47.5", "55", "55", "60", "67.5", "72.5", "72.5"],
-  ["42.5", "50", "57.5", "60", "67.5", "70", "75", "75"],
-  ["45", "52.5", "60", "62.5", "70", "70", "77.5", "77.5"],
-  ["45", "52.5", "60", "65", "70", "72.5", "80", "80"],
-  ["47.5", "55", "62.5", "67.5", "72.5", "75", "82.5", "82.5"],
-  ["47.5", "57.5", "65", "70", "75", "77.5", "85", "85"],
-  ["50", "57.5", "67.5", "70", "77.5", "80", "87.5", "87.5"],
-  ["50", "60", "67.5", "72.5", "80", "82.5", "90", "90"],
-  ["52.5", "62.5", "70", "75", "82.5", "85", "92.5", "92.5"],
-  ["52.5", "62.5", "72.5", "77.5", "85", "87.5", "95", "95"],
-  ["55", "65", "75", "80", "87.5", "90", "97.5", "97.5"],
-  ["55", "65", "75", "80", "87.5", "90", "97.5", "100"],
-  ["57.5", "67.5", "77.5", "82.5", "90", "92.5", "100", "102.5"],
-  ["60", "70", "80", "85", "92.5", "95", "102.5", "105"],
-  ["60", "70", "82.5", "87.5", "95", "97.5", "105", "107.5"],
-  ["62.5", "72.5", "82.5", "90", "97.5", "100", "107.5", "110"],
-  ["62.5", "75", "85", "90", "100", "102.5", "110", "112.5"],
-  ["65", "75", "85", "92.5", "102.5", "105", "112.5", "115"],
-  ["65", "77", "90", "95", "105", "107.5", "115", "117.5"],
-  ["67.5", "80", "90", "97.5", "107.5", "110", "117.5", "120"],
-  ["67.5", "80", "92.5", "100", "107.5", "112.5", "120", "122.5"],
-  ["70", "82.5", "95", "100", "110", "115", "122.5", "125"],
-  ["72.5", "85", "97.5", "102.5", "112.5", "115", "125", "127.5"],
-  ["72.5", "85", "97.5", "105", "115", "117.5", "127.5", "130"],
-  ["75", "87.5", "100", "107", "117.5", "120", "130", "132.5"],
-  ["75", "90", "102.5", "110", "120", "122.5", "132.5", "135"],
-  ["77.5", "90", "105", "110", "122.5", "125", "135", "137.5"],
-  ["77.5", "92.5", "105", "112.5", "122.5", "127.5", "137.5", "140"],
-  ["82.5", "95", "107.5", "115", "125", "130", "140", "142.5"],
-  ["80", "95", "110", "117.5", "127.5", "132.5", "142.5", "145"],
-  ["82.5", "97.5", "112.5", "120", "130", "135", "145", "147.5"],
-  ["82.5", "97.5", "112.5", "120", "132.5", "135", "147.5", "150"],
-  ["85", "100", "115", "122.5", "135", "137.5", "150", "152.5"],
-  ["87.5", "102.5", "117.5", "125", "135", "140", "152.5", "155"],
-  ["87.5", "102.5", "120", "127.5", "140", "142.5", "155", "157.5"],
-  ["90", "105", "120", "130", "140", "145", "157.5", "160"],
-  ["90", "107", "122.5", "130", "142.5", "147.5", "160", "162.5"],
-  ["92.5", "107", "125", "132.5", "145", "150", "162.5", "165"],
-  ["92.5", "110", "127.5", "135", "147.5", "152.5", "165", "167.5"],
-  ["95", "112.5", "127.5", "137.5", "150", "155", "167.5", "170"],
-  ["95", "112.5", "130", "140", "152.5", "157.5", "170", "172.5"],
-  ["97.5", "115", "132.5", "140", "155", "157.5", "172.5", "175"],
-  ["100", "117.5", "135", "142.5", "157.5", "160", "175", "177.5"],
-  ["100", "117.5", "135", "145", "157.5", "162.5", "177.5", "180"],
-  ["102.5", "120", "137.5", "147.5", "160", "165", "180", "182.5"],
-  ["102.5", "122.5", "140", "150", "162.5", "167.5", "182.5", "185"],
-  ["105", "122.5", "142.5", "150", "165", "170", "185", "187.5"],
-  ["105", "125", "142.5", "152.5", "167.5", "172.5", "187.5", "190"],
-  ["107.5", "127.5", "145", "155", "170", "175", "190", "192.5"],
-  ["107.5", "127.5", "147.5", "157.5", "172.5", "177.5", "192.5", "195"],
-  ["110", "130", "150", "160", "175", "180", "195", "197.5"],
-  ["110", "130", "150", "160", "175", "180", "195", "200"]
-];
-
-let currentMonth = '';
-let currentWeek = 1;
-let currentDay = 1;
-let currentRoutine: MonthRoutine | null = null;
-
-// Storage keys
-const EXERCISE_SELECTIONS_KEY = 'workout_exercise_selections';
-const LAST_SELECTED_DAY_KEY = 'workout_last_selected_day';
-const LAST_SELECTED_MONTH_KEY = 'workout_last_selected_month';
-const LOGIN_AUTH_KEY = 'workout_authenticated';
-
+// Not a security boundary: the routines are public and this only keeps the page
+// from opening on a shared screen. See README.
 const CORRECT_PASSWORD_HASH = '80895744385d20a00a4f66ec0d590e06fa2969fd4a4381157aaea1038002a347';
 
-document.addEventListener('DOMContentLoaded', () => {
-  checkAuthenticationAndInitialize();
-});
-
-async function hashPassword(password: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
-  return hashHex;
+/** What the page is currently showing */
+interface PageState {
+  monthId: string;
+  week: number;
+  day: number;
+  routine: MonthRoutine | null;
 }
 
-// Authentication Check and Initialize
-function checkAuthenticationAndInitialize(): void {
-  if (isAuthenticated()) {
-    // User is already authenticated - skip login and go straight to app
-    hideLoginScreen();
-    initializeWorkoutApp();
-  } else {
-    // User is not authenticated - show login form
-    setupLoginForm();
+const state: PageState = { monthId: '', week: 1, day: 1, routine: null };
+
+/**
+ * Hashes a password with SHA-256
+ * @param password - The plain text password
+ * @returns The lowercase hex digest
+ */
+const hashPassword = async (password: string): Promise<string> => {
+  const data = new TextEncoder().encode(password);
+  const digest = await crypto.subtle.digest('SHA-256', data);
+
+  return Array.from(new Uint8Array(digest))
+    .map(byte => byte.toString(16).padStart(2, '0'))
+    .join('');
+};
+
+/**
+ * Swaps the password prompt for the workout content
+ */
+const hideLoginScreen = (): void => {
+  const loginScreen = document.getElementById('login-screen');
+  const workoutContent = document.getElementById('workout-content');
+  if (!loginScreen || !workoutContent) {
+    console.error('Login screen or workout content not found');
+    return;
   }
-}
 
-// Login Functions
-function setupLoginForm(): void {
-  const loginForm = document.getElementById('login-form') as HTMLFormElement;
-  const loginError = document.getElementById('login-error') as HTMLElement;
-  const passwordInput = document.getElementById('workout-password') as HTMLInputElement;
+  loginScreen.style.display = 'none';
+  workoutContent.style.display = 'block';
+};
 
-  if (!loginForm || !loginError || !passwordInput) return;
+/**
+ * Shows the wrong-password message
+ */
+const showLoginError = (): void => {
+  const loginError = document.getElementById('login-error');
+  if (loginError) loginError.style.display = 'block';
+};
 
-  loginForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-
-    const enteredPassword = passwordInput.value;
-
-    try {
-      const hashedEnteredPassword = await hashPassword(enteredPassword);
-
-      if (hashedEnteredPassword === CORRECT_PASSWORD_HASH) {
-        // Correct password - save authentication and proceed
-        saveAuthentication();
-        hideLoginScreen();
-        initializeWorkoutApp();
-      } else {
-        // Wrong password - show error
-        showLoginError();
-        passwordInput.value = ''; // Clear the password field
-        passwordInput.focus();
-      }
-    } catch (error) {
-      console.error('Error hashing password:', error);
-      showLoginError();
-      passwordInput.value = '';
-      passwordInput.focus();
-    }
-  });
-
-  // Focus on password input when page loads
-  passwordInput.focus();
-}
-
-function showLoginError(): void {
-  const loginError = document.getElementById('login-error') as HTMLElement;
-  if (loginError) {
-    loginError.style.display = 'block';
-  }
-}
-
-function hideLoginScreen(): void {
-  const loginScreen = document.getElementById('login-screen') as HTMLElement;
-  const workoutContent = document.getElementById('workout-content') as HTMLElement;
-
-  if (loginScreen && workoutContent) {
-    loginScreen.style.display = 'none';
-    workoutContent.style.display = 'block';
-  }
-}
-
-function initializeWorkoutApp(): void {
-  // Initialize the workout app after successful login
-  loadWorkoutData();
-  setupMonthSelector();
-  setupRoutineSelector();
-  setupCollapsibleSections();
-
-  // Load saved month if available, otherwise use most recent
-  const savedMonth = loadLastSelectedMonth();
-  const availableMonths = getAvailableMonths();
-  const monthToUse = savedMonth && availableMonths.includes(savedMonth)
-    ? savedMonth
-    : availableMonths[availableMonths.length - 1]; // Most recent month
-
-  // Load saved day if available, otherwise use defaults
-  const savedDay = loadLastSelectedDay();
-
-  // Select month and handle saved day within the same call
-  selectMonthAndDay(monthToUse, savedDay);
-}
-
-function loadWorkoutData() {
+/**
+ * Fills the reference table that sits below the routine
+ */
+const renderReferenceTable = (): void => {
   const tbody = document.getElementById('workout-data');
-  if (!tbody) return;
-
-  gymData.forEach((rowData, index) => {
-    const row = document.createElement('tr');
-
-    // Row number (starting from 1)
-    const rowNum = document.createElement('td');
-    rowNum.textContent = (index + 1).toString();
-    rowNum.className = 'row-number';
-    row.appendChild(rowNum);
-
-    // Add each data cell
-    rowData.forEach(value => {
-      const cell = document.createElement('td');
-      cell.textContent = value;
-      row.appendChild(cell);
-    });
-
-    tbody.appendChild(row);
-  });
-}
-
-function setupMonthSelector() {
-  const monthSelect = document.getElementById('month-select') as HTMLSelectElement;
-  if (!monthSelect) return;
-
-  // Populate month options
-  const availableMonths = getAvailableMonths();
-  monthSelect.innerHTML = '';
-  
-  availableMonths.forEach(monthId => {
-    const option = document.createElement('option');
-    option.value = monthId;
-    // Format display name (e.g., "2025_09" -> "Septiembre 2025")
-    option.textContent = formatMonthDisplay(monthId);
-    monthSelect.appendChild(option);
-  });
-
-  // Handle month selection change
-  monthSelect.addEventListener('change', (e) => {
-    const target = e.target as HTMLSelectElement;
-    selectMonth(target.value);
-  });
-}
-
-function setupRoutineSelector() {
-  // This will be called after generating the week interface
-  setupWeekAndDayEventListeners();
-}
-
-function setupWeekAndDayEventListeners() {
-  // Handle day link clicks
-  const dayLinks = document.querySelectorAll('.day-link');
-  dayLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      const target = e.target as HTMLElement;
-      const week = parseInt(target.dataset.week || '1');
-      const day = parseInt(target.dataset.day || '1');
-      selectDay(week, day);
-    });
-  });
-}
-
-function generateWeekInterface() {
-  if (!currentRoutine) return;
-
-  // Get the available weeks from the current routine
-  const weeks = [...new Set(currentRoutine.workoutDays.map(d => d.week))].sort((a, b) => a - b);
-
-  // Get containers and templates
-  const weeksRow = document.getElementById('weeks-row');
-  const daysRow = document.getElementById('days-row');
-  const weekHeaderTemplate = document.getElementById('week-header-template') as HTMLTemplateElement;
-  const weekDaysTemplate = document.getElementById('week-days-template') as HTMLTemplateElement;
-
-  if (!weeksRow || !daysRow || !weekHeaderTemplate || !weekDaysTemplate) return;
-
-  // Clear existing content (except templates)
-  const existingHeaders = weeksRow.querySelectorAll('.week-header');
-  const existingDays = daysRow.querySelectorAll('.week-days');
-  existingHeaders.forEach(header => header.remove());
-  existingDays.forEach(days => days.remove());
-
-  // Generate week headers using template
-  weeks.forEach(weekNum => {
-    const headerClone = weekHeaderTemplate.content.cloneNode(true) as DocumentFragment;
-    const headerElement = headerClone.querySelector('.week-header') as HTMLElement;
-    const titleElement = headerClone.querySelector('.week-title') as HTMLElement;
-
-    headerElement.dataset.week = weekNum.toString();
-    titleElement.textContent = `SEMANA ${weekNum}`;
-    if (weekNum === currentWeek) {
-      headerElement.classList.add('active');
-    }
-
-    weeksRow.appendChild(headerClone);
-  });
-
-  // Generate day buttons using template
-  weeks.forEach((weekNum) => {
-    const daysClone = weekDaysTemplate.content.cloneNode(true) as DocumentFragment;
-    const weekDaysElement = daysClone.querySelector('.week-days') as HTMLElement;
-    const dayLinks = daysClone.querySelectorAll('.day-link');
-
-    weekDaysElement.dataset.week = weekNum.toString();
-    if (weekNum === currentWeek) weekDaysElement.classList.add('active');
-
-    dayLinks.forEach(dayLink => {
-      const element = dayLink as HTMLElement;
-      element.dataset.week = weekNum.toString();
-      // data-day is already set in the template (1, 2, 3)
-      if (weekNum === currentWeek && element.dataset.day === currentDay.toString()) {
-        element.classList.add('active');
-      }
-    });
-
-    daysRow.appendChild(daysClone);
-  });
-
-  // Re-setup event listeners after generating new elements
-  setupWeekAndDayEventListeners();
-}
-
-// Note: selectWeek function removed as it was unused
-// Week selection happens through day selection (selectDay function)
-
-function selectDay(week: number, day: number) {
-  currentWeek = week;
-  currentDay = day;
-
-  // Update active week header
-  document.querySelectorAll('.week-header').forEach(header => {
-    const element = header as HTMLElement;
-    element.classList.remove('active');
-    if (element.dataset.week === week.toString()) {
-      element.classList.add('active');
-    }
-  });
-
-  // Update active day link
-  document.querySelectorAll('.day-link').forEach(link => {
-    const element = link as HTMLElement;
-    element.classList.remove('active');
-    if (element.dataset.week === week.toString() && element.dataset.day === day.toString()) {
-      element.classList.add('active');
-    }
-  });
-
-  loadRoutineDisplay();
-  saveLastSelectedDay(week, day);
-}
-
-function selectMonth(monthId: string, skipDisplayReload: boolean = false) {
-  currentMonth = monthId;
-  currentRoutine = getRoutineByMonth(monthId);
-
-  if (!currentRoutine) {
-    console.error(`No routine found for month: ${monthId}`);
+  if (!tbody) {
+    console.error('Element #workout-data not found');
     return;
   }
 
-  // Update the select element
-  const monthSelect = document.getElementById('month-select') as HTMLSelectElement;
-  if (monthSelect) {
-    monthSelect.value = monthId;
-  }
+  tbody.innerHTML = renderGymTableRows();
+};
 
-  // Generate the week interface for this routine
-  generateWeekInterface();
-
-  // Reset to first available week/day for this routine
-  const availableWeeks = [...new Set(currentRoutine.workoutDays.map(d => d.week))].sort((a, b) => a - b);
-  if (availableWeeks.length > 0) {
-    currentWeek = availableWeeks[0];
-    currentDay = 1;
-  }
-
-  // Save the selected month
-  saveLastSelectedMonth(monthId);
-
-  // Reload the current routine display (unless skipped during initialization)
-  if (!skipDisplayReload) {
-    loadRoutineDisplay();
-  }
-}
-
-function selectMonthAndDay(monthId: string, savedDay: { week: number; day: number } | null) {
-  currentMonth = monthId;
-  currentRoutine = getRoutineByMonth(monthId);
-
-  if (!currentRoutine) {
-    console.error(`No routine found for month: ${monthId}`);
-    return;
-  }
-
-  // Update the select element
-  const monthSelect = document.getElementById('month-select') as HTMLSelectElement;
-  if (monthSelect) {
-    monthSelect.value = monthId;
-  }
-
-  // Set week/day before generating interface (so active states are correct)
-  if (savedDay) {
-    // Validate that the saved day exists in this routine
-    const workoutExists = currentRoutine.workoutDays.some(w => w.week === savedDay.week && w.day === savedDay.day);
-    if (workoutExists) {
-      currentWeek = savedDay.week;
-      currentDay = savedDay.day;
-    } else {
-      // Saved day doesn't exist in this routine, use defaults
-      const availableWeeks = [...new Set(currentRoutine.workoutDays.map(d => d.week))].sort((a, b) => a - b);
-      currentWeek = availableWeeks[0] || 1;
-      currentDay = 1;
-    }
-  } else {
-    // No saved day, use defaults
-    const availableWeeks = [...new Set(currentRoutine.workoutDays.map(d => d.week))].sort((a, b) => a - b);
-    currentWeek = availableWeeks[0] || 1;
-    currentDay = 1;
-  }
-
-  // Generate the week interface for this routine (with correct active states)
-  generateWeekInterface();
-
-  // Save the selected month
-  saveLastSelectedMonth(monthId);
-
-  // Load the routine display
-  loadRoutineDisplay();
-}
-
-function formatMonthDisplay(monthId: string): string {
-  const [year, monthNum] = monthId.split('_');
-  const monthNames = [
-    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-  ];
-  
-  const monthIndex = parseInt(monthNum) - 1;
-  const monthName = monthNames[monthIndex] || `Mes ${monthNum}`;
-  
-  return `${monthName} ${year}`;
-}
-
-
-// This function is no longer needed since all days are pre-rendered in HTML
-
-function loadRoutineDisplay() {
+/**
+ * Redraws the current day, resolving each exercise against the stored 1RM picks
+ */
+const renderRoutine = (): void => {
   const routineContent = document.getElementById('routine-content');
-  if (!routineContent) return;
+  if (!routineContent) {
+    console.error('Element #routine-content not found');
+    return;
+  }
 
-  if (!currentRoutine) {
+  if (!state.routine) {
     routineContent.innerHTML = '<p>No se ha seleccionado ninguna rutina.</p>';
     return;
   }
 
-  const workout = getWorkoutByWeekAndDay(currentWeek, currentDay);
+  const workout = getWorkoutByWeekAndDay(state.routine, state.week, state.day);
   if (!workout) {
     routineContent.innerHTML = '<p>No se encontró entrenamiento para este día.</p>';
     return;
   }
 
-  // Use template function with current routine
-  routineContent.innerHTML = renderWorkoutTemplate(workout, currentRoutine.warmup);
-
-  // Setup collapsible sections and exercise selectors after DOM update
-  setTimeout(() => {
-    setupCollapsibleSections();
-    setupExerciseSelectors();
-  }, 0);
-}
-
-function getWorkoutByWeekAndDay(week: number, day: number): DayWorkout | undefined {
-  if (!currentRoutine) return undefined;
-  return currentRoutine.workoutDays.find(w => w.week === week && w.day === day);
-}
-
-// Exercise Selection Functions
-function sanitizeExerciseName(name: string): string {
-  return name.toLowerCase()
-    .replace(/\s+/g, '_')
-    .replace(/[()]/g, '')
-    .replace(/[^a-z0-9_]/g, '');
-}
-
-function loadExerciseSelections(): Record<string, number> {
-  try {
-    const stored = localStorage.getItem(EXERCISE_SELECTIONS_KEY);
-    if (!stored) return {};
-    
-    const data = JSON.parse(stored);
-    
-    // Check if it's the new format (grouped by month)
-    if (data && typeof data === 'object' && currentMonth && data[currentMonth]) {
-      return data[currentMonth];
-    }
-    
-    // Check if it's the old format (flat structure) - migrate it
-    if (data && typeof data === 'object' && !currentMonth) {
-      // If no current month set, return empty to avoid errors
-      return {};
-    }
-    
-    // Handle old format migration
-    if (data && typeof data === 'object' && currentMonth) {
-      // Check if any key doesn't look like a month ID (YYYY_MM)
-      const hasOldFormat = Object.keys(data).some(key => !/^\d{4}_\d{2}$/.test(key));
-      if (hasOldFormat) {
-        // This is old format, migrate to new format
-        migrateExerciseSelections(data);
-        // Return the current month's data after migration
-        const newData = JSON.parse(localStorage.getItem(EXERCISE_SELECTIONS_KEY) || '{}');
-        return newData[currentMonth] || {};
-      }
-    }
-    
-    return {};
-  } catch {
-    return {};
-  }
-}
-
-function saveExerciseSelection(exerciseId: string, rowIndex: number): void {
-  try {
-    if (!currentMonth) {
-      console.error('Cannot save exercise selection: no current month set');
-      return;
-    }
-    
-    const allSelections = loadAllExerciseSelections();
-    
-    // Initialize month if it doesn't exist
-    if (!allSelections[currentMonth]) {
-      allSelections[currentMonth] = {};
-    }
-    
-    // Save the selection for the current month
-    allSelections[currentMonth][exerciseId] = rowIndex;
-    
-    localStorage.setItem(EXERCISE_SELECTIONS_KEY, JSON.stringify(allSelections));
-  } catch (error) {
-    console.error('Error saving exercise selection:', error);
-  }
-}
-
-function removeExerciseSelection(exerciseId: string): void {
-  try {
-    if (!currentMonth) {
-      console.error('Cannot remove exercise selection: no current month set');
-      return;
-    }
-    
-    const allSelections = loadAllExerciseSelections();
-    
-    // Remove the selection for the current month
-    if (allSelections[currentMonth]) {
-      delete allSelections[currentMonth][exerciseId];
-    }
-    
-    localStorage.setItem(EXERCISE_SELECTIONS_KEY, JSON.stringify(allSelections));
-  } catch (error) {
-    console.error('Error removing exercise selection:', error);
-  }
-}
-
-function loadAllExerciseSelections(): Record<string, Record<string, number>> {
-  try {
-    const stored = localStorage.getItem(EXERCISE_SELECTIONS_KEY);
-    return stored ? JSON.parse(stored) : {};
-  } catch {
-    return {};
-  }
-}
-
-function migrateExerciseSelections(oldData: Record<string, number>): void {
-  try {
-    // Create new format structure
-    const newData: Record<string, Record<string, number>> = {};
-    
-    // Get all available months
-    const availableMonths = getAvailableMonths();
-    
-    // For migration, we'll assign the old selections to all available months
-    // This ensures users don't lose their existing selections
-    availableMonths.forEach(monthId => {
-      newData[monthId] = { ...oldData };
-    });
-    
-    // Save the migrated data
-    localStorage.setItem(EXERCISE_SELECTIONS_KEY, JSON.stringify(newData));
-  } catch (error) {
-    console.error('Error migrating exercise selections:', error);
-  }
-}
-
-function getWeightForPercentage(rowIndex: number, columnIndex: number): string | null {
-  if (rowIndex < 0 || rowIndex >= gymData.length || columnIndex < 0 || columnIndex >= gymData[rowIndex].length) {
-    return null;
-  }
-  return gymData[rowIndex][columnIndex];
-}
-
-function saveLastSelectedDay(week: number, day: number): void {
-  try {
-    const dayData = { week, day };
-    localStorage.setItem(LAST_SELECTED_DAY_KEY, JSON.stringify(dayData));
-  } catch (error) {
-    console.error('Error saving last selected day:', error);
-  }
-}
-
-function loadLastSelectedDay(): { week: number; day: number } | null {
-  try {
-    const stored = localStorage.getItem(LAST_SELECTED_DAY_KEY);
-    if (stored) {
-      const data = JSON.parse(stored);
-      // Validate the data structure
-      if (data && typeof data.week === 'number' && typeof data.day === 'number') {
-        return data;
-      }
-    }
-    return null;
-  } catch {
-    return null;
-  }
-}
-
-function saveLastSelectedMonth(monthId: string): void {
-  try {
-    localStorage.setItem(LAST_SELECTED_MONTH_KEY, monthId);
-  } catch (error) {
-    console.error('Error saving last selected month:', error);
-  }
-}
-
-function loadLastSelectedMonth(): string | null {
-  try {
-    return localStorage.getItem(LAST_SELECTED_MONTH_KEY);
-  } catch {
-    return null;
-  }
-}
-
-function saveAuthentication(): void {
-  try {
-    localStorage.setItem(LOGIN_AUTH_KEY, 'true');
-  } catch (error) {
-    console.error('Error saving authentication status:', error);
-  }
-}
-
-function isAuthenticated(): boolean {
-  try {
-    const stored = localStorage.getItem(LOGIN_AUTH_KEY);
-    return stored === 'true';
-  } catch {
-    return false;
-  }
-}
-
-// This function is no longer needed since weights are calculated directly in the template
-
-function setupExerciseSelectors(): void {
-  document.querySelectorAll('.exercise-selector').forEach(select => {
-    const selectElement = select as HTMLSelectElement;
-    const exerciseId = selectElement.dataset.exerciseId;
-
-    if (!exerciseId) return;
-
-    selectElement.addEventListener('change', (event) => {
-      const target = event.target as HTMLSelectElement;
-      const selectedValue = target.value;
-
-      if (selectedValue === '') {
-        // Remove selection
-        removeExerciseSelection(exerciseId);
-      } else {
-        // Save selection
-        const rowIndex = parseInt(selectedValue);
-        saveExerciseSelection(exerciseId, rowIndex);
-      }
-
-      // Refresh the entire routine display to show updated weights
-      loadRoutineDisplay();
-    });
+  routineContent.innerHTML = renderWorkoutDay(workout, state.routine.warmup, {
+    selections: loadExerciseSelections(state.monthId, getAvailableMonths()),
+    defaults: state.routine.defaults,
   });
-}
 
-// Template rendering functions - clean separation of HTML from logic
-function renderWorkoutTemplate(workout: DayWorkout, warmup: MonthRoutine['warmup']): string {
-  return `
-    <h3>Semana ${workout.week} - Día ${workout.day}</h3>
+  // innerHTML is synchronous, so the new headers exist by now and the wiring
+  // does not need to be deferred to a later tick.
+  setupCollapsibleSections();
+};
 
-    ${renderWarmupSection(warmup)}
-    ${renderMainExercisesSection(workout.mainExercises)}
-    ${renderCircuitSection(workout.circuit, workout.circuitRounds)}
-  `;
-}
+/**
+ * Marks the active week header and day button
+ */
+const highlightSelection = (): void => {
+  document.querySelectorAll<HTMLElement>('.week-header').forEach(header => {
+    header.classList.toggle('active', header.dataset.week === `${state.week}`);
+  });
 
-function renderWarmupSection(warmup: MonthRoutine['warmup']): string {
-  return `
-    <div class="routine-section">
-      <table class="routine-table">
-        <thead>
-          <tr class="section-header collapsible-header collapsed" data-section="warmup">
-            <th colspan="2">
-              <span class="section-title">Entrada en Calor - ${warmup.totalRounds} rondas</span>
-              <span class="collapse-icon">▼</span>
-            </th>
-          </tr>
-          <tr class="collapsible-content column-headers" data-content="warmup" style="display: none;">
-            <th>Ejercicio</th>
-            <th>Series/Repeticiones</th>
-          </tr>
-        </thead>
-        <tbody class="collapsible-content" data-content="warmup" style="display: none;">
-          ${warmup.exercises.map(exercise => `
-            <tr>
-              <td>${exercise.name}</td>
-              <td>${exercise.sets}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
+  document.querySelectorAll<HTMLElement>('.week-days').forEach(weekDays => {
+    weekDays.classList.toggle('active', weekDays.dataset.week === `${state.week}`);
+  });
 
-function renderMainExercisesSection(mainExercises: DayWorkout['mainExercises']): string {
-  const selections = loadExerciseSelections();
+  document.querySelectorAll<HTMLElement>('.day-link').forEach(link => {
+    const isActive = link.dataset.week === `${state.week}` && link.dataset.day === `${state.day}`;
+    link.classList.toggle('active', isActive);
+  });
+};
 
-  return `
-    <div class="routine-section">
-      <table class="routine-table">
-        <thead>
-          <tr class="section-header collapsible-header expanded" data-section="main">
-            <th colspan="7">
-              <span class="section-title">Ejercicios Principales</span>
-              <span class="collapse-icon">▲</span>
-            </th>
-          </tr>
-          <tr class="collapsible-content column-headers" data-content="main">
-            <th>Ejercicio</th>
-            <th>55%</th>
-            <th>65%</th>
-            <th>75%</th>
-            <th>Rango E</th>
-            <th>Rango F</th>
-            <th>MAX</th>
-          </tr>
-        </thead>
-        <tbody class="collapsible-content" data-content="main">
-          ${mainExercises.map(exercise => {
-            const exerciseId = sanitizeExerciseName(exercise.name);
-            let selectedRow: number | undefined = selections[exerciseId];
+/**
+ * Rebuilds the week/day selector for the routine in state
+ */
+const renderWeekSelector = (): void => {
+  if (!state.routine) return;
 
-            // Use routine default if no selection exists
-            if (selectedRow === undefined && currentMonth) {
-              const defaults = getDefaultsForMonth(currentMonth);
-              if (defaults) {
-                const defaultWeight = defaults[exercise.name];
-                if (defaultWeight !== undefined) {
-                  // Find the row index that matches the default weight
-                  selectedRow = gymData.findIndex(row => parseInt(row[7]) === defaultWeight);
-                  if (selectedRow === -1) selectedRow = undefined;
-                }
-              }
-            }
+  const weeksRow = document.getElementById('weeks-row');
+  const daysRow = document.getElementById('days-row');
+  const weekHeaderTemplate = document.getElementById('week-header-template');
+  const weekDaysTemplate = document.getElementById('week-days-template');
 
-            // Helper function to render weight cell
-            const renderWeightCell = (originalValue: string | undefined, columnType: string) => {
-              if (!originalValue || originalValue === '-') return '-';
+  if (
+    !weeksRow ||
+    !daysRow ||
+    !(weekHeaderTemplate instanceof HTMLTemplateElement) ||
+    !(weekDaysTemplate instanceof HTMLTemplateElement)
+  ) {
+    console.error('Week selector containers or templates not found');
+    return;
+  }
 
-              // Extract just the number/text without "reps"
-              const cleanValue = originalValue.replace(/\s*reps?\s*/i, '').trim();
+  weeksRow.querySelectorAll('.week-header').forEach(header => header.remove());
+  daysRow.querySelectorAll('.week-days').forEach(days => days.remove());
 
-              if (selectedRow !== undefined) {
-                const columnMap: Record<string, number> = {
-                  '55': 0, '65': 1, '75': 2
-                };
-                const columnIndex = columnMap[columnType];
-                if (columnIndex !== undefined) {
-                  const weight = getWeightForPercentage(selectedRow, columnIndex);
-                  return weight ? `${cleanValue} (${weight} kg)` : cleanValue;
-                }
-              }
+  for (const week of getWeeks(state.routine)) {
+    const headerClone = weekHeaderTemplate.content.cloneNode(true) as DocumentFragment;
+    const header = headerClone.querySelector<HTMLElement>('.week-header');
+    const title = headerClone.querySelector<HTMLElement>('.week-title');
+    if (!header || !title) {
+      console.error('Week header template is missing .week-header or .week-title');
+      return;
+    }
 
-              return `<span data-exercise-id="${exerciseId}" data-column-type="${columnType}" data-original-text="${cleanValue}">${cleanValue}</span>`;
-            };
+    header.dataset.week = `${week}`;
+    title.textContent = `SEMANA ${week}`;
+    weeksRow.appendChild(headerClone);
 
-            // Helper function to render range cell (E or F) with min/max weights
-            const renderRangeCell = (originalValue: string, rangeType: 'E' | 'F') => {
-              if (!originalValue || originalValue === '-') return '-';
+    const daysClone = weekDaysTemplate.content.cloneNode(true) as DocumentFragment;
+    const weekDays = daysClone.querySelector<HTMLElement>('.week-days');
+    if (!weekDays) {
+      console.error('Week days template is missing .week-days');
+      return;
+    }
 
-              // Extract just the number/text without "reps"
-              const cleanValue = originalValue.replace(/\s*reps?\s*/i, '').trim();
+    weekDays.dataset.week = `${week}`;
+    // data-day already comes from the template; only the week needs filling in
+    daysClone.querySelectorAll<HTMLElement>('.day-link').forEach(link => {
+      link.dataset.week = `${week}`;
+    });
+    daysRow.appendChild(daysClone);
+  }
 
-              if (selectedRow !== undefined) {
-                const minColumn = rangeType === 'E' ? 3 : 5; // E min = 3, F min = 5
-                const maxColumn = rangeType === 'E' ? 4 : 6; // E max = 4, F max = 6
+  highlightSelection();
+};
 
-                const minWeight = getWeightForPercentage(selectedRow, minColumn);
-                const maxWeight = getWeightForPercentage(selectedRow, maxColumn);
+/**
+ * Shows one day of the current routine and remembers it
+ * @param week - The week number
+ * @param day - The day number within the week
+ */
+const selectDay = (week: number, day: number): void => {
+  state.week = week;
+  state.day = day;
 
-                if (minWeight && maxWeight) {
-                  return `${cleanValue} (${minWeight}-${maxWeight} kg)`;
-                } else if (minWeight) {
-                  return `${cleanValue} (${minWeight} kg)`;
-                } else if (maxWeight) {
-                  return `${cleanValue} (${maxWeight} kg)`;
-                }
-              }
+  highlightSelection();
+  renderRoutine();
+  saveLastSelectedDay({ week, day });
+};
 
-              return cleanValue;
-            };
+/**
+ * Loads a month and shows one of its days
+ * @param monthId - The month to load
+ * @param preferredDay - The day to reopen on, when it exists in this routine
+ */
+const selectMonth = async (monthId: string, preferredDay: SelectedDay | null): Promise<void> => {
+  const routine = await loadRoutine(monthId);
+  if (!routine) return;
 
-            const renderMaxCell = (originalValue: string | undefined) => {
-              if (!originalValue || originalValue === '-') return '-';
+  state.monthId = monthId;
+  state.routine = routine;
 
-              const cleanValue = originalValue.replace(/\s*reps?\s*/i, '').trim();
+  const weeks = getWeeks(routine);
+  const dayExists =
+    preferredDay !== null &&
+    routine.workoutDays.some(w => w.week === preferredDay.week && w.day === preferredDay.day);
 
-              if (selectedRow !== undefined) {
-                const maxWeight = getWeightForPercentage(selectedRow, 7);
-                if (maxWeight) {
-                  return `${cleanValue} (${maxWeight} kg)`;
-                }
-              }
+  state.week = dayExists ? preferredDay.week : (weeks[0] ?? 1);
+  state.day = dayExists ? preferredDay.day : 1;
 
-              return cleanValue;
-            };
+  const monthSelect = document.getElementById('month-select');
+  if (monthSelect instanceof HTMLSelectElement) monthSelect.value = monthId;
 
-            return `
-              <tr>
-                <td>
-                  <div class="exercise-container">
-                    <div class="exercise-name">${exercise.name}</div>
-                    <select class="exercise-selector" data-exercise-id="${exerciseId}">
-                      <option value="">${selectedRow !== undefined ? 'Máximo...' : (() => {
-                        const defaults = getDefaultsForMonth(currentMonth);
-                        return defaults && defaults[exercise.name] ? `${defaults[exercise.name]} kg` : 'Máximo...';
-                      })()}</option>
-                      ${gymData.map((row, index) => {
-                        const maxWeight = row[7]; // MAX column
-                        const isSelected = selectedRow === index;
-                        return `<option value="${index}" ${isSelected ? 'selected' : ''}>${maxWeight} kg</option>`;
-                      }).join('')}
-                    </select>
-                  </div>
-                </td>
-                <td>${renderWeightCell(exercise.warmupSets.percentage55, '55')}</td>
-                <td>${renderWeightCell(exercise.warmupSets.percentage65, '65')}</td>
-                <td>${renderWeightCell(exercise.warmupSets.percentage75, '75')}</td>
-                <td>${renderRangeCell(exercise.workingSets, 'E')}</td>
-                <td>${exercise.rangeFSets ? renderRangeCell(exercise.rangeFSets, 'F') : '-'}</td>
-                <td>${renderMaxCell(exercise.maxSets)}</td>
-              </tr>
-            `;
-          }).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
+  renderWeekSelector();
+  renderRoutine();
+  saveLastSelectedMonth(monthId);
+};
 
-function renderCircuitSection(circuit: DayWorkout['circuit'], rounds: number): string {
-  return `
-    <div class="routine-section">
-      <table class="routine-table">
-        <thead>
-          <tr class="section-header collapsible-header expanded" data-section="circuit">
-            <th colspan="2">
-              <span class="section-title">Circuito Final (${rounds} rondas)</span>
-              <span class="collapse-icon">▲</span>
-            </th>
-          </tr>
-          <tr class="collapsible-content column-headers" data-content="circuit">
-            <th>Ejercicio</th>
-            <th>Repeticiones</th>
-          </tr>
-        </thead>
-        <tbody class="collapsible-content" data-content="circuit">
-          ${circuit.map(exercise => `
-            <tr>
-              <td>${exercise.name}</td>
-              <td>${exercise.reps}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
+/**
+ * Fills the month dropdown and reacts to changes
+ */
+const setupMonthSelector = (): void => {
+  const monthSelect = document.getElementById('month-select');
+  if (!(monthSelect instanceof HTMLSelectElement)) {
+    console.error('Element #month-select not found');
+    return;
+  }
 
+  monthSelect.innerHTML = getAvailableMonths()
+    .map(monthId => `<option value="${monthId}">${formatMonthDisplay(monthId)}</option>`)
+    .join('');
+
+  monthSelect.addEventListener('change', event => {
+    const target = event.target as HTMLSelectElement;
+    void selectMonth(target.value, null);
+  });
+};
+
+/**
+ * Wires day clicks and 1RM changes.
+ *
+ * Both listen on a container that outlives the re-renders, so the handlers are
+ * attached once instead of being rebound every time the markup is replaced.
+ */
+const setupDelegatedListeners = (): void => {
+  const daysRow = document.getElementById('days-row');
+  if (daysRow) {
+    daysRow.addEventListener('click', event => {
+      const link = (event.target as HTMLElement).closest<HTMLElement>('.day-link');
+      if (!link) return;
+
+      const week = Number(link.dataset.week);
+      const day = Number(link.dataset.day);
+      if (Number.isNaN(week) || Number.isNaN(day)) return;
+
+      selectDay(week, day);
+    });
+  }
+
+  const routineContent = document.getElementById('routine-content');
+  if (routineContent) {
+    routineContent.addEventListener('change', event => {
+      const select = event.target;
+      if (!(select instanceof HTMLSelectElement) || !select.classList.contains('exercise-selector'))
+        return;
+
+      const exerciseId = select.dataset.exerciseId;
+      if (!exerciseId) return;
+
+      if (select.value === '') {
+        removeExerciseSelection(state.monthId, exerciseId);
+      } else {
+        saveExerciseSelection(state.monthId, exerciseId, Number(select.value));
+      }
+
+      renderRoutine();
+    });
+  }
+};
+
+/**
+ * Starts the page once the password prompt is out of the way
+ */
+const initializeWorkoutApp = async (): Promise<void> => {
+  renderReferenceTable();
+  setupMonthSelector();
+  setupDelegatedListeners();
+  setupCollapsibleSections();
+
+  const availableMonths = getAvailableMonths();
+  const savedMonth = loadLastSelectedMonth();
+  const monthToShow =
+    savedMonth && availableMonths.includes(savedMonth)
+      ? savedMonth
+      : availableMonths[availableMonths.length - 1];
+
+  if (!monthToShow) {
+    console.error('No routines available');
+    return;
+  }
+
+  await selectMonth(monthToShow, loadLastSelectedDay());
+};
+
+/**
+ * Wires the password prompt
+ */
+const setupLoginForm = (): void => {
+  const loginForm = document.getElementById('login-form');
+  const passwordInput = document.getElementById('workout-password');
+
+  if (!(loginForm instanceof HTMLFormElement) || !(passwordInput instanceof HTMLInputElement)) {
+    console.error('Login form or password input not found');
+    return;
+  }
+
+  loginForm.addEventListener('submit', async event => {
+    event.preventDefault();
+
+    try {
+      if ((await hashPassword(passwordInput.value)) === CORRECT_PASSWORD_HASH) {
+        saveAuthentication();
+        hideLoginScreen();
+        await initializeWorkoutApp();
+        return;
+      }
+    } catch (error) {
+      console.error('Failed to hash password:', error);
+    }
+
+    showLoginError();
+    passwordInput.value = '';
+    passwordInput.focus();
+  });
+
+  passwordInput.focus();
+};
+
+/**
+ * Skips the prompt when this browser already cleared it, otherwise wires it up
+ */
+const initializeWorkoutPage = (): void => {
+  if (isAuthenticated()) {
+    hideLoginScreen();
+    void initializeWorkoutApp();
+    return;
+  }
+
+  setupLoginForm();
+};
+
+document.addEventListener('DOMContentLoaded', initializeWorkoutPage);

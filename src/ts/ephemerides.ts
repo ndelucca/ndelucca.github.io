@@ -51,4 +51,4 @@ const todaysEvents = async (): Promise<void> => {
   }
 };
 
-window.addEventListener('load', todaysEvents);
+document.addEventListener('DOMContentLoaded', todaysEvents);

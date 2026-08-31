@@ -1,88 +1,104 @@
-// Central export file for all monthly routines
-// Import and export all available monthly routines
+/**
+ * Routine registry - loads each month's data on demand and derives stats from it.
+ *
+ * The data lives in `src/data/routines/*.json` and is pulled in with a dynamic
+ * import so a page only downloads the month it actually shows, instead of
+ * bundling every routine up front. Adding a month means dropping a JSON file in
+ * that directory and listing its id in `src/data/months.json`.
+ *
+ * @module routines
+ */
 
-import { routine2025_08 } from './2025_08';
-import { routine2025_09 } from './2025_09';
-import { routine2025_10 } from './2025_10';
-import { routine2025_11 } from './2025_11';
-import { routine2025_12 } from './2025_12';
-import { routine2026_01 } from './2026_01';
-import { routine2026_02 } from './2026_02';
-import { routine2026_03 } from './2026_03';
-import { routine2026_04 } from './2026_04';
-import { routine2026_05 } from './2026_05';
-import { routine2026_06 } from './2026_06';
-import { routine2026_07 } from './2026_07';
-import { routine2026_08 } from './2026_08';
-import { routine2026_09 } from './2026_09';
-// Import future months here as they are added
+import monthIds from '../../data/months.json';
+import { DayWorkout, MonthRoutine, RoutineStats } from './types';
 
-export { routine2025_08 };
-export { routine2025_09 };
-export { routine2025_10 };
-export { routine2025_11 };
-export { routine2025_12 };
-export { routine2026_01 };
-export { routine2026_02 };
-export { routine2026_03 };
-export { routine2026_04 };
-export { routine2026_05 };
-export { routine2026_06 };
-export { routine2026_07 };
-export { routine2026_08 };
-export { routine2026_09 };
-// Export future months here
-
-// Export common types
 export * from './types';
 
-// Registry of available routines
-export const availableRoutines = {
-  '2025_08': routine2025_08,
-  '2025_09': routine2025_09,
-  '2025_10': routine2025_10,
-  '2025_11': routine2025_11,
-  '2025_12': routine2025_12,
-  '2026_01': routine2026_01,
-  '2026_02': routine2026_02,
-  '2026_03': routine2026_03,
-  '2026_04': routine2026_04,
-  '2026_05': routine2026_05,
-  '2026_06': routine2026_06,
-  '2026_07': routine2026_07,
-  '2026_08': routine2026_08,
-  '2026_09': routine2026_09,
-  // Add future months here
-};
+const cache = new Map<string, MonthRoutine>();
 
-// Get routine by month identifier
-export const getRoutineByMonth = (monthId: string) => {
-  return availableRoutines[monthId as keyof typeof availableRoutines];
-};
-
-// Get list of available months
+/**
+ * Lists the months that ship with the site, oldest first
+ * @returns The month identifiers, e.g. ['2025_08', '2025_09']
+ */
 export const getAvailableMonths = (): string[] => {
-  return Object.keys(availableRoutines);
+  return [...monthIds];
 };
 
-// Get routine statistics
-export const getRoutineStats = (monthId: string) => {
-  const routine = getRoutineByMonth(monthId);
-  if (!routine) return null;
+/**
+ * Loads one month's routine, caching it so repeated selections are free
+ * @param monthId - The month identifier, e.g. '2025_08'
+ * @returns The routine, or null when the month is unknown or fails to load
+ */
+export const loadRoutine = async (monthId: string): Promise<MonthRoutine | null> => {
+  const cached = cache.get(monthId);
+  if (cached) return cached;
 
-  const weeks = [...new Set(routine.workoutDays.map(d => d.week))];
+  if (!getAvailableMonths().includes(monthId)) {
+    console.error(`Unknown routine month: ${monthId}`);
+    return null;
+  }
+
+  try {
+    const data = await import(
+      /* webpackChunkName: "routine-[request]" */ `../../data/routines/${monthId}.json`
+    );
+    const routine = (data.default ?? data) as MonthRoutine;
+    cache.set(monthId, routine);
+    return routine;
+  } catch (error) {
+    console.error(`Failed to load routine for ${monthId}:`, error);
+    return null;
+  }
+};
+
+/**
+ * Finds the workout for one week/day pair
+ * @param routine - The routine to search
+ * @param week - The week number
+ * @param day - The day number within the week
+ * @returns The matching workout, or undefined when the routine has no such day
+ */
+export const getWorkoutByWeekAndDay = (
+  routine: MonthRoutine,
+  week: number,
+  day: number
+): DayWorkout | undefined => {
+  return routine.workoutDays.find(w => w.week === week && w.day === day);
+};
+
+/**
+ * Every workout of one week
+ * @param routine - The routine to search
+ * @param week - The week number
+ * @returns The workouts of that week, in file order
+ */
+export const getWeekWorkouts = (routine: MonthRoutine, week: number): DayWorkout[] => {
+  return routine.workoutDays.filter(w => w.week === week);
+};
+
+/**
+ * The week numbers a routine covers, sorted numerically.
+ * The comparator matters: a bare sort() would order week 10 before week 2.
+ * @param routine - The routine to inspect
+ * @returns The ascending list of week numbers
+ */
+export const getWeeks = (routine: MonthRoutine): number[] => {
+  return [...new Set(routine.workoutDays.map(w => w.week))].sort((a, b) => a - b);
+};
+
+/**
+ * Summary counts for one routine
+ * @param routine - The routine to measure
+ * @returns Week and day totals plus the week range
+ */
+export const getRoutineStats = (routine: MonthRoutine): RoutineStats => {
+  const weeks = getWeeks(routine);
+
   return {
-    totalWeeks: Math.max(...weeks),
+    month: routine.month,
+    totalWeeks: weeks.length === 0 ? 0 : weeks[weeks.length - 1],
     totalWorkoutDays: routine.workoutDays.length,
-    weekRange: { min: Math.min(...weeks), max: Math.max(...weeks) },
-    daysPerWeek: routine.workoutDays.filter(d => d.week === 1).length
+    weekRange: { min: weeks[0] ?? 0, max: weeks[weeks.length - 1] ?? 0 },
+    daysPerWeek: getWeekWorkouts(routine, weeks[0] ?? 0).length,
   };
-};
-
-// Get all routine statistics
-export const getAllRoutineStats = () => {
-  return Object.keys(availableRoutines).map(monthId => ({
-    month: monthId,
-    ...getRoutineStats(monthId)
-  }));
 };

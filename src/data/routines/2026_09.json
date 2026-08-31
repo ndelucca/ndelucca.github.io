@@ -1,0 +1,888 @@
+{
+  "month": "2026_09",
+  "warmup": {
+    "exercises": [
+      {
+        "name": "Revolver la olla",
+        "sets": "6+6"
+      },
+      {
+        "name": "Buenos días 1pp",
+        "sets": "5+4"
+      },
+      {
+        "name": "Giros c/barra",
+        "sets": "7"
+      },
+      {
+        "name": "Movilidad c/disco",
+        "sets": "6"
+      },
+      {
+        "name": "Metidas de arr",
+        "sets": "4"
+      }
+    ],
+    "totalRounds": 3
+  },
+  "ranges": {
+    "rangeE": "80% - 87.5% del 1RM",
+    "rangeF": "87.5% - 95% del 1RM"
+  },
+  "defaults": {
+    "RDL": 120,
+    "Fuerza c/impulso": 75,
+    "Remo parado": 90,
+    "Sentadillas atrás": 135,
+    "Fza en banco": 100,
+    "Dominadas": 100
+  },
+  "workoutDays": [
+    {
+      "day": 1,
+      "week": 1,
+      "mainExercises": [
+        {
+          "name": "Sentadillas atrás",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3x2"
+        },
+        {
+          "name": "Fza en banco",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3x2"
+        },
+        {
+          "name": "Dominadas",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3x2"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Vuelo lat + vuelo front c/manc y cambio",
+          "reps": "7"
+        },
+        {
+          "name": "Oblicuos c/banda arrodillado",
+          "reps": "6"
+        },
+        {
+          "name": "Bandera 1/2 asta",
+          "reps": "15\""
+        },
+        {
+          "name": "Angelito invertido",
+          "reps": "9"
+        },
+        {
+          "name": "Bíceps+press 1bb y pp contraria",
+          "reps": "6+5"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 2,
+      "week": 1,
+      "mainExercises": [
+        {
+          "name": "RDL",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "2 reps",
+          "rangeFSets": "1x2"
+        },
+        {
+          "name": "Fuerza c/impulso",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "2 reps",
+          "rangeFSets": "1x2"
+        },
+        {
+          "name": "Remo parado",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "2 reps",
+          "rangeFSets": "1x2"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Twist pp colgado",
+          "reps": "12"
+        },
+        {
+          "name": "Calambre c/1 mancuerna",
+          "reps": "6+6"
+        },
+        {
+          "name": "Hell pp c/mancuerna",
+          "reps": "20\""
+        },
+        {
+          "name": "Retropulsión c/barra(vuelta lenta)",
+          "reps": "6"
+        },
+        {
+          "name": "Pullover+press suspendido en banco 1pp 1bb contrario",
+          "reps": "5+4"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 3,
+      "week": 1,
+      "mainExercises": [
+        {
+          "name": "Sentadillas atrás",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "2 reps"
+          },
+          "workingSets": "1x2"
+        },
+        {
+          "name": "Fza en banco",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "2 reps"
+          },
+          "workingSets": "1x2"
+        },
+        {
+          "name": "Dominadas",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "2 reps"
+          },
+          "workingSets": "1x2"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Vuelo lat + vuelo front c/manc y cambio",
+          "reps": "7"
+        },
+        {
+          "name": "Oblicuos c/banda arrodillado",
+          "reps": "6"
+        },
+        {
+          "name": "Bandera 1/2 asta",
+          "reps": "15\""
+        },
+        {
+          "name": "Angelito invertido",
+          "reps": "9"
+        },
+        {
+          "name": "Bíceps+press 1bb y pp contraria",
+          "reps": "6+5"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 1,
+      "week": 2,
+      "mainExercises": [
+        {
+          "name": "RDL",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3x2",
+          "rangeFSets": "1 rep"
+        },
+        {
+          "name": "Fuerza c/impulso",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3x2",
+          "rangeFSets": "1 rep"
+        },
+        {
+          "name": "Remo parado",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3x2",
+          "rangeFSets": "1 rep"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Twist pp colgado",
+          "reps": "12"
+        },
+        {
+          "name": "Calambre c/1 mancuerna",
+          "reps": "6+6"
+        },
+        {
+          "name": "Hell pp c/mancuerna",
+          "reps": "20\""
+        },
+        {
+          "name": "Retropulsión c/barra(vuelta lenta)",
+          "reps": "6"
+        },
+        {
+          "name": "Pullover+press suspendido en banco 1pp 1bb contrario",
+          "reps": "5+4"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 2,
+      "week": 2,
+      "mainExercises": [
+        {
+          "name": "Sentadillas atrás",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "2x3",
+          "rangeFSets": "2 reps"
+        },
+        {
+          "name": "Fza en banco",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "2x3",
+          "rangeFSets": "2 reps"
+        },
+        {
+          "name": "Dominadas",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "2x3",
+          "rangeFSets": "2 reps"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Vuelo lat + vuelo front c/manc y cambio",
+          "reps": "7"
+        },
+        {
+          "name": "Oblicuos c/banda arrodillado",
+          "reps": "6"
+        },
+        {
+          "name": "Bandera 1/2 asta",
+          "reps": "15\""
+        },
+        {
+          "name": "Angelito invertido",
+          "reps": "9"
+        },
+        {
+          "name": "Bíceps+press 1bb y pp contraria",
+          "reps": "6+5"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 3,
+      "week": 2,
+      "mainExercises": [
+        {
+          "name": "RDL",
+          "warmupSets": {
+            "percentage55": "3 reps",
+            "percentage65": "3 reps",
+            "percentage75": "2 reps"
+          },
+          "workingSets": "1x3"
+        },
+        {
+          "name": "Fuerza c/impulso",
+          "warmupSets": {
+            "percentage55": "3 reps",
+            "percentage65": "3 reps",
+            "percentage75": "2 reps"
+          },
+          "workingSets": "1x3"
+        },
+        {
+          "name": "Remo parado",
+          "warmupSets": {
+            "percentage55": "3 reps",
+            "percentage65": "3 reps",
+            "percentage75": "2 reps"
+          },
+          "workingSets": "1x3"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Twist pp colgado",
+          "reps": "12"
+        },
+        {
+          "name": "Calambre c/1 mancuerna",
+          "reps": "6+6"
+        },
+        {
+          "name": "Hell pp c/mancuerna",
+          "reps": "20\""
+        },
+        {
+          "name": "Retropulsión c/barra(vuelta lenta)",
+          "reps": "6"
+        },
+        {
+          "name": "Pullover+press suspendido en banco 1pp 1bb contrario",
+          "reps": "5+4"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 1,
+      "week": 3,
+      "mainExercises": [
+        {
+          "name": "Sentadillas atrás",
+          "warmupSets": {
+            "percentage65": "4 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "(3x1)+(2x1)",
+          "rangeFSets": "1x2"
+        },
+        {
+          "name": "Fza en banco",
+          "warmupSets": {
+            "percentage65": "4 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "(3x1)+(2x1)",
+          "rangeFSets": "1x2"
+        },
+        {
+          "name": "Dominadas",
+          "warmupSets": {
+            "percentage65": "4 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "(3x1)+(2x1)",
+          "rangeFSets": "1x2"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Vuelo lat + vuelo front c/manc y cambio",
+          "reps": "7"
+        },
+        {
+          "name": "Oblicuos c/banda arrodillado",
+          "reps": "6"
+        },
+        {
+          "name": "Bandera 1/2 asta",
+          "reps": "15\""
+        },
+        {
+          "name": "Angelito invertido",
+          "reps": "9"
+        },
+        {
+          "name": "Bíceps+press 1bb y pp contraria",
+          "reps": "6+5"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 2,
+      "week": 3,
+      "mainExercises": [
+        {
+          "name": "RDL",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "2 reps"
+          },
+          "workingSets": "3x2",
+          "rangeFSets": "2 reps",
+          "maxSets": "1 rep"
+        },
+        {
+          "name": "Fuerza c/impulso",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "2 reps"
+          },
+          "workingSets": "3x2",
+          "rangeFSets": "2 reps",
+          "maxSets": "1 rep"
+        },
+        {
+          "name": "Remo parado",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "2 reps"
+          },
+          "workingSets": "3x2",
+          "rangeFSets": "2 reps",
+          "maxSets": "1 rep"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Twist pp colgado",
+          "reps": "12"
+        },
+        {
+          "name": "Calambre c/1 mancuerna",
+          "reps": "6+6"
+        },
+        {
+          "name": "Hell pp c/mancuerna",
+          "reps": "20\""
+        },
+        {
+          "name": "Retropulsión c/barra(vuelta lenta)",
+          "reps": "6"
+        },
+        {
+          "name": "Pullover+press suspendido en banco 1pp 1bb contrario",
+          "reps": "5+4"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 3,
+      "week": 3,
+      "mainExercises": [
+        {
+          "name": "Sentadillas atrás",
+          "warmupSets": {
+            "percentage55": "5 reps",
+            "percentage65": "2 reps",
+            "percentage75": "2 reps"
+          },
+          "workingSets": "(2x2)+(3x1)"
+        },
+        {
+          "name": "Fza en banco",
+          "warmupSets": {
+            "percentage55": "5 reps",
+            "percentage65": "2 reps",
+            "percentage75": "2 reps"
+          },
+          "workingSets": "(2x2)+(3x1)"
+        },
+        {
+          "name": "Dominadas",
+          "warmupSets": {
+            "percentage55": "5 reps",
+            "percentage65": "2 reps",
+            "percentage75": "2 reps"
+          },
+          "workingSets": "(2x2)+(3x1)"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Vuelo lat + vuelo front c/manc y cambio",
+          "reps": "7"
+        },
+        {
+          "name": "Oblicuos c/banda arrodillado",
+          "reps": "6"
+        },
+        {
+          "name": "Bandera 1/2 asta",
+          "reps": "15\""
+        },
+        {
+          "name": "Angelito invertido",
+          "reps": "9"
+        },
+        {
+          "name": "Bíceps+press 1bb y pp contraria",
+          "reps": "6+5"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 1,
+      "week": 4,
+      "mainExercises": [
+        {
+          "name": "RDL",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "(3x1)+(2x1)",
+          "rangeFSets": "1x2",
+          "maxSets": "1 rep"
+        },
+        {
+          "name": "Fuerza c/impulso",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "(3x1)+(2x1)",
+          "rangeFSets": "1x2",
+          "maxSets": "1 rep"
+        },
+        {
+          "name": "Remo parado",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "(3x1)+(2x1)",
+          "rangeFSets": "1x2",
+          "maxSets": "1 rep"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Twist pp colgado",
+          "reps": "12"
+        },
+        {
+          "name": "Calambre c/1 mancuerna",
+          "reps": "6+6"
+        },
+        {
+          "name": "Hell pp c/mancuerna",
+          "reps": "20\""
+        },
+        {
+          "name": "Retropulsión c/barra(vuelta lenta)",
+          "reps": "6"
+        },
+        {
+          "name": "Pullover+press suspendido en banco 1pp 1bb contrario",
+          "reps": "5+4"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 2,
+      "week": 4,
+      "mainExercises": [
+        {
+          "name": "Sentadillas atrás",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "(3x1)+(2x1)+(1x1)",
+          "rangeFSets": "2 reps",
+          "maxSets": "1 rep"
+        },
+        {
+          "name": "Fza en banco",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "(3x1)+(2x1)+(1x1)",
+          "rangeFSets": "2 reps",
+          "maxSets": "1 rep"
+        },
+        {
+          "name": "Dominadas",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "(3x1)+(2x1)+(1x1)",
+          "rangeFSets": "2 reps",
+          "maxSets": "1 rep"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Vuelo lat + vuelo front c/manc y cambio",
+          "reps": "7"
+        },
+        {
+          "name": "Oblicuos c/banda arrodillado",
+          "reps": "6"
+        },
+        {
+          "name": "Bandera 1/2 asta",
+          "reps": "15\""
+        },
+        {
+          "name": "Angelito invertido",
+          "reps": "9"
+        },
+        {
+          "name": "Bíceps+press 1bb y pp contraria",
+          "reps": "6+5"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 3,
+      "week": 4,
+      "mainExercises": [
+        {
+          "name": "RDL",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "2 reps"
+          },
+          "workingSets": "3x3",
+          "rangeFSets": "2 reps"
+        },
+        {
+          "name": "Fuerza c/impulso",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "2 reps"
+          },
+          "workingSets": "3x3",
+          "rangeFSets": "2 reps"
+        },
+        {
+          "name": "Remo parado",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "2 reps"
+          },
+          "workingSets": "3x3",
+          "rangeFSets": "2 reps"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Twist pp colgado",
+          "reps": "12"
+        },
+        {
+          "name": "Calambre c/1 mancuerna",
+          "reps": "6+6"
+        },
+        {
+          "name": "Hell pp c/mancuerna",
+          "reps": "20\""
+        },
+        {
+          "name": "Retropulsión c/barra(vuelta lenta)",
+          "reps": "6"
+        },
+        {
+          "name": "Pullover+press suspendido en banco 1pp 1bb contrario",
+          "reps": "5+4"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 1,
+      "week": 5,
+      "mainExercises": [
+        {
+          "name": "Sentadillas atrás",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "1x2"
+        },
+        {
+          "name": "Fza en banco",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "1x2"
+        },
+        {
+          "name": "Dominadas",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "1x2"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Vuelo lat + vuelo front c/manc y cambio",
+          "reps": "7"
+        },
+        {
+          "name": "Oblicuos c/banda arrodillado",
+          "reps": "6"
+        },
+        {
+          "name": "Bandera 1/2 asta",
+          "reps": "15\""
+        },
+        {
+          "name": "Angelito invertido",
+          "reps": "9"
+        },
+        {
+          "name": "Bíceps+press 1bb y pp contraria",
+          "reps": "6+5"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 2,
+      "week": 5,
+      "mainExercises": [
+        {
+          "name": "RDL",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "2 reps",
+          "rangeFSets": "1 rep"
+        },
+        {
+          "name": "Fuerza c/impulso",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "2 reps",
+          "rangeFSets": "1 rep"
+        },
+        {
+          "name": "Remo parado",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "2 reps",
+          "rangeFSets": "1 rep"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Twist pp colgado",
+          "reps": "12"
+        },
+        {
+          "name": "Calambre c/1 mancuerna",
+          "reps": "6+6"
+        },
+        {
+          "name": "Hell pp c/mancuerna",
+          "reps": "20\""
+        },
+        {
+          "name": "Retropulsión c/barra(vuelta lenta)",
+          "reps": "6"
+        },
+        {
+          "name": "Pullover+press suspendido en banco 1pp 1bb contrario",
+          "reps": "5+4"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 3,
+      "week": 5,
+      "mainExercises": [
+        {
+          "name": "Sentadillas atrás",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "1 rep"
+        },
+        {
+          "name": "Fza en banco",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "1 rep"
+        },
+        {
+          "name": "Dominadas",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "1 rep"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Vuelo lat + vuelo front c/manc y cambio",
+          "reps": "7"
+        },
+        {
+          "name": "Oblicuos c/banda arrodillado",
+          "reps": "6"
+        },
+        {
+          "name": "Bandera 1/2 asta",
+          "reps": "15\""
+        },
+        {
+          "name": "Angelito invertido",
+          "reps": "9"
+        },
+        {
+          "name": "Bíceps+press 1bb y pp contraria",
+          "reps": "6+5"
+        }
+      ],
+      "circuitRounds": 3
+    }
+  ]
+}

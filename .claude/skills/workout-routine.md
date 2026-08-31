@@ -40,118 +40,84 @@ unzip -p "/path/to/file.docx" word/document.xml | sed -e 's/<[^>]*>//g' | tr -s 
 ## Step 4: Determine Routine Length
 
 Count the weeks - routines vary:
+
 - **3 weeks**: 9 workout days
 - **4 weeks**: 12 workout days (most common)
 - **5 weeks**: 15 workout days
 
 ## Step 5: Create Files
 
-### 5.1 Create `src/ts/routines/YYYY_MM.ts`
+Routines are data, not code: each month is a single JSON file, plus one line in
+the month registry. There are no per-month TypeScript modules and no helper
+functions to copy.
 
-```typescript
-// Month YYYY routine data - extracted from FUERZA X.docx
-import { MonthRoutine, DayWorkout } from './types';
+### 5.1 Create `src/data/routines/YYYY_MM.json`
 
-export const routine2025_MM: MonthRoutine = {
-  month: 'YYYY_MM',
-  warmup: {
-    exercises: [
-      { name: 'Exercise name', sets: '4+4' },
-    ],
-    totalRounds: 3
+Follow the `MonthRoutine` shape in `src/ts/routines/types.ts`. The `defaults`
+map holds the starting 1RM in kg per main exercise, keyed by the exact exercise
+name used in `workoutDays`.
+
+```json
+{
+  "month": "YYYY_MM",
+  "warmup": {
+    "exercises": [{ "name": "Exercise name", "sets": "4+4" }],
+    "totalRounds": 3
   },
-  ranges: {
-    rangeE: '80% - 87.5% del 1RM',
-    rangeF: '87.5% - 95% del 1RM'
+  "ranges": {
+    "rangeE": "80% - 87.5% del 1RM",
+    "rangeF": "87.5% - 95% del 1RM"
   },
-  workoutDays: [
-    // SEMANA 1
+  "defaults": {
+    "Sentadillas atrás": 135,
+    "Fuerza en banco": 100,
+    "Dominadas": 100,
+    "RDL": 120,
+    "Empuje de fuerza": 75,
+    "Remo acostado": 90
+  },
+  "workoutDays": [
     {
-      day: 1,
-      week: 1,
-      mainExercises: [
+      "day": 1,
+      "week": 1,
+      "mainExercises": [
         {
-          name: 'Sentadillas atrás',
-          warmupSets: { percentage55: '5 reps', percentage65: '4 reps', percentage75: '3 reps' },
-          workingSets: '2x2'
-          // rangeFSets: '1x1' // optional
-        },
+          "name": "Sentadillas atrás",
+          "warmupSets": {
+            "percentage55": "5 reps",
+            "percentage65": "4 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "2x2",
+          "rangeFSets": "1x1"
+        }
       ],
-      circuit: [
-        { name: 'Circuit exercise', reps: '4+3' },
-      ],
-      circuitRounds: 3
-    },
+      "circuit": [{ "name": "Circuit exercise", "reps": "4+3" }],
+      "circuitRounds": 3
+    }
   ]
-};
-
-// REQUIRED utility functions
-export const getWorkoutByWeekAndDay = (week: number, day: number): DayWorkout | undefined => {
-  return routine2025_MM.workoutDays.find(w => w.week === week && w.day === day);
-};
-
-export const getCurrentWeekWorkouts = (week: number): DayWorkout[] => {
-  return routine2025_MM.workoutDays.filter(w => w.week === week);
-};
-
-export const getAllWeeks = (): number[] => {
-  return [...new Set(routine2025_MM.workoutDays.map(w => w.week))].sort();
-};
-
-export const getTotalWeeks = (): number => {
-  return Math.max(...routine2025_MM.workoutDays.map(w => w.week));
-};
-
-export const getTotalWorkoutDays = (): number => {
-  return routine2025_MM.workoutDays.length;
-};
-
-export const getWeekRange = (): { min: number; max: number } => {
-  const weeks = getAllWeeks();
-  return { min: Math.min(...weeks), max: Math.max(...weeks) };
-};
+}
 ```
 
-### 5.2 Create `src/ts/routines/defaults/YYYY_MM.ts`
+`rangeFSets` and `maxSets` are optional - leave them out when the day has none,
+rather than writing a placeholder.
 
-```typescript
-// Month YYYY exercise defaults - maximum weight selections
-export const defaults2025_MM: Record<string, number> = {
-  'RDL (Peso muerto rumano)': XXX,
-  'RDL': XXX,
-  'Empuje de fuerza': XXX,
-  'Remo acostado': XXX,
-  'Sentadillas atrás': XXX,
-  'Fuerza en banco': XXX,
-  'Dominadas': XXX
-};
-```
+### 5.2 Register the month
 
-### 5.3 Update `src/ts/routines/index.ts`
-
-- Import: `import { routine2025_MM } from './2025_MM';`
-- Export: `export { routine2025_MM };`
-- Registry: `'2025_MM': routine2025_MM,`
-
-### 5.4 Update `src/ts/routines/defaults/index.ts`
-
-- Import: `import { defaults2025_MM } from './2025_MM';`
-- Export: Add to export list
-- Registry: `'2025_MM': defaults2025_MM,`
-
-### 5.5 Update `src/__tests__/routines.test.ts`
-
-- Increment expected routine count in `getAllRoutineStats()` test
-- Add assertion for new month's week count
+Add `"YYYY_MM"` to `src/data/months.json`, keeping the list in chronological
+order. That is the only registry: the page imports each month's JSON on demand,
+so nothing else needs editing.
 
 ## Exercise Groups
 
 **Group A** (alternates):
+
 - Sentadillas atrás
 - Fuerza en banco
 - Dominadas
 
 **Group B** (alternates):
+
 - RDL
 - Empuje de fuerza
 - Remo acostado
@@ -166,6 +132,7 @@ export const defaults2025_MM: Record<string, number> = {
 ## Standard Exercise Names
 
 Use exactly:
+
 - `Sentadillas atrás`
 - `Fuerza en banco`
 - `Dominadas`
@@ -185,6 +152,9 @@ Use exactly:
 
 ## Step 6: Verify
 
-Run:
-1. `npm test` - Update test if count mismatch
-2. `npm run build` - Verify TypeScript compiles
+Run `npm run check` (typecheck, lint, formatting and tests). The routine suite
+walks every month listed in `months.json` and asserts that it loads, trains
+three days a week, and ships a default for every exercise it names - so a
+malformed or unregistered month fails there without any test needing an edit.
+
+Then run `npm run build`.

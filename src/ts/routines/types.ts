@@ -1,60 +1,57 @@
-// Common interfaces for workout routines
-// These types are shared across all monthly routine files
+/**
+ * Shared types for the monthly workout routines
+ * @module routines/types
+ */
 
 export interface WarmupExercise {
   name: string;
-  sets: string; // e.g., "6 BD 1pp/4+3", "4 Vit/6"
+  sets: string; // e.g., '6 BD 1pp/4+3', '4 Vit/6'
 }
 
 export interface MainExercise {
   name: string;
-  warmupSets: { // 55%, 65%, 75%
-    percentage55?: string; // e.g., "5 reps"
-    percentage65?: string; // e.g., "5 reps"  
-    percentage75?: string; // e.g., "5 reps", "4 reps"
+  warmupSets: {
+    percentage55?: string; // e.g., '5 reps'
+    percentage65?: string;
+    percentage75?: string;
   };
-  workingSets: string; // e.g., "4x2", "4x3", "5x3" - Rango E
-  rangeFSets?: string; // Optional field for future routines with Rango F exercises
-  maxSets?: string; // Optional field for max-effort attempts at 1RM (column MAX)
+  workingSets: string; // Rango E, e.g., '4x2', '4x3', '5x3'
+  rangeFSets?: string; // Rango F, only in some routines
+  maxSets?: string; // Max-effort attempts at 1RM (column MAX)
 }
 
 export interface CircuitExercise {
   name: string;
-  reps: string; // e.g., "4", "6+5", "8", "20\"", "15\"+15\""
+  reps: string; // e.g., '4', '6+5', '20"', '15"+15"'
 }
 
 export interface DayWorkout {
-  day: number; // 1, 2, 3 (days per week)
-  week: number; // Week number (varies by routine: 1-4 for most, 1-5 for some)
+  day: number; // 1..3
+  week: number; // 1..5 depending on the routine
   mainExercises: MainExercise[];
   circuit: CircuitExercise[];
-  circuitRounds: number; // Usually 3
+  circuitRounds: number;
 }
 
 export interface MonthRoutine {
-  month: string; // e.g., "2025_08", "2025_09"
+  month: string; // e.g., '2025_08'
   warmup: {
     exercises: WarmupExercise[];
-    totalRounds: number; // Usually 3
+    totalRounds: number;
   };
-  workoutDays: DayWorkout[];
   ranges: {
-    rangeE: string; // "80% - 87.5% del 1RM"
-    rangeF: string; // "87.5% - 95% del 1RM (patrón siguiente)"
+    rangeE: string; // '80% - 87.5% del 1RM'
+    rangeF: string; // '87.5% - 95% del 1RM'
   };
+  /** Starting 1RM per main exercise, in kg, used until the user picks a row */
+  defaults: Record<string, number>;
+  workoutDays: DayWorkout[];
 }
 
-// Utility function types
-export type WeekWorkoutGetter = (week: number, day: number) => DayWorkout | undefined;
-export type WeekWorkoutsGetter = (week: number) => DayWorkout[];
-export type AllWeeksGetter = () => number[];
-
-// Helper functions for working with routines
-export interface RoutineHelpers {
-  getWorkoutByWeekAndDay: WeekWorkoutGetter;
-  getCurrentWeekWorkouts: WeekWorkoutsGetter;
-  getAllWeeks: AllWeeksGetter;
-  getTotalWeeks: () => number;
-  getTotalWorkoutDays: () => number;
-  getWeekRange: () => { min: number; max: number };
+export interface RoutineStats {
+  month: string;
+  totalWeeks: number;
+  totalWorkoutDays: number;
+  weekRange: { min: number; max: number };
+  daysPerWeek: number;
 }

@@ -51,7 +51,7 @@
       font-size: 0.9rem;
     }
 
-    input[type="password"] {
+    input[type='password'] {
       padding: 1rem;
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
@@ -177,7 +177,7 @@
 
   .month-selector {
     padding: 0.3rem 0.4rem;
-    
+
     .month-select {
       min-width: 95px;
       font-size: 0.8rem;
@@ -189,7 +189,7 @@
 // Integrated Routine Selector Grid Styles
 .routine-selector {
   margin: 0 0 1.5rem 0;
-  
+
   .selector-grid {
     background: rgba(18, 22, 29, 0.6);
     border-radius: 8px;
@@ -197,14 +197,14 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   }
-  
+
   .weeks-row {
     display: grid;
     // One column per week: routines have 3, 4 or 5 of them
     grid-auto-flow: column;
     grid-auto-columns: 1fr;
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    
+
     .week-header {
       padding: 0.5rem 0.4rem;
       text-align: center;
@@ -216,11 +216,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      
+
       &:last-child {
         border-right: none;
       }
-      
+
       .week-title {
         font-weight: 600;
         font-size: 0.9rem;
@@ -228,11 +228,11 @@
         text-transform: uppercase;
         letter-spacing: 0.5px;
       }
-      
+
       &.active {
         background: rgba(255, 133, 27, 0.2);
         border-bottom: 2px solid $primary-color;
-        
+
         .week-title {
           color: $primary-color;
           font-weight: bold;
@@ -240,22 +240,22 @@
       }
     }
   }
-  
+
   .days-row {
     display: grid;
     // Must track .weeks-row: one column of day buttons per week
     grid-auto-flow: column;
     grid-auto-columns: 1fr;
-    
+
     .week-days {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       border-right: 1px solid rgba(255, 255, 255, 0.1);
-      
+
       &:last-child {
         border-right: none;
       }
-      
+
       .day-link {
         @include tab-item;
       }
@@ -266,13 +266,13 @@
 // Compact Routine Display Styles
 .current-routine {
   margin: 1rem 0;
-  
+
   h3 {
     color: $primary-color;
     margin-bottom: 1rem;
     font-size: 1.3rem;
   }
-  
+
   .routine-section {
     margin-bottom: 1.25rem;
   }
@@ -284,7 +284,7 @@
   align-items: center;
   gap: 0.75rem;
   min-height: 2rem;
-  
+
   .exercise-name {
     font-weight: 500;
     color: $primary-font-color;
@@ -292,7 +292,7 @@
     flex: 1;
     min-width: 0; // Allow text to wrap/ellipsis if needed
   }
-  
+
   .exercise-selector {
     flex-shrink: 0;
     min-width: 110px;
@@ -303,13 +303,13 @@
     border-radius: 4px;
     color: $primary-font-color;
     font-size: 0.75rem;
-    
+
     &:focus {
       outline: none;
       border-color: $primary-color;
       box-shadow: 0 0 0 2px rgba(255, 133, 27, 0.2);
     }
-    
+
     option {
       background: $secondary-color;
       color: $primary-font-color;
@@ -326,13 +326,14 @@
   overflow: hidden;
   margin-bottom: 0.75rem;
   font-size: 0.85rem;
-  
-  th, td {
+
+  th,
+  td {
     padding: 0.5rem 0.6rem;
     text-align: left;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
-  
+
   // Section header row (integrated titles) - Dark background with theme accents
   .section-header {
     background: rgba(18, 22, 29, 0.95);
@@ -340,7 +341,7 @@
     cursor: pointer;
     user-select: none;
     transition: all 0.3s ease;
-    
+
     th {
       padding: 0.6rem 0.8rem;
       font-size: 0.9rem;
@@ -349,16 +350,16 @@
       letter-spacing: 0.3px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       position: relative;
-      
+
       &:hover {
         background: rgba(255, 133, 27, 0.1);
         color: color.adjust($primary-color, $lightness: 10%);
       }
-      
+
       .section-title {
         flex: 1;
       }
-      
+
       .collapse-icon {
         float: right;
         font-size: 0.75rem;
@@ -367,8 +368,8 @@
         color: $primary-color;
       }
     }
-      }
-  
+  }
+
   // Column header row (standard table headers)
   .column-headers th {
     background: rgba(255, 133, 27, 0.2);
@@ -378,7 +379,7 @@
     text-transform: uppercase;
     letter-spacing: 0.4px;
   }
-  
+
   // Regular headers for non-integrated tables
   th:not(.section-header th):not(.column-headers th) {
     background: rgba(255, 133, 27, 0.2);
@@ -388,20 +389,20 @@
     text-transform: uppercase;
     letter-spacing: 0.4px;
   }
-  
+
   td {
     color: $primary-font-color;
-    
+
     &:first-child {
       font-weight: 500;
       color: $primary-font-color;
     }
   }
-  
+
   tr:hover {
     background: rgba(255, 255, 255, 0.05);
   }
-  
+
   tr:last-child td {
     border-bottom: none;
   }
@@ -451,7 +452,8 @@
   color: $primary-font-color;
   font-size: 0.85rem;
 
-  th, td {
+  th,
+  td {
     padding: 0.5rem 0.4rem;
     text-align: center;
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -460,7 +462,7 @@
   thead {
     background: $primary-color;
     color: white;
-    
+
     th {
       font-weight: bold;
       position: sticky;
@@ -502,18 +504,18 @@
     .selector-grid {
       border-radius: 8px;
     }
-    
+
     .weeks-row {
       .week-header {
         padding: 0.35rem 0.25rem;
         min-height: 28px;
-        
+
         .week-title {
           font-size: 0.75rem;
         }
       }
     }
-    
+
     .days-row {
       .week-days {
         .day-link {
@@ -524,17 +526,17 @@
       }
     }
   }
-  
+
   .exercise-container {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.4rem;
     min-height: auto;
-    
+
     .exercise-name {
       font-size: 0.8rem;
     }
-    
+
     .exercise-selector {
       width: 100%;
       min-width: auto;
@@ -543,30 +545,32 @@
       padding: 0.25rem 0.3rem;
     }
   }
-  
+
   .routine-table {
     font-size: 0.75rem;
-    
-    th, td {
+
+    th,
+    td {
       padding: 0.4rem 0.3rem;
     }
-    
+
     th {
       font-size: 0.7rem;
     }
   }
-  
+
   .workout-table {
     font-size: 0.75rem;
-    
-    th, td {
+
+    th,
+    td {
       padding: 0.35rem 0.2rem;
     }
-    
+
     thead .percentage-row th {
       font-size: 0.65rem;
     }
-    
+
     tbody td {
       font-size: 0.7rem;
     }

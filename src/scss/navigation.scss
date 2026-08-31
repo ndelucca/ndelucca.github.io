@@ -1,5 +1,5 @@
-@use "variables" as *;
-@use "mixins" as *;
+@use 'variables' as *;
+@use 'mixins' as *;
 
 .header {
   display: flex;
@@ -18,7 +18,7 @@
 .logo {
   width: $nav-width;
   height: 63px;
-  background-image: url("../../public/img/logo/logo-no-background.svg");
+  background-image: url('../../public/img/logo/logo-no-background.svg');
   background-size: contain;
   background-repeat: no-repeat;
 }
@@ -84,7 +84,7 @@
   margin-left: $nav-width;
 }
 
-@include responsive("medium") {
+@include responsive('medium') {
   .hamburger {
     display: block;
     top: 5px;

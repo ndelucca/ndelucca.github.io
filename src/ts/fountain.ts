@@ -10,7 +10,7 @@ import { fetchFortuneCookie } from './modules/fortune';
  * Loads a random fortune cookie quote and displays it in cowsay format
  * Handles errors gracefully by displaying error messages to the user
  */
-const lucky_cow = async (): Promise<void> => {
+const luckyCow = async (): Promise<void> => {
   const cowElement = document.querySelector('.cowsie');
   if (!cowElement) {
     console.error('Element .cowsie not found');
@@ -18,13 +18,13 @@ const lucky_cow = async (): Promise<void> => {
   }
 
   try {
-    cowElement.innerHTML = randomCow('Moo..?');
-    const fortune_cookie = await fetchFortuneCookie();
-    cowElement.innerHTML = randomCow(fortune_cookie);
+    cowElement.textContent = randomCow('Moo..?');
+    const fortuneCookie = await fetchFortuneCookie();
+    cowElement.textContent = randomCow(fortuneCookie);
   } catch (error) {
     console.error('Failed to load fortune cookie:', error);
-    cowElement.innerHTML = randomCow('Error loading fortune. Please try again later.');
+    cowElement.textContent = randomCow('Error loading fortune. Please try again later.');
   }
 };
 
-window.addEventListener('load', lucky_cow);
+document.addEventListener('DOMContentLoaded', luckyCow);
