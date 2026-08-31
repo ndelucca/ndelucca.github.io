@@ -38,8 +38,8 @@ const todaysEvents = async (): Promise<void> => {
       const contentElement = elEvent.querySelector('.content');
 
       if (titleElement && contentElement) {
-        titleElement.innerHTML = year;
-        contentElement.innerHTML = text;
+        titleElement.textContent = `${year}`;
+        contentElement.textContent = text;
         elTodaysEvents.appendChild(elEvent);
       } else {
         console.warn('Event template missing .title or .content element');
