@@ -1,6 +1,7 @@
 import { getAvailableMonths, getRoutineByMonth } from './routines/index';
 import { getDefaultsForMonth } from './routines/defaults/index';
 import { DayWorkout, MonthRoutine } from './routines/types';
+import { setupCollapsibleSections } from './modules/collapsible';
 
 // Hardcoded gym table data from gym_table.csv
 const gymData = [
@@ -428,49 +429,6 @@ function formatMonthDisplay(monthId: string): string {
   return `${monthName} ${year}`;
 }
 
-function setupCollapsibleSections() {
-  document.querySelectorAll('.collapsible-header').forEach(header => {
-    const headerEl = header as HTMLElement;
-    if (headerEl.dataset.collapsibleBound === 'true') return;
-    headerEl.dataset.collapsibleBound = 'true';
-    header.addEventListener('click', () => {
-      const section = (header as HTMLElement).dataset.section;
-      const contentElements = document.querySelectorAll(`[data-content="${section}"]`);
-      const icon = header.querySelector('.collapse-icon') as HTMLElement;
-
-      if (contentElements.length === 0 || !icon) return;
-
-      const firstContent = contentElements[0] as HTMLElement;
-      const isCollapsed = firstContent.style.display === 'none';
-
-      if (isCollapsed) {
-        // Expand all content elements
-        contentElements.forEach(element => {
-          const el = element as HTMLElement;
-          // Set appropriate display value based on element type
-          if (el.tagName.toLowerCase() === 'tbody') {
-            el.style.display = 'table-row-group';
-          } else if (el.tagName.toLowerCase() === 'tr') {
-            el.style.display = 'table-row';
-          } else {
-            el.style.display = 'block';
-          }
-        });
-        header.classList.remove('collapsed');
-        header.classList.add('expanded');
-        icon.textContent = '▲';
-      } else {
-        // Collapse all content elements
-        contentElements.forEach(element => {
-          (element as HTMLElement).style.display = 'none';
-        });
-        header.classList.remove('expanded');
-        header.classList.add('collapsed');
-        icon.textContent = '▼';
-      }
-    });
-  });
-}
 
 // This function is no longer needed since all days are pre-rendered in HTML
 

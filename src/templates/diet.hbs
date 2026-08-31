@@ -1,0 +1,20 @@
+{{> partials/top_boilerplate}}
+
+  <div class="diet-content">
+    <!-- Today's header: date, training badge and manual override -->
+    <div class="diet-header">
+      <div class="diet-today">
+        <span class="diet-date" id="diet-date"></span>
+        <span class="diet-badge" id="diet-badge"></span>
+      </div>
+      <button type="button" class="diet-toggle" id="diet-toggle">⇄ Cambiar</button>
+    </div>
+
+    <!-- Meals for the current day - rendered by JavaScript -->
+    <div id="diet-day"></div>
+
+    <!-- Reference material from the plan - rendered by JavaScript -->
+    <div id="diet-reference"></div>
+  </div>
+
+{{> partials/bottom_boilerplate}}

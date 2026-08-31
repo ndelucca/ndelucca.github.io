@@ -1,3 +1,5 @@
+@use "variables" as *;
+
 // Responsive design
 @mixin responsive($breakpoint) {
   @if $breakpoint == "small" {
@@ -12,5 +14,39 @@
     @media (max-width: 1024px) {
       @content;
     }
+  }
+}
+
+// One cell of a tab strip: the workout day selector and the diet meal options
+@mixin tab-item {
+  padding: 0.4rem 0.25rem;
+  text-align: center;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.02);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 2px solid transparent;
+  transition: all 0.3s ease;
+  font-size: 0.8rem;
+  color: $secondary-font-color;
+  box-sizing: border-box;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:last-child {
+    border-right: none;
+  }
+
+  &:hover {
+    background: rgba(255, 133, 27, 0.15);
+    color: $primary-font-color;
+  }
+
+  &.active {
+    background: rgba(255, 133, 27, 0.3);
+    color: $primary-color;
+    font-weight: bold;
+    border-top: 2px solid $primary-color;
   }
 }

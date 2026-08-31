@@ -1,0 +1,273 @@
+@use 'sass:color';
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.diet-content {
+  max-width: 900px;
+}
+
+// Today's header: date, training badge and manual override
+.diet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 133, 27, 0.3);
+}
+
+.diet-today {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.diet-date {
+  font-size: 1.1rem;
+  color: $primary-font-color;
+}
+
+.diet-badge {
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  &.training {
+    background: rgba(255, 133, 27, 0.18);
+    border: 1px solid $primary-color;
+    color: $primary-color;
+  }
+
+  &.rest {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: $secondary-font-color;
+  }
+}
+
+.diet-toggle {
+  padding: 0.4rem 0.9rem;
+  background: transparent;
+  border: 1px solid rgba(255, 133, 27, 0.4);
+  border-radius: 6px;
+  color: $primary-color;
+  font-family: $main-font;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 133, 27, 0.12);
+    border-color: $primary-color;
+  }
+}
+
+// Sections - same fold/unfold pattern as the workout page
+.diet-section {
+  margin-bottom: 1.25rem;
+
+  .collapsible-header {
+    color: $primary-color;
+    font-size: 1.1rem;
+    margin: 0 0 0.75rem 0;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid rgba(255, 133, 27, 0.3);
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: color.adjust($primary-color, $lightness: 10%);
+    }
+
+    .section-title {
+      flex: 1;
+    }
+
+    .collapse-icon {
+      font-size: 0.75rem;
+      transition: transform 0.3s ease;
+      margin-left: 0.75rem;
+      color: $primary-color;
+    }
+  }
+}
+
+.diet-section-body {
+  overflow-x: auto;
+}
+
+.diet-hint {
+  color: $secondary-font-color;
+  font-size: 0.9rem;
+  margin: 0 0 0.75rem 0;
+}
+
+// Breakfast / snack option tabs - same look as the workout day selector
+.diet-tabs {
+  margin-bottom: 0.75rem;
+}
+
+.diet-tab-bar {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  background: rgba(18, 22, 29, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  margin-bottom: 0.75rem;
+}
+
+.diet-tab {
+  @include tab-item;
+  padding: 0.5rem 0.25rem;
+  min-height: 36px;
+  line-height: 1.2;
+}
+
+// Breakfast / snack options
+.diet-option,
+.diet-component,
+.diet-group {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.diet-option-label,
+.diet-component-name,
+.diet-group-name {
+  color: $primary-color;
+  font-size: 0.95rem;
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.diet-option-text {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.diet-portion {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $secondary-font-color;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 0.15rem 0.5rem;
+}
+
+.diet-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  line-height: 1.5;
+
+  li {
+    margin-bottom: 0.35rem;
+  }
+}
+
+.diet-note {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: $secondary-font-color;
+  line-height: 1.4;
+
+  &.diet-note-highlight {
+    font-style: normal;
+    color: $primary-color;
+    background: rgba(255, 133, 27, 0.1);
+    border-left: 2px solid $primary-color;
+    padding: 0.4rem 0.6rem;
+    border-radius: 0 4px 4px 0;
+  }
+}
+
+.diet-extras {
+  font-size: 0.9rem;
+  color: $secondary-font-color;
+
+  p {
+    margin: 0.25rem 0;
+  }
+
+  strong {
+    color: $primary-font-color;
+  }
+}
+
+// Supplements
+.diet-supplement {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.6fr) minmax(140px, 1fr) 2fr;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.diet-supplement-timing {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $primary-color;
+}
+
+.diet-supplement-name {
+  font-weight: 600;
+}
+
+.diet-supplement-dose {
+  color: $secondary-font-color;
+  font-size: 0.9rem;
+}
+
+// Food groups
+.diet-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+@include responsive('medium') {
+  .diet-header {
+    align-items: flex-start;
+  }
+
+  .diet-tab {
+    font-size: 0.7rem;
+    padding: 0.5rem 0.15rem;
+  }
+
+  .diet-date {
+    font-size: 1rem;
+  }
+
+  .diet-supplement {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+}

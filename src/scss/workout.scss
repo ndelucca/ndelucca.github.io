@@ -200,7 +200,9 @@
   
   .weeks-row {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    // One column per week: routines have 3, 4 or 5 of them
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     
     .week-header {
@@ -241,7 +243,9 @@
   
   .days-row {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    // Must track .weeks-row: one column of day buttons per week
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
     
     .week-days {
       display: grid;
@@ -253,37 +257,7 @@
       }
       
       .day-link {
-        padding: 0.4rem 0.25rem;
-        text-align: center;
-        cursor: pointer;
-        background: rgba(255, 255, 255, 0.02);
-        border-right: 1px solid rgba(255, 255, 255, 0.08);
-        border-top: 2px solid transparent;
-        border-bottom: 2px solid transparent;
-        transition: all 0.3s ease;
-        font-size: 0.8rem;
-        color: $secondary-font-color;
-        box-sizing: border-box;
-        min-height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        
-        &:last-child {
-          border-right: none;
-        }
-        
-        &:hover {
-          background: rgba(255, 133, 27, 0.15);
-          color: $primary-font-color;
-        }
-        
-        &.active {
-          background: rgba(255, 133, 27, 0.3);
-          color: $primary-color;
-          font-weight: bold;
-          border-top: 2px solid $primary-color;
-        }
+        @include tab-item;
       }
     }
   }
@@ -393,11 +367,7 @@
         color: $primary-color;
       }
     }
-    
-    &.expanded .collapse-icon {
-      transform: rotate(180deg);
-    }
-  }
+      }
   
   // Column header row (standard table headers)
   .column-headers th {
@@ -462,10 +432,6 @@
       transition: transform 0.3s ease;
       margin-left: 0.75rem;
       color: $primary-color;
-    }
-
-    &.expanded .collapse-icon {
-      transform: rotate(180deg);
     }
   }
 }
