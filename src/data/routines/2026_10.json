@@ -1,0 +1,737 @@
+{
+  "month": "2026_10",
+  "warmup": {
+    "exercises": [
+      {
+        "name": "Puente+tracción fit 1pp",
+        "sets": "4+3"
+      },
+      {
+        "name": "Tracción+abducción fit",
+        "sets": "4+3"
+      },
+      {
+        "name": "Puente lateral+giro",
+        "sets": "4+3"
+      },
+      {
+        "name": "Sentadilla de arranque 1bb",
+        "sets": "4+3"
+      }
+    ],
+    "totalRounds": 3
+  },
+  "ranges": {
+    "rangeE": "80% - 87.5% del 1RM",
+    "rangeF": "87.5% - 95% del 1RM"
+  },
+  "defaults": {
+    "RDL": 120,
+    "Fuerza c/impulso": 75,
+    "Remo parado": 90,
+    "Sentadillas atrás": 135,
+    "Fza en banco": 100,
+    "Dominadas": 100
+  },
+  "workoutDays": [
+    {
+      "day": 1,
+      "week": 1,
+      "mainExercises": [
+        {
+          "name": "RDL",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3x2",
+          "rangeFSets": "1 rep"
+        },
+        {
+          "name": "Fuerza c/impulso",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3x2",
+          "rangeFSets": "1 rep"
+        },
+        {
+          "name": "Remo parado",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3x2",
+          "rangeFSets": "1 rep"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Superman 1pp+vuelo post bb contrario",
+          "reps": "5+4"
+        },
+        {
+          "name": "Pal off arrodillado 1pp+arriba-abajo",
+          "reps": "6+5"
+        },
+        {
+          "name": "Molino",
+          "reps": "4+3"
+        },
+        {
+          "name": "Retropulsión c/barra c/vuelta en 6\"",
+          "reps": "6"
+        },
+        {
+          "name": "Bíceps+press 1pp cruzado",
+          "reps": "6+5"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 2,
+      "week": 1,
+      "mainExercises": [
+        {
+          "name": "Sentadillas atrás",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3x3",
+          "rangeFSets": "1x2"
+        },
+        {
+          "name": "Fza en banco",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3x3",
+          "rangeFSets": "1x2"
+        },
+        {
+          "name": "Dominadas",
+          "warmupSets": {
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3x3",
+          "rangeFSets": "1x2"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Dragon flag",
+          "reps": "4"
+        },
+        {
+          "name": "Buenos días 1pp",
+          "reps": "4+3"
+        },
+        {
+          "name": "Paloma TRX",
+          "reps": "8"
+        },
+        {
+          "name": "Rueda 3 direcciones",
+          "reps": "9"
+        },
+        {
+          "name": "Extensiones tríceps",
+          "reps": "6"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 3,
+      "week": 1,
+      "mainExercises": [
+        {
+          "name": "RDL",
+          "warmupSets": {
+            "percentage55": "3 reps",
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3 reps"
+        },
+        {
+          "name": "Fuerza c/impulso",
+          "warmupSets": {
+            "percentage55": "3 reps",
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3 reps"
+        },
+        {
+          "name": "Remo parado",
+          "warmupSets": {
+            "percentage55": "3 reps",
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3 reps"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Superman 1pp+vuelo post bb contrario",
+          "reps": "5+4"
+        },
+        {
+          "name": "Pal off arrodillado 1pp+arriba-abajo",
+          "reps": "6+5"
+        },
+        {
+          "name": "Molino",
+          "reps": "4+3"
+        },
+        {
+          "name": "Retropulsión c/barra c/vuelta en 6\"",
+          "reps": "6"
+        },
+        {
+          "name": "Bíceps+press 1pp cruzado",
+          "reps": "6+5"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 1,
+      "week": 2,
+      "mainExercises": [
+        {
+          "name": "Sentadillas atrás",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "4 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "3x3",
+          "rangeFSets": "2 reps"
+        },
+        {
+          "name": "Fza en banco",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "4 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "3x3",
+          "rangeFSets": "2 reps"
+        },
+        {
+          "name": "Dominadas",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "4 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "3x3",
+          "rangeFSets": "2 reps"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Dragon flag",
+          "reps": "4"
+        },
+        {
+          "name": "Buenos días 1pp",
+          "reps": "4+3"
+        },
+        {
+          "name": "Paloma TRX",
+          "reps": "8"
+        },
+        {
+          "name": "Rueda 3 direcciones",
+          "reps": "9"
+        },
+        {
+          "name": "Extensiones tríceps",
+          "reps": "6"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 2,
+      "week": 2,
+      "mainExercises": [
+        {
+          "name": "RDL",
+          "warmupSets": {
+            "percentage65": "4 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "(4x1)+(3x2)",
+          "rangeFSets": "1x2"
+        },
+        {
+          "name": "Fuerza c/impulso",
+          "warmupSets": {
+            "percentage65": "4 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "(4x1)+(3x2)",
+          "rangeFSets": "1x2"
+        },
+        {
+          "name": "Remo parado",
+          "warmupSets": {
+            "percentage65": "4 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "(4x1)+(3x2)",
+          "rangeFSets": "1x2"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Superman 1pp+vuelo post bb contrario",
+          "reps": "5+4"
+        },
+        {
+          "name": "Pal off arrodillado 1pp+arriba-abajo",
+          "reps": "6+5"
+        },
+        {
+          "name": "Molino",
+          "reps": "4+3"
+        },
+        {
+          "name": "Retropulsión c/barra c/vuelta en 6\"",
+          "reps": "6"
+        },
+        {
+          "name": "Bíceps+press 1pp cruzado",
+          "reps": "6+5"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 3,
+      "week": 2,
+      "mainExercises": [
+        {
+          "name": "Sentadillas atrás",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "4 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "2x2",
+          "rangeFSets": "1 rep"
+        },
+        {
+          "name": "Fza en banco",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "4 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "2x2",
+          "rangeFSets": "1 rep"
+        },
+        {
+          "name": "Dominadas",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "4 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "2x2",
+          "rangeFSets": "1 rep"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Dragon flag",
+          "reps": "4"
+        },
+        {
+          "name": "Buenos días 1pp",
+          "reps": "4+3"
+        },
+        {
+          "name": "Paloma TRX",
+          "reps": "8"
+        },
+        {
+          "name": "Rueda 3 direcciones",
+          "reps": "9"
+        },
+        {
+          "name": "Extensiones tríceps",
+          "reps": "6"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 1,
+      "week": 3,
+      "mainExercises": [
+        {
+          "name": "RDL",
+          "warmupSets": {
+            "percentage55": "5 reps",
+            "percentage65": "5 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "4x2",
+          "rangeFSets": "1 rep",
+          "maxSets": "1 rep"
+        },
+        {
+          "name": "Fuerza c/impulso",
+          "warmupSets": {
+            "percentage55": "5 reps",
+            "percentage65": "5 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "4x2",
+          "rangeFSets": "1 rep",
+          "maxSets": "1 rep"
+        },
+        {
+          "name": "Remo parado",
+          "warmupSets": {
+            "percentage55": "5 reps",
+            "percentage65": "5 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "4x2",
+          "rangeFSets": "1 rep",
+          "maxSets": "1 rep"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Superman 1pp+vuelo post bb contrario",
+          "reps": "5+4"
+        },
+        {
+          "name": "Pal off arrodillado 1pp+arriba-abajo",
+          "reps": "6+5"
+        },
+        {
+          "name": "Molino",
+          "reps": "4+3"
+        },
+        {
+          "name": "Retropulsión c/barra c/vuelta en 6\"",
+          "reps": "6"
+        },
+        {
+          "name": "Bíceps+press 1pp cruzado",
+          "reps": "6+5"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 2,
+      "week": 3,
+      "mainExercises": [
+        {
+          "name": "Sentadillas atrás",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "4 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "3x3",
+          "rangeFSets": "2x2",
+          "maxSets": "1 rep"
+        },
+        {
+          "name": "Fza en banco",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "4 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "3x3",
+          "rangeFSets": "2x2",
+          "maxSets": "1 rep"
+        },
+        {
+          "name": "Dominadas",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "4 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "3x3",
+          "rangeFSets": "2x2",
+          "maxSets": "1 rep"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Dragon flag",
+          "reps": "4"
+        },
+        {
+          "name": "Buenos días 1pp",
+          "reps": "4+3"
+        },
+        {
+          "name": "Paloma TRX",
+          "reps": "8"
+        },
+        {
+          "name": "Rueda 3 direcciones",
+          "reps": "9"
+        },
+        {
+          "name": "Extensiones tríceps",
+          "reps": "6"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 3,
+      "week": 3,
+      "mainExercises": [
+        {
+          "name": "RDL",
+          "warmupSets": {
+            "percentage55": "5 reps",
+            "percentage65": "4 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "3x2",
+          "rangeFSets": "1 rep"
+        },
+        {
+          "name": "Fuerza c/impulso",
+          "warmupSets": {
+            "percentage55": "5 reps",
+            "percentage65": "4 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "3x2",
+          "rangeFSets": "1 rep"
+        },
+        {
+          "name": "Remo parado",
+          "warmupSets": {
+            "percentage55": "5 reps",
+            "percentage65": "4 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "3x2",
+          "rangeFSets": "1 rep"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Superman 1pp+vuelo post bb contrario",
+          "reps": "5+4"
+        },
+        {
+          "name": "Pal off arrodillado 1pp+arriba-abajo",
+          "reps": "6+5"
+        },
+        {
+          "name": "Molino",
+          "reps": "4+3"
+        },
+        {
+          "name": "Retropulsión c/barra c/vuelta en 6\"",
+          "reps": "6"
+        },
+        {
+          "name": "Bíceps+press 1pp cruzado",
+          "reps": "6+5"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 1,
+      "week": 4,
+      "mainExercises": [
+        {
+          "name": "Sentadillas atrás",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "2 reps"
+          },
+          "workingSets": "1x2"
+        },
+        {
+          "name": "Fza en banco",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "2 reps"
+          },
+          "workingSets": "1x2"
+        },
+        {
+          "name": "Dominadas",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "2 reps"
+          },
+          "workingSets": "1x2"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Dragon flag",
+          "reps": "4"
+        },
+        {
+          "name": "Buenos días 1pp",
+          "reps": "4+3"
+        },
+        {
+          "name": "Paloma TRX",
+          "reps": "8"
+        },
+        {
+          "name": "Rueda 3 direcciones",
+          "reps": "9"
+        },
+        {
+          "name": "Extensiones tríceps",
+          "reps": "6"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 2,
+      "week": 4,
+      "mainExercises": [
+        {
+          "name": "RDL",
+          "warmupSets": {
+            "percentage55": "3 reps",
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "2x2",
+          "rangeFSets": "1 rep"
+        },
+        {
+          "name": "Fuerza c/impulso",
+          "warmupSets": {
+            "percentage55": "3 reps",
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "2x2",
+          "rangeFSets": "1 rep"
+        },
+        {
+          "name": "Remo parado",
+          "warmupSets": {
+            "percentage55": "3 reps",
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "2x2",
+          "rangeFSets": "1 rep"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Superman 1pp+vuelo post bb contrario",
+          "reps": "5+4"
+        },
+        {
+          "name": "Pal off arrodillado 1pp+arriba-abajo",
+          "reps": "6+5"
+        },
+        {
+          "name": "Molino",
+          "reps": "4+3"
+        },
+        {
+          "name": "Retropulsión c/barra c/vuelta en 6\"",
+          "reps": "6"
+        },
+        {
+          "name": "Bíceps+press 1pp cruzado",
+          "reps": "6+5"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 3,
+      "week": 4,
+      "mainExercises": [
+        {
+          "name": "Sentadillas atrás",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "2 reps"
+          },
+          "workingSets": "1 rep"
+        },
+        {
+          "name": "Fza en banco",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "2 reps"
+          },
+          "workingSets": "1 rep"
+        },
+        {
+          "name": "Dominadas",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "2 reps"
+          },
+          "workingSets": "1 rep"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Dragon flag",
+          "reps": "4"
+        },
+        {
+          "name": "Buenos días 1pp",
+          "reps": "4+3"
+        },
+        {
+          "name": "Paloma TRX",
+          "reps": "8"
+        },
+        {
+          "name": "Rueda 3 direcciones",
+          "reps": "9"
+        },
+        {
+          "name": "Extensiones tríceps",
+          "reps": "6"
+        }
+      ],
+      "circuitRounds": 3
+    }
+  ]
+}
