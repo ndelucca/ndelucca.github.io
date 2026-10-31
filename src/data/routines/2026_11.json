@@ -1,0 +1,554 @@
+{
+  "month": "2026_11",
+  "warmup": {
+    "exercises": [
+      {
+        "name": "Adelante y atrás fit 1pp",
+        "sets": "4+3"
+      },
+      {
+        "name": "Peso muerto 1pp",
+        "sets": "5+4"
+      },
+      {
+        "name": "Movilidad tobillo y cadera c/banda",
+        "sets": "5+4"
+      },
+      {
+        "name": "Vitalización 1bb c/mancuerna",
+        "sets": "3+2"
+      }
+    ],
+    "totalRounds": 3
+  },
+  "ranges": {
+    "rangeE": "80% - 87.5% del 1RM",
+    "rangeF": "87.5% - 95% del 1RM"
+  },
+  "defaults": {
+    "RDL": 120,
+    "Fuerza c/impulso": 75,
+    "Remo parado": 90,
+    "Sentadillas atrás": 135,
+    "Fza en banco": 100,
+    "Dominadas": 100
+  },
+  "workoutDays": [
+    {
+      "day": 1,
+      "week": 1,
+      "mainExercises": [
+        {
+          "name": "RDL",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "4 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3x2",
+          "rangeFSets": "1x3"
+        },
+        {
+          "name": "Fuerza c/impulso",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "4 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3x2",
+          "rangeFSets": "1x3"
+        },
+        {
+          "name": "Remo parado",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "4 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3x2",
+          "rangeFSets": "1x3"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Hell de tronco+extensiones bb c/bastón",
+          "reps": "8"
+        },
+        {
+          "name": "Calambre c/banda 3 pos arrodillado",
+          "reps": "12"
+        },
+        {
+          "name": "Tríceps c/banda por detrás",
+          "reps": "6+5"
+        },
+        {
+          "name": "Pal off c/desplazamiento",
+          "reps": "8"
+        },
+        {
+          "name": "Pullover+press suspendido 1bb y 1pp",
+          "reps": "5+4"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 2,
+      "week": 1,
+      "mainExercises": [
+        {
+          "name": "Sentadillas atrás",
+          "warmupSets": {
+            "percentage65": "5 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "4x2",
+          "rangeFSets": "2x2"
+        },
+        {
+          "name": "Fza en banco",
+          "warmupSets": {
+            "percentage65": "5 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "4x2",
+          "rangeFSets": "2x2"
+        },
+        {
+          "name": "Dominadas",
+          "warmupSets": {
+            "percentage65": "5 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "4x2",
+          "rangeFSets": "2x2"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Puente 2 apoyos+codo-rodilla",
+          "reps": "5+4"
+        },
+        {
+          "name": "Indeciso c/mancuerna",
+          "reps": "9"
+        },
+        {
+          "name": "Dragon flag c/detención 3\"",
+          "reps": "4"
+        },
+        {
+          "name": "Bíceps TRX 1pp",
+          "reps": "6+5"
+        },
+        {
+          "name": "Vuelo posterior 1pp+vuelo frontal otra",
+          "reps": "4"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 3,
+      "week": 1,
+      "mainExercises": [
+        {
+          "name": "RDL",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "4 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3x3",
+          "rangeFSets": "1x2"
+        },
+        {
+          "name": "Fuerza c/impulso",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "4 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3x3",
+          "rangeFSets": "1x2"
+        },
+        {
+          "name": "Remo parado",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "4 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3x3",
+          "rangeFSets": "1x2"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Hell de tronco+extensiones bb c/bastón",
+          "reps": "8"
+        },
+        {
+          "name": "Calambre c/banda 3 pos arrodillado",
+          "reps": "12"
+        },
+        {
+          "name": "Tríceps c/banda por detrás",
+          "reps": "6+5"
+        },
+        {
+          "name": "Pal off c/desplazamiento",
+          "reps": "8"
+        },
+        {
+          "name": "Pullover+press suspendido 1bb y 1pp",
+          "reps": "5+4"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 1,
+      "week": 2,
+      "mainExercises": [
+        {
+          "name": "Sentadillas atrás",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "4 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "4x3",
+          "rangeFSets": "2x3"
+        },
+        {
+          "name": "Fza en banco",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "4 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "4x3",
+          "rangeFSets": "2x3"
+        },
+        {
+          "name": "Dominadas",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "4 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "4x3",
+          "rangeFSets": "2x3"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Puente 2 apoyos+codo-rodilla",
+          "reps": "5+4"
+        },
+        {
+          "name": "Indeciso c/mancuerna",
+          "reps": "9"
+        },
+        {
+          "name": "Dragon flag c/detención 3\"",
+          "reps": "4"
+        },
+        {
+          "name": "Bíceps TRX 1pp",
+          "reps": "6+5"
+        },
+        {
+          "name": "Vuelo posterior 1pp+vuelo frontal otra",
+          "reps": "4"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 2,
+      "week": 2,
+      "mainExercises": [
+        {
+          "name": "RDL",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "4x3",
+          "rangeFSets": "2x3"
+        },
+        {
+          "name": "Fuerza c/impulso",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "4x3",
+          "rangeFSets": "2x3"
+        },
+        {
+          "name": "Remo parado",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "4x3",
+          "rangeFSets": "2x3"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Hell de tronco+extensiones bb c/bastón",
+          "reps": "8"
+        },
+        {
+          "name": "Calambre c/banda 3 pos arrodillado",
+          "reps": "12"
+        },
+        {
+          "name": "Tríceps c/banda por detrás",
+          "reps": "6+5"
+        },
+        {
+          "name": "Pal off c/desplazamiento",
+          "reps": "8"
+        },
+        {
+          "name": "Pullover+press suspendido 1bb y 1pp",
+          "reps": "5+4"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 3,
+      "week": 2,
+      "mainExercises": [
+        {
+          "name": "Sentadillas atrás",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "4 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "3x3",
+          "rangeFSets": "4x1"
+        },
+        {
+          "name": "Fza en banco",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "4 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "3x3",
+          "rangeFSets": "4x1"
+        },
+        {
+          "name": "Dominadas",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "4 reps",
+            "percentage75": "4 reps"
+          },
+          "workingSets": "3x3",
+          "rangeFSets": "4x1"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Puente 2 apoyos+codo-rodilla",
+          "reps": "5+4"
+        },
+        {
+          "name": "Indeciso c/mancuerna",
+          "reps": "9"
+        },
+        {
+          "name": "Dragon flag c/detención 3\"",
+          "reps": "4"
+        },
+        {
+          "name": "Bíceps TRX 1pp",
+          "reps": "6+5"
+        },
+        {
+          "name": "Vuelo posterior 1pp+vuelo frontal otra",
+          "reps": "4"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 1,
+      "week": 3,
+      "mainExercises": [
+        {
+          "name": "RDL",
+          "warmupSets": {
+            "percentage65": "4 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3x2"
+        },
+        {
+          "name": "Fuerza c/impulso",
+          "warmupSets": {
+            "percentage65": "4 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3x2"
+        },
+        {
+          "name": "Remo parado",
+          "warmupSets": {
+            "percentage65": "4 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "3x2"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Hell de tronco+extensiones bb c/bastón",
+          "reps": "8"
+        },
+        {
+          "name": "Calambre c/banda 3 pos arrodillado",
+          "reps": "12"
+        },
+        {
+          "name": "Tríceps c/banda por detrás",
+          "reps": "6+5"
+        },
+        {
+          "name": "Pal off c/desplazamiento",
+          "reps": "8"
+        },
+        {
+          "name": "Pullover+press suspendido 1bb y 1pp",
+          "reps": "5+4"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 2,
+      "week": 3,
+      "mainExercises": [
+        {
+          "name": "Sentadillas atrás",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "2x2"
+        },
+        {
+          "name": "Fza en banco",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "2x2"
+        },
+        {
+          "name": "Dominadas",
+          "warmupSets": {
+            "percentage55": "4 reps",
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "2x2"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Puente 2 apoyos+codo-rodilla",
+          "reps": "5+4"
+        },
+        {
+          "name": "Indeciso c/mancuerna",
+          "reps": "9"
+        },
+        {
+          "name": "Dragon flag c/detención 3\"",
+          "reps": "4"
+        },
+        {
+          "name": "Bíceps TRX 1pp",
+          "reps": "6+5"
+        },
+        {
+          "name": "Vuelo posterior 1pp+vuelo frontal otra",
+          "reps": "4"
+        }
+      ],
+      "circuitRounds": 3
+    },
+    {
+      "day": 3,
+      "week": 3,
+      "mainExercises": [
+        {
+          "name": "RDL",
+          "warmupSets": {
+            "percentage55": "3 reps",
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "1x2"
+        },
+        {
+          "name": "Fuerza c/impulso",
+          "warmupSets": {
+            "percentage55": "3 reps",
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "1x2"
+        },
+        {
+          "name": "Remo parado",
+          "warmupSets": {
+            "percentage55": "3 reps",
+            "percentage65": "3 reps",
+            "percentage75": "3 reps"
+          },
+          "workingSets": "1x2"
+        }
+      ],
+      "circuit": [
+        {
+          "name": "Hell de tronco+extensiones bb c/bastón",
+          "reps": "8"
+        },
+        {
+          "name": "Calambre c/banda 3 pos arrodillado",
+          "reps": "12"
+        },
+        {
+          "name": "Tríceps c/banda por detrás",
+          "reps": "6+5"
+        },
+        {
+          "name": "Pal off c/desplazamiento",
+          "reps": "8"
+        },
+        {
+          "name": "Pullover+press suspendido 1bb y 1pp",
+          "reps": "5+4"
+        }
+      ],
+      "circuitRounds": 3
+    }
+  ]
+}
